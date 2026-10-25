@@ -1,0 +1,62 @@
+{% extends "page_shell.html" %}
+{% block page_title %}How far is your destination — <span class="grad">culturally?</span>{% endblock %}
+{% block page_lead %}Based on Hofstede's dimensions and Erin Meyer's Culture Map. The server computes a Cultural Distance Index, finds the largest gaps and builds a personal adaptation checklist.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <div class="radar-grid">
+    <div class="card reveal">
+      <div class="field-row">
+        <label class="field"><span>I am from</span><select id="radarFrom"></select></label>
+        <button class="icon-btn swap" id="radarSwap" title="Swap" aria-label="Swap countries">⇄</button>
+        <label class="field"><span>I am going to</span><select id="radarTo"></select></label>
+      </div>
+      <div class="radar-wrap"><canvas id="radarChart" aria-label="Radar chart of six cultural dimensions"></canvas></div>
+    </div>
+    <div class="card shock reveal" id="shockPanel"></div>
+  </div>
+
+  <!-- Theory cards -->
+  <div class="theory-section reveal">
+    <h3>📖 The six dimensions explained</h3>
+    <div class="theory-grid">
+      <div class="theory-card card">
+        <h4>Power Distance</h4>
+        <p class="muted">How much less powerful members of a society accept and expect unequal power distribution. High PD = respect for hierarchy; low PD = egalitarian approach. (Hofstede)</p>
+      </div>
+      <div class="theory-card card">
+        <h4>Individualism</h4>
+        <p class="muted">Preference for a loosely-knit social framework (individualism) vs. tight group loyalty (collectivism). Affects how students work in teams and seek help. (Hofstede)</p>
+      </div>
+      <div class="theory-card card">
+        <h4>Communication context</h4>
+        <p class="muted">High-context cultures convey meaning through tone, body language, and what is <em>not</em> said. Low-context cultures prefer explicit, direct words. (Hall)</p>
+      </div>
+      <div class="theory-card card">
+        <h4>Uncertainty avoidance</h4>
+        <p class="muted">How uncomfortable members feel with ambiguity. High UA = detailed rules and plans; low UA = flexible, tolerant of improvisation. (Hofstede)</p>
+      </div>
+      <div class="theory-card card">
+        <h4>Time orientation</h4>
+        <p class="muted">Monochronic cultures (Germany, Japan) treat time linearly — one task at a time, punctuality is sacred. Polychronic cultures (Italy, KZ) are more fluid. (Hall)</p>
+      </div>
+      <div class="theory-card card">
+        <h4>Expressiveness</h4>
+        <p class="muted">How visibly emotions are displayed. Italian conversation is animated; Japanese reserve shows respect. Misreading expressiveness causes misunderstandings. (Meyer)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk legend -->
+  <div class="card reveal risk-legend">
+    <h3>⚡ Culture-Shock Risk Zones</h3>
+    <div class="risk-row">
+      <div class="risk-item"><span class="sev low">Low</span><p class="muted">CDI &lt; 20 — minor adjustments, mostly comfortable</p></div>
+      <div class="risk-item"><span class="sev mid">Medium</span><p class="muted">CDI 20–45 — noticeable differences, prepare for surprises</p></div>
+      <div class="risk-item"><span class="sev high">High</span><p class="muted">CDI &gt; 45 — significant gap, deliberate adaptation needed</p></div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block page_vendor %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "page_shell.html" %}
+{% block page_title %}Guided Country <span class="grad">Learning Tracks</span>{% endblock %}
+{% block page_lead %}A systematic 5-stage curriculum based on David Kolb's learning cycle and Earley &amp; Ang's CQ model. Master non-verbal cues, gap prevention, pragmatic subtext, and roleplay before taking the qualification exam.{% endblock %}
+
+{% block page_content %}
+<section class="section learn-hub">
+  <!-- Active Track Banner & Tracker -->
+  <div class="card reveal track-hero" id="trackHero">
+    <div class="track-hero-head">
+      <div class="track-identity">
+        <span class="track-flag" id="curFlag">🇩🇪</span>
+        <div>
+          <span class="eyebrow" id="curContext">Central European · Low Context</span>
+          <h2 id="curTitle">Kazakhstan ➔ Germany Adaptation Track</h2>
+        </div>
+      </div>
+      <div class="track-quick-select">
+        <label><span>Switch country track:</span>
+          <select id="trackCountrySelect" class="track-select"></select>
+        </label>
+      </div>
+    </div>
+
+    <!-- Progress summary -->
+    <div class="track-progress-block">
+      <div class="track-progress-meta">
+        <span id="progressSummary">0 of 5 lessons completed</span>
+        <b id="progressPct">0%</b>
+      </div>
+      <div class="track-progress-track">
+        <div class="track-progress-bar" id="progressBar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    {% if not current_user %}
+    <div class="guest-banner">
+      <span>💡 You are training in <b>Guest Mode</b>. <a href="{{ url_for('web.auth') }}">Sign in or create a free account</a> to save your streak and unlock permanent certificates.</span>
+    </div>
+    {% else %}
+    <div class="user-track-status">
+      <span>Learner: <b>{{ current_user.full_name or current_user.username }}</b></span>
+      <span class="tag alumni">🏅 {{ current_user.cq_level }}</span>
+      {% if current_user.streak_days and current_user.streak_days > 1 %}
+      <span class="tag warn">🔥 {{ current_user.streak_days }} Day Streak</span>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- 5-Step Curriculum Roadmap -->
+  <div class="roadmap-section reveal">
+    <div class="roadmap-head">
+      <span class="eyebrow">Curriculum Roadmap</span>
+      <h3>5 Stages to Intercultural Readiness</h3>
+      <p class="muted">Complete each stage in order. Lessons unlock progressively as you build your competence.</p>
+    </div>
+
+    <div class="roadmap-list" id="roadmapList">
+      <div class="empty"><span class="spinner"></span> Loading curriculum...</div>
+    </div>
+  </div>
+
+  <!-- All Destination Tracks Grid -->
+  <div class="all-tracks-section reveal">
+    <div class="section-head">
+      <span class="eyebrow">All Destinations</span>
+      <h3>Explore Other Country Tracks</h3>
+      <p class="muted">Switch your target destination anytime. Your progress in each country is saved independently.</p>
+    </div>
+    <div class="tracks-grid" id="allTracksGrid"></div>
+  </div>
+</section>
+{% endblock %}

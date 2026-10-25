@@ -44,7 +44,10 @@ def seed(reset: bool = False) -> str:
             voice_min=c["voice_min"], voice_max=c["voice_max"], hospitality=c["hospitality"],
             etiquette=[EtiquetteRule(title=e["title"], text=e["text"], position=i) for i, e in enumerate(c["etiquette"])],
             universities=[University(name=u) for u in c["universities"]],
-            voices=[AlumniVoice(university=v["university"], text=v["text"]) for v in c["alumni_voices"]],
+            voices=[AlumniVoice(university=v["university"], text=v["text"], student_name=v.get("student_name"),
+                                nis_branch=v.get("nis_branch"), program_duration=v.get("program_duration"),
+                                advice=v.get("advice"), is_verified=v.get("is_verified", True), source="survey")
+                    for v in c["alumni_voices"]],
             scores=[CountryDimension(dimension=dims[k], value=v) for k, v in c["dims"].items()],
         )
         countries[c["code"]] = country
@@ -96,3 +99,34 @@ def seed(reset: bool = False) -> str:
     return (f"Seeded {len(countries)} countries, {len(dims)} dimensions, {len(data['quiz'])} quiz cases, "
             f"{len(data['match_items'])} match items, {len(data['roleplays'])} roleplay scenarios, "
             f"{len(data['greetings'])} greetings, {cached} expert analyses.")
+
+
+def import_alumni(path: str) -> str:
+    """Import full alumni survey records from a JSON list (idempotent: identical country+text rows are skipped).
+
+    Record fields: country (ISO-2), university, cultural_observations, advice_for_students?, student_name?,
+    nis_branch?, program_duration?, is_verified? (default true). Publish ``student_name`` only with consent.
+    """
+    with open(path, encoding="utf-8") as f:
+        records = json.load(f)
+    countries = {c.code: c for c in db.session.scalars(select(Country)).all()}
+    added = skipped = 0
+    for r in records:
+        country = countries.get(str(r.get("country", "")).upper())
+        text = (r.get("cultural_observations") or r.get("text") or "").strip()
+        if not country or not text or not r.get("university"):
+            skipped += 1
+            continue
+        exists = db.session.scalar(select(AlumniVoice.id).where(AlumniVoice.country_id == country.id,
+                                                                AlumniVoice.text == text))
+        if exists:
+            skipped += 1
+            continue
+        db.session.add(AlumniVoice(
+            country=country, university=r["university"].strip(), text=text, advice=r.get("advice_for_students"),
+            student_name=r.get("student_name"), nis_branch=r.get("nis_branch"),
+            program_duration=r.get("program_duration"), is_verified=r.get("is_verified", True), source="survey"))
+        added += 1
+    db.session.commit()
+    return f"Imported {added} alumni records, skipped {skipped}."
+

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#1e1642"/>
+    </linearGradient>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b6cff"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#f472b6"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <circle cx="64" cy="64" r="42" fill="none" stroke="url(#grad)" stroke-width="5" stroke-dasharray="14 8"/>
+  <circle cx="64" cy="64" r="28" fill="none" stroke="#22d3ee" stroke-width="2.5" opacity="0.6"/>
+  <!-- Central mark: intercultural bridge / crescent symbol -->
+  <path d="M48,64 A16,16 0 0,0 80,64 A16,16 0 1,1 48,64 Z" fill="url(#grad)"/>
+  <circle cx="64" cy="64" r="4" fill="#ffffff"/>
+</svg>

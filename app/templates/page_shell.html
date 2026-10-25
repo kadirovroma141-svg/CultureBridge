@@ -1,0 +1,56 @@
+{# Page shell — every /page extends this instead of base.html directly.
+   Provides: nav, background, footer, common scripts. Page fills block 'page_content'. #}
+{% extends "base.html" %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block head %}
+<meta name="description" content="{{ page.desc }}">
+<link rel="canonical" href="{{ canonical }}">
+<link rel="manifest" href="{{ url_for('web.manifest') }}">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.desc }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ canonical }}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v={{ asset_v }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}?v={{ asset_v }}">
+{% block page_head %}{% endblock %}
+{% endblock %}
+{% block body_class %}page-{{ current_key or 'home' }}{% endblock %}
+{% block body %}
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  {% include "partials/nav.html" %}
+
+  <main id="top">
+    {% block page_hero %}
+    <section class="page-header section">
+      <div class="section-head reveal">
+        <span class="eyebrow">{{ page.icon }} {{ page.nav }}</span>
+        <h1>{% block page_title %}{{ page.nav }}{% endblock %}</h1>
+        <p class="lead">{% block page_lead %}{{ page.desc }}{% endblock %}</p>
+      </div>
+    </section>
+    {% endblock %}
+
+    {% block page_content %}{% endblock %}
+
+    {% if next_page %}
+    <section class="section next-module reveal">
+      <a href="{{ next_page.path }}" class="card next-card">
+        <span class="next-label">Next module</span>
+        <span class="next-title">{{ next_page.icon }} {{ next_page.nav }} →</span>
+      </a>
+    </section>
+    {% endif %}
+
+    {% include "partials/footer.html" %}
+  </main>
+
+  <div class="toast" id="toast"></div>
+{% endblock %}
+{% block scripts %}
+{% block page_vendor %}{% endblock %}
+<script src="{{ url_for('static', filename='js/app.js') }}?v={{ asset_v }}"></script>
+{% block page_scripts %}{% endblock %}
+{% endblock %}

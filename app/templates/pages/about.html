@@ -1,0 +1,90 @@
+{% extends "page_shell.html" %}
+{% block page_title %}Methodology, Sources &amp; <span class="grad">Architecture</span>{% endblock %}
+{% block page_lead %}The research behind CultureBridge AI: NIS alumni survey, Hofstede, Hall, Meyer and Brown &amp; Levinson, ethics and limitations, and how the platform is built.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <!-- Research basis -->
+  <div class="card reveal">
+    <h3>🔬 Research Foundation</h3>
+    <p>CultureBridge AI is built on three pillars of data:</p>
+    <div class="pillar-grid">
+      <div class="pillar">
+        <span class="pillar-num">1</span>
+        <h4>NIS Alumni Survey</h4>
+        <p class="muted">An empirical questionnaire of Nazarbayev Intellectual School graduates studying in Italy, Hungary, Canada, the USA and other countries. Responses describe real cultural shocks, adaptation strategies and advice for future students.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">2</span>
+        <h4>Published Cross-Cultural Models</h4>
+        <p class="muted">Six dimensions combine frameworks from Geert Hofstede (Power Distance, Individualism, Uncertainty Avoidance), Edward T. Hall (Context, Time, Proxemics) and Erin Meyer (Expressiveness, direct/indirect feedback).</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">3</span>
+        <h4>Pragmatic &amp; Politeness Theory</h4>
+        <p class="muted">Brown &amp; Levinson's face-threatening acts model underpins the AI Decoder. Each phrase is analysed for its threat to positive face (desire to be liked) and negative face (desire for autonomy).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Academic references -->
+  <div class="card reveal">
+    <h3>📚 Key References</h3>
+    <ol class="refs" id="refs">
+      <li>Hofstede, G. (2001). <em>Culture's Consequences: Comparing Values, Behaviors, Institutions and Organizations Across Nations</em>. 2nd ed. Sage.</li>
+      <li>Hall, E. T. (1966). <em>The Hidden Dimension</em>. Doubleday.</li>
+      <li>Hall, E. T. (1976). <em>Beyond Culture</em>. Anchor Books.</li>
+      <li>Meyer, E. (2014). <em>The Culture Map: Breaking Through the Invisible Boundaries of Global Business</em>. PublicAffairs.</li>
+      <li>Brown, P. &amp; Levinson, S. C. (1987). <em>Politeness: Some Universals in Language Usage</em>. Cambridge University Press.</li>
+      <li>Earley, P. C. &amp; Ang, S. (2003). <em>Cultural Intelligence: Individual Interactions Across Cultures</em>. Stanford University Press.</li>
+      <li>Ting-Toomey, S. (1999). <em>Communicating Across Cultures</em>. Guilford Press.</li>
+      <li>Thomas, D. C. &amp; Inkson, K. C. (2017). <em>Cultural Intelligence: Surviving and Thriving in the Global Village</em>. 3rd ed. Berrett-Koehler.</li>
+    </ol>
+  </div>
+
+  <!-- Ethics & limitations -->
+  <div class="card reveal">
+    <h3>⚖️ Ethics &amp; Limitations</h3>
+    <div class="ethics-grid">
+      <div class="ethics-item">
+        <h4>Anonymity</h4>
+        <p class="muted">All alumni survey responses are anonymised. Voices shown on the platform are condensed summaries, not direct quotes, to protect participants' privacy.</p>
+      </div>
+      <div class="ethics-item">
+        <h4>Generalisation caveat</h4>
+        <p class="muted">Dimension scores describe <em>group tendencies</em> — never every individual. People within any culture vary widely. CultureBridge is a starting point for understanding, not a stereotype machine.</p>
+      </div>
+      <div class="ethics-item">
+        <h4>AI transparency</h4>
+        <p class="muted">The server-side AI (Gemini / OpenAI) generates cultural interpretations. When the AI is unreachable, a rule-based engine with an expert-curated cache provides answers. The source is always labelled.</p>
+      </div>
+      <div class="ethics-item">
+        <h4>Data freshness</h4>
+        <p class="muted">Survey data was collected in 2024–2025. Cultural norms evolve. If you notice outdated information, please report it through the admin panel.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Architecture -->
+  <div class="card reveal">
+    <h3>🏗️ Technical Architecture</h3>
+    <div class="arch-grid">
+      <div class="arch-item">
+        <h4>Backend</h4>
+        <p class="muted">Python 3.11+, Flask 3.x, SQLAlchemy ORM, Pydantic validation, Gunicorn (production). SQLite for development, PostgreSQL for production.</p>
+      </div>
+      <div class="arch-item">
+        <h4>AI Layer</h4>
+        <p class="muted">Server-side integration with Google Gemini and OpenAI APIs. Responses are cached in the database for offline resilience. The rule-based pragma engine guarantees answers even when APIs are down.</p>
+      </div>
+      <div class="arch-item">
+        <h4>Frontend</h4>
+        <p class="muted">Vanilla JS (no framework), D3.js for maps, Chart.js for radar, Three.js for 3D elements. CSS custom properties for theming. Progressive enhancement — works without JavaScript for basic content.</p>
+      </div>
+      <div class="arch-item">
+        <h4>Deployment</h4>
+        <p class="muted">Docker-ready (Dockerfile + docker-compose). Render.yaml and Procfile for one-click deploy to Render or Railway. CI health checks at /healthz and /api/health.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

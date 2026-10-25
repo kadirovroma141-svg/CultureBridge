@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Certificate of Cultural Awareness — CultureBridge AI{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}">
+{% endblock %}
+{% block body_class %}page-certificate{% endblock %}
+{% block body %}
+<main class="cert-page">
+  <div class="cert-frame card">
+    <div class="cert-border">
+      <div class="cert-header">
+        <span class="cert-logo">◐ Culture<b>Bridge</b> <small class="logo-ai">AI</small></span>
+        <h1 class="cert-title">Certificate of Cultural Awareness</h1>
+      </div>
+      <div class="cert-body">
+        <p class="cert-award">This certifies that</p>
+        <p class="cert-name">{{ cert.name or 'Anonymous Learner' }}</p>
+        <p class="cert-award">has demonstrated <b>{{ cert.level }}</b>-level cultural awareness</p>
+        <div class="cert-score">
+          <span class="cert-score-val">{{ cert.score }}/{{ cert.total }}</span>
+          <span class="cert-score-pct">({{ cert.pct }}%)</span>
+        </div>
+        <p class="cert-desc muted">by completing the CultureBridge AI Cultural Awareness Quiz based on real-life intercultural scenarios, Hofstede's dimensions, and NIS alumni research data.</p>
+      </div>
+      <div class="cert-footer">
+        <div class="cert-date">{{ cert.date }}</div>
+        <div class="cert-id muted">ID: {{ cert.token[:12] }}…</div>
+      </div>
+      <div class="cert-badge">
+        {% if cert.level == 'Expert' %}🏅{% elif cert.level == 'Learner' %}🎓{% else %}📘{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="cert-actions">
+    <button class="btn primary" onclick="window.print()">🖨 Print Certificate</button>
+    <a href="{{ url_for('web.quiz') }}" class="btn ghost">← Take the Quiz Again</a>
+    <a href="{{ url_for('web.home') }}" class="btn ghost">Home</a>
+  </div>
+</main>
+{% endblock %}

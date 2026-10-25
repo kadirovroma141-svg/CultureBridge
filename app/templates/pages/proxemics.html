@@ -1,0 +1,67 @@
+{% extends "page_shell.html" %}
+{% block page_title %}How close is <span class="grad">too close?</span>{% endblock %}
+{% block page_lead %}Edward T. Hall's proxemics: every culture has an invisible bubble. Move the slider and watch your partner react. Test your voice tone with the microphone calibrator.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <div class="prox-grid">
+    <div class="card prox-stage reveal">
+      <div class="field-row">
+        <label class="field"><span>Conversation partner from</span><select id="proxCountry"></select></label>
+        <div class="prox-readout"><b id="proxCm">80</b><span>cm</span></div>
+      </div>
+      <svg id="proxSvg" viewBox="0 0 600 260" role="img" aria-label="Two avatars at a distance"></svg>
+      <input type="range" id="proxRange" min="20" max="150" value="80" aria-label="Distance in centimetres">
+      <div class="zone-bar"><span style="flex:25">Intimate &lt;45</span><span style="flex:75">Personal 45–120</span><span style="flex:30">Social 120+</span></div>
+      <div class="prox-verdict" id="proxVerdict"></div>
+    </div>
+    <div class="card voice reveal">
+      <h3>🎙 Voice Tone Tester</h3>
+      <p class="muted">Speak a sentence. We measure loudness and pace and compare them with the typical norm of the selected culture.</p>
+      <canvas id="voiceCanvas" height="120"></canvas>
+      <div class="meter-label"><span>Loudness</span><b id="voiceLevel">—</b></div>
+      <div class="v-meter"><div class="v-band" id="voiceBand"></div><div class="v-fill" id="voiceFill"></div></div>
+      <div class="meter-label"><span>Pace (syllable peaks / s)</span><b id="voicePace">—</b></div>
+      <div class="voice-actions">
+        <button class="btn primary" id="voiceBtn">Start microphone</button>
+      </div>
+      <div class="prox-verdict" id="voiceVerdict">Microphone audio is analysed locally in your browser and never sent to the server.</div>
+    </div>
+  </div>
+
+  <!-- Hall zones theory -->
+  <div class="card reveal hall-zones">
+    <h3>📏 Edward T. Hall's Four Distance Zones</h3>
+    <div class="zone-cards">
+      <div class="zone-card">
+        <span class="zone-icon">💞</span>
+        <h4>Intimate (0–45 cm)</h4>
+        <p class="muted">Reserved for partners, close family, and children. Entering this zone with a stranger feels invasive in all cultures.</p>
+      </div>
+      <div class="zone-card">
+        <span class="zone-icon">🤝</span>
+        <h4>Personal (45–120 cm)</h4>
+        <p class="muted">Friends and acquaintances. The comfortable range varies: 45 cm in Italy, 110 cm in Canada. Most intercultural misunderstandings happen here.</p>
+      </div>
+      <div class="zone-card">
+        <span class="zone-icon">🏢</span>
+        <h4>Social (120–360 cm)</h4>
+        <p class="muted">Formal interactions, strangers, business meetings. Used by default in low-contact cultures like Japan and the UK.</p>
+      </div>
+      <div class="zone-card">
+        <span class="zone-icon">📢</span>
+        <h4>Public (360+ cm)</h4>
+        <p class="muted">Public speaking, lectures. No cultural variation — everyone maintains this distance with audiences.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comfort distance chart -->
+  <div class="card reveal">
+    <h3>📊 Comfort conversation distance by culture</h3>
+    <div class="bar-chart" id="proxBars">
+      <!-- filled by JS from country data -->
+    </div>
+    <p class="muted center" style="margin-top:12px">Based on Hall (1966), adjusted for NIS alumni survey reports. Distances are approximate norms for acquaintances.</p>
+  </div>
+</section>
+{% endblock %}

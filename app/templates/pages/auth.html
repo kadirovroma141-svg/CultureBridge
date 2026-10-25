@@ -1,0 +1,116 @@
+{% extends "page_shell.html" %}
+{% block page_title %}Learning Account &amp; <span class="grad">Progress Sync</span>{% endblock %}
+{% block page_lead %}Create an account to track your systematic intercultural learning, unlock verified certificates, and keep your CQ Passport synced across devices.{% endblock %}
+{% block page_content %}
+<section class="section auth-section">
+  {% if current_user %}
+  <!-- Logged in state -->
+  <div class="card reveal profile-card">
+    <div class="profile-header">
+      <div class="profile-avatar">👤</div>
+      <div class="profile-meta">
+        <h2>{{ current_user.full_name or current_user.username }}</h2>
+        <div class="profile-tags">
+          <span class="tag">@{{ current_user.username }}</span>
+          <span class="tag alumni">🏅 {{ current_user.cq_level }}</span>
+          <span class="tag">🎯 Target: {{ current_user.target_country }}</span>
+          {% if current_user.streak_days and current_user.streak_days > 1 %}
+          <span class="tag warn">🔥 {{ current_user.streak_days }} Day Streak</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <a href="{{ url_for('web.learn') }}" class="btn primary">Continue Learning Tracks →</a>
+      <button class="btn ghost" id="profileLogoutBtn">Log Out</button>
+    </div>
+  </div>
+  {% else %}
+  <!-- Login / Register Card -->
+  <div class="auth-wrap reveal">
+    <div class="card auth-card">
+      <div class="chip-row tabs auth-tabs">
+        <button class="chip active" id="tabLoginBtn" type="button">Sign In</button>
+        <button class="chip" id="tabRegisterBtn" type="button">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <div class="field">
+          <span>Username</span>
+          <input type="text" id="loginUsername" required autocomplete="username" placeholder="e.g. kazakh_scholar">
+        </div>
+        <div class="field">
+          <span>Password</span>
+          <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••">
+        </div>
+        <button class="btn primary auth-submit-btn" type="submit">Sign In ✦</button>
+        <div class="auth-msg" id="loginMsg"></div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form" hidden>
+        <div class="field">
+          <span>Username</span>
+          <input type="text" id="regUsername" required autocomplete="username" minlength="3" maxlength="40" placeholder="Choose a username">
+        </div>
+        <div class="field">
+          <span>Full Name (for certificates)</span>
+          <input type="text" id="regFullName" maxlength="100" placeholder="e.g. Altynay Sadykova">
+        </div>
+        <div class="field">
+          <span>Destination Country Track</span>
+          <select id="regCountry" required>
+            <option value="DE">🇩🇪 Germany</option>
+            <option value="IT">🇮🇹 Italy</option>
+            <option value="HU">🇭🇺 Hungary</option>
+            <option value="US">🇺🇸 United States</option>
+            <option value="GB">🇬🇧 United Kingdom</option>
+            <option value="JP">🇯🇵 Japan</option>
+            <option value="KR">🇰🇷 South Korea</option>
+            <option value="CN">🇨🇳 China</option>
+            <option value="CA">🇨🇦 Canada</option>
+            <option value="KZ">🇰🇿 Kazakhstan</option>
+          </select>
+        </div>
+        <div class="field">
+          <span>Password</span>
+          <input type="password" id="regPassword" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters">
+        </div>
+        <button class="btn primary auth-submit-btn" type="submit">Start Learning Track 🚀</button>
+        <div class="auth-msg" id="regMsg"></div>
+      </form>
+    </div>
+
+    <!-- Benefits Column -->
+    <div class="auth-perks card">
+      <h3>🌟 Why create an account?</h3>
+      <div class="perks-list">
+        <div class="perk-item">
+          <span class="perk-icon">🎓</span>
+          <div>
+            <b>Systematic Country Tracks</b>
+            <p class="muted">5 progressive stages to master non-verbal cues, shock avoidance, subtext, and roleplay.</p>
+          </div>
+        </div>
+        <div class="perk-item">
+          <span class="perk-icon">📜</span>
+          <div>
+            <b>Verified Track Certificates</b>
+            <p class="muted">Earn verifiable credentials with custom URLs and print-ready format.</p>
+          </div>
+        </div>
+        <div class="perk-item">
+          <span class="perk-icon">🔥</span>
+          <div>
+            <b>Daily Streaks &amp; Mastery Levels</b>
+            <p class="muted">Climb from Novice Explorer to Cultural Diplomat with consistent daily training.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

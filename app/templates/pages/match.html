@@ -1,0 +1,45 @@
+{% extends "page_shell.html" %}
+{% block page_title %}Match the <span class="grad">Cultural Customs</span>{% endblock %}
+{% block page_lead %}Drag each custom onto the situation where it belongs (on a phone: tap a custom, then tap a situation). Answers are checked on the server.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <div class="match-grid">
+    <div class="card reveal">
+      <h3>Customs</h3>
+      <div class="match-pool" id="matchPool"></div>
+    </div>
+    <div class="card reveal">
+      <h3>Situations</h3>
+      <div class="match-slots" id="matchSlots"></div>
+      <div class="match-actions">
+        <button class="btn primary" id="matchCheck">Check Answers</button>
+        <button class="btn ghost" id="matchReset">Reset</button>
+      </div>
+    </div>
+  </div>
+  <div class="card match-result reveal" id="matchResult" hidden></div>
+
+  <!-- How to play -->
+  <div class="card reveal match-help">
+    <h3>🧩 How to play</h3>
+    <div class="help-steps">
+      <div class="help-step">
+        <span class="step-num">1</span>
+        <p>Read the customs on the left. Each one describes a cultural practice from a specific country.</p>
+      </div>
+      <div class="help-step">
+        <span class="step-num">2</span>
+        <p>Read the situations on the right. Find the situation where each custom belongs.</p>
+      </div>
+      <div class="help-step">
+        <span class="step-num">3</span>
+        <p><b>Desktop:</b> Drag a custom card and drop it onto a situation. <b>Phone:</b> Tap a custom, then tap the situation.</p>
+      </div>
+      <div class="help-step">
+        <span class="step-num">4</span>
+        <p>Press <b>Check Answers</b>. The server verifies each match and provides a scientific explanation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

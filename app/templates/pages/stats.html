@@ -1,0 +1,60 @@
+{% extends "page_shell.html" %}
+{% block page_title %}Live Community <span class="grad">Statistics</span>{% endblock %}
+{% block page_lead %}Real-time analytics from the database: how many people trained, average cultural awareness score, level distribution and the most common mistakes.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <!-- Live stat counters -->
+  <div class="stats-hero reveal">
+    <div class="stat-big card">
+      <span class="stat-big-icon">👥</span>
+      <b id="statUsers">—</b>
+      <span>Total learners</span>
+    </div>
+    <div class="stat-big card">
+      <span class="stat-big-icon">📝</span>
+      <b id="statAttempts">—</b>
+      <span>Quiz attempts</span>
+    </div>
+    <div class="stat-big card">
+      <span class="stat-big-icon">🎯</span>
+      <b id="statAvg">—</b>
+      <span>Average score</span>
+    </div>
+    <div class="stat-big card">
+      <span class="stat-big-icon">🏆</span>
+      <b id="statExperts">—</b>
+      <span>Experts earned</span>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <!-- Level distribution -->
+    <div class="card reveal">
+      <h3>📊 Level Distribution</h3>
+      <div class="level-bars" id="levelBars">
+        <div class="level-bar"><span class="level-name">Expert (≥80%)</span><div class="level-track"><div class="level-fill expert" id="barExpert"></div></div><span class="level-pct" id="pctExpert">—</span></div>
+        <div class="level-bar"><span class="level-name">Learner (50–79%)</span><div class="level-track"><div class="level-fill learner" id="barLearner"></div></div><span class="level-pct" id="pctLearner">—</span></div>
+        <div class="level-bar"><span class="level-name">Beginner (&lt;50%)</span><div class="level-track"><div class="level-fill beginner" id="barBeginner"></div></div><span class="level-pct" id="pctBeginner">—</span></div>
+      </div>
+    </div>
+
+    <!-- Common mistakes -->
+    <div class="card reveal">
+      <h3>🔥 Most Challenging Questions</h3>
+      <div id="hardestQuestions" class="hardest-list">
+        <p class="muted">Loading…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity timeline -->
+  <div class="card reveal">
+    <h3>📈 Activity Over Time</h3>
+    <canvas id="activityChart" height="200" aria-label="Activity chart"></canvas>
+    <p class="muted center" style="margin-top:8px">Data from the live database. Updated every page load.</p>
+  </div>
+</section>
+{% endblock %}
+{% block page_vendor %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.js') }}"></script>
+{% endblock %}

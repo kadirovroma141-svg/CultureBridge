@@ -14,7 +14,7 @@ import re
 from flask import current_app
 from sqlalchemy import select
 
-from . import pragma
+from . import localize, pragma
 from .extensions import db
 from .models import Country, Setting, TranslationCache
 
@@ -31,6 +31,9 @@ Return ONLY a JSON object with keys:
 "risk": integer 0-100 — risk of offending / conflict for a listener from {country},
 "heard": string, 1-2 sentences — how a typical local would psychologically interpret it,
 "adapted": string — the culturally adapted English version for {country}, same intent,
+"adapted_alt": string — a second polite English version in a different register (formal vs friendly),
+"adapted_local": string — the same polite message written in {language}, the local language,
+"category": one of criticism|food|time|request|ask|decline|neutral,
 "tags": array of 1-4 short labels of detected pragmatic issues,
 "notes": array of 1-3 short explanations referencing cultural theory."""
 
@@ -86,16 +89,33 @@ def _clean_llm(raw: str) -> dict:
     j = json.loads(re.sub(r"^```(?:json)?|```$", "", raw.strip()).strip())
     risk = max(0, min(100, int(round(float(j.get("risk", 0))))))
     level = pragma.level_of(risk)
+    category = str(j.get("category", "")).strip().lower()
     return {
         "risk": risk,
         "level": level,
         "level_label": pragma.LEVEL_LABELS[level],
         "heard": str(j.get("heard", "")),
         "adapted": str(j.get("adapted", "")),
+        "adapted_alt": str(j.get("adapted_alt", "")),
+        "adapted_local": str(j.get("adapted_local", "")),
+        "category": category if category in localize.CATEGORIES else "",
         "tags": [str(t) for t in j.get("tags", [])][:4],
         "notes": [str(n) for n in j.get("notes", [])][:3],
         "softeners": 0,
     }
+
+
+def with_variants(result: dict, text: str, country: Country) -> dict:
+    """Attach ``variants`` (2 English + 1 local-language rephrasing) to any decode result, online or offline."""
+    out = dict(result)
+    category = out.get("category") or pragma.analyze(text, country, lexicon()).get("category", "neutral")
+    v = localize.variants(category, country.lang, out.get("adapted", ""), country.dims().get("hierarchy", 50))
+    if out.get("adapted_alt"):
+        v["en"][1] = out["adapted_alt"]
+    if out.get("adapted_local"):
+        v["local"]["text"] = out["adapted_local"]
+    out["category"], out["variants"] = category, v
+    return out
 
 
 def _cached(h: str, code: str, providers: tuple[str, ...]):
@@ -119,7 +139,7 @@ def decode(text: str, code: str, fresh: bool = False) -> dict:
     def serve(row: TranslationCache, source: str) -> dict:
         row.hits += 1
         db.session.commit()
-        return {**row.result, "source": source, "provider": row.provider, "model": row.model}
+        return with_variants({**row.result, "source": source, "provider": row.provider, "model": row.model}, text, country)
 
     # 1. previously generated LLM answer
     if not fresh:
@@ -131,7 +151,8 @@ def decode(text: str, code: str, fresh: bool = False) -> dict:
     if provider != "none":
         dims = country.dims()
         prompt = PROMPT.format(country=country.name, context=country.context.lower(), direct=dims["direct"],
-                               hierarchy=dims["hierarchy"], text=text.replace('"""', "'''"))
+                               hierarchy=dims["hierarchy"], language=localize.LANGUAGE_NAMES.get(country.lang, country.lang),
+                               text=text.replace('"""', "'''"))
         try:
             result = _clean_llm(_call_llm(provider, key, model, prompt))
             row = _cached(h, code, (provider,))
@@ -141,7 +162,7 @@ def decode(text: str, code: str, fresh: bool = False) -> dict:
                 db.session.add(TranslationCache(phrase_hash=h, phrase=text, country_code=code,
                                                 provider=provider, model=model, result=result))
             db.session.commit()
-            return {**result, "source": "live", "provider": provider, "model": model}
+            return with_variants({**result, "source": "live", "provider": provider, "model": model}, text, country)
         except Exception as exc:  # network down, quota, bad JSON… never break the demo
             db.session.rollback()
             log.warning("LLM call failed (%s): %s", provider, exc)
@@ -155,4 +176,5 @@ def decode(text: str, code: str, fresh: bool = False) -> dict:
         return serve(row, "expert-cache")
 
     # 4. rule-based engine
-    return {**pragma.analyze(text, country, lexicon()), "source": "engine", "provider": "engine", "model": "pragma-rules-v1"}
+    return with_variants({**pragma.analyze(text, country, lexicon()), "source": "engine", "provider": "engine",
+                          "model": "pragma-rules-v1"}, text, country)

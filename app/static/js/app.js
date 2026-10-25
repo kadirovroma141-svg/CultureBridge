@@ -26,6 +26,7 @@ const store = {
 let toastTimer;
 function toast(msg) {
   const t = $("#toast");
+  if (!t) return;
   t.textContent = msg;
   t.classList.add("show");
   clearTimeout(toastTimer);
@@ -53,8 +54,9 @@ function countryOptions(select, selected) {
    Theme
    --------------------------------------------------------------------- */
 const themeListeners = [];
-function applyThemeIcon() { $("#themeBtn").textContent = document.documentElement.dataset.theme === "light" ? "☀" : "☾"; }
-$("#themeBtn").addEventListener("click", () => {
+function applyThemeIcon() { const btn = $("#themeBtn"); if (btn) btn.textContent = document.documentElement.dataset.theme === "light" ? "☀" : "☾"; }
+const _themeBtn = $("#themeBtn");
+if (_themeBtn) _themeBtn.addEventListener("click", () => {
   const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
   document.documentElement.dataset.theme = next;
   try { localStorage.setItem("cb-theme", next); } catch (e) {}
@@ -87,9 +89,10 @@ function markNonverbal(tag) {
   if (!progress.nonverbal.includes(tag)) saveProgress({ nonverbal: [...progress.nonverbal, tag] });
 }
 function renderPassport() {
+  const bars = $("#passportBars"); if (!bars) return;
   const vals = PASSPORT.map((p) => clamp(p.val(), 0, 1));
-  $("#passportBars").innerHTML = PASSPORT.map((p, i) => `<div class="pbar">${p.label}<div><i style="width:${Math.round(vals[i] * 100)}%"></i></div></div>`).join("");
-  $("#cqScore").textContent = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length * 100);
+  bars.innerHTML = PASSPORT.map((p, i) => `<div class="pbar">${p.label}<div><i style="width:${Math.round(vals[i] * 100)}%"></i></div></div>`).join("");
+  const sc = $("#cqScore"); if (sc) sc.textContent = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length * 100);
 }
 
 /* ---------------------------------------------------------------------
@@ -104,6 +107,7 @@ const navLinks = $$("#navLinks a");
 const navSections = $$("main section[id]");
 let navRaf = 0;
 function syncNav() {
+  if (!navSections.length) return;
   navRaf = 0;
   const line = innerHeight * 0.4;
   let current = "";
@@ -111,7 +115,7 @@ function syncNav() {
   navLinks.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
 }
 window.addEventListener("scroll", () => { if (!navRaf) navRaf = requestAnimationFrame(syncNav); }, { passive: true });
-syncNav();
+if (navSections.length) syncNav();
 
 function countUp(el, target) {
   const t0 = performance.now();
@@ -269,7 +273,14 @@ function initAtlas() {
         <p class="muted" style="font-size:.75rem;margin-top:10px">Quotes are condensed from anonymous survey responses.</p></div>`
       : `<p class="muted" style="font-size:.85rem">No alumni from our survey study here yet — profile based on the exercise base and published research.</p>`}
       <div class="match-actions"><button class="btn ghost" data-go="radar">Compare with Kazakhstan →</button></div>`;
-    card.querySelector("[data-go]").addEventListener("click", () => { radar.set("KZ", code === "KZ" ? "DE" : code); document.getElementById("radar").scrollIntoView(); });
+    card.querySelector("[data-go]").addEventListener("click", () => {
+      if (typeof radar !== "undefined" && radar && document.getElementById("radar")) {
+        radar.set("KZ", code === "KZ" ? "DE" : code);
+        document.getElementById("radar").scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.location.href = `/radar?from=KZ&to=${encodeURIComponent(code === "KZ" ? "DE" : code)}`;
+      }
+    });
   }
 
   select(COUNTRIES.IT ? "IT" : CODES[0], true);
@@ -318,12 +329,15 @@ function initGreetings() {
     markNonverbal("greetings");
   }
 
-  $("#greetings").addEventListener("click", (e) => {
-    const sp = e.target.closest(".speak");
-    if (sp) { e.stopPropagation(); speak(GREETINGS[+sp.dataset.i]); return; }
-    const c = e.target.closest(".gcard");
-    if (c) c.classList.toggle("flipped");
-  });
+  const greetWrap = $("#greetings") || $("#marquee1")?.closest(".section") || document.body;
+  if (greetWrap) {
+    greetWrap.addEventListener("click", (e) => {
+      const sp = e.target.closest(".speak");
+      if (sp) { e.stopPropagation(); speak(GREETINGS[+sp.dataset.i]); return; }
+      const c = e.target.closest(".gcard");
+      if (c) c.classList.toggle("flipped");
+    });
+  }
 }
 
 /* ---------------------------------------------------------------------
@@ -427,8 +441,11 @@ function initRadar() {
       ${items ? `<h3 style="margin-top:14px">✅ Personal adaptation checklist</h3>${items}` : `<p>These cultures are very close on all six dimensions — expect a smooth start!</p>`}`;
   }
 
-  countryOptions(fromSel, "KZ");
-  countryOptions(toSel, "DE");
+  const urlParams = new URLSearchParams(window.location.search);
+  const qFrom = urlParams.get("from");
+  const qTo = urlParams.get("to");
+  countryOptions(fromSel, qFrom && COUNTRIES[qFrom] ? qFrom : "KZ");
+  countryOptions(toSel, qTo && COUNTRIES[qTo] ? qTo : "DE");
   fromSel.addEventListener("change", update);
   toSel.addEventListener("change", update);
   $("#radarSwap").addEventListener("click", () => { const f = fromSel.value; fromSel.value = toSel.value; toSel.value = f; update(); });
@@ -501,15 +518,20 @@ function initDecoder(presets, aiInfo) {
       </div>
       <div>${r.tags.map((t) => `<span class="ftag">${esc(t)}</span>`).join("")}${r.softeners ? `<span class="ftag soft">${r.softeners} softener${r.softeners > 1 ? "s" : ""} detected</span>` : ""}</div>
       <div class="dec-block" style="margin-top:10px"><h4>👂 How a local hears it</h4><p>${esc(r.heard)}</p></div>
-      <div class="dec-block adapted"><h4>✨ Culturally adapted for ${esc(c.name)} <button class="copy" id="copyBtn">Copy</button></h4><p id="adaptedText" class="typing"></p></div>
-      ${r.notes.length ? `<div class="dec-block"><h4>🔬 Why</h4>${r.notes.map((n) => `<p style="font-size:.88rem;margin-bottom:4px">• ${esc(n)}</p>`).join("")}</div>` : ""}`;
+      <div class="dec-block adapted"><h4>✨ Culturally adapted for ${esc(c.name)} <button class="copy" data-copy="${esc(r.adapted)}" id="copyBtn">Copy</button></h4><p id="adaptedText" class="typing"></p></div>
+      ${r.variants && r.variants.en && r.variants.en[1] && r.variants.en[1] !== r.adapted ? `<div class="dec-block"><h4>Alternative English register <button class="copy" data-copy="${esc(r.variants.en[1])}">Copy</button></h4><p>${esc(r.variants.en[1])}</p></div>` : ""}
+      ${r.variants && r.variants.local && r.variants.local.text ? `<div class="dec-block"><h4>🗣 ${esc(r.variants.local.language || c.name)} <button class="copy" data-copy="${esc(r.variants.local.text)}">Copy</button></h4><p style="font-weight:500">${esc(r.variants.local.text)}</p></div>` : ""}
+      ${r.notes && r.notes.length ? `<div class="dec-block"><h4>🔬 Why</h4>${r.notes.map((n) => `<p style="font-size:.88rem;margin-bottom:4px">• ${esc(n)}</p>`).join("")}</div>` : ""}`;
     requestAnimationFrame(() => { const n = out.querySelector(".needle"); if (n) n.style.transform = `rotate(${deg}deg)`; });
     const gv = $("#gaugeVal"); let v = 0;
     const iv = setInterval(() => { v = Math.min(r.risk, v + Math.max(1, Math.round(r.risk / 25))); gv.textContent = v + "%"; if (v >= r.risk) clearInterval(iv); }, 30);
     const at = $("#adaptedText"); let i = 0;
     const tw = setInterval(() => { at.textContent = r.adapted.slice(0, ++i); if (i >= r.adapted.length) { clearInterval(tw); at.classList.remove("typing"); } }, 14);
-    $("#copyBtn").addEventListener("click", () => {
-      (navigator.clipboard ? navigator.clipboard.writeText(r.adapted) : Promise.reject()).then(() => toast("Copied!"), () => toast("Copy not available here."));
+    out.querySelectorAll(".copy").forEach((b) => {
+      b.addEventListener("click", () => {
+        const textToCopy = b.dataset.copy || r.adapted;
+        (navigator.clipboard ? navigator.clipboard.writeText(textToCopy) : Promise.reject()).then(() => toast("Copied!"), () => toast("Copy not available here."));
+      });
     });
   }
 }
@@ -614,7 +636,9 @@ function initProxemics(voice) {
    05b · Voice Tone Tester (Web Audio API, local only)
    --------------------------------------------------------------------- */
 function initVoice() {
-  const canvas = $("#voiceCanvas"), ctx2 = canvas.getContext("2d"), btn = $("#voiceBtn");
+  const canvas = $("#voiceCanvas"), btn = $("#voiceBtn");
+  if (!canvas || !btn) return { setCountry: () => {} };
+  const ctx2 = canvas.getContext("2d");
   let code = "IT", audio = null, analyser = null, stream = null, raf = 0;
   let smooth = 0, speechLevels = [], onsets = [], prevEnv = 0, armed = true, speakingMs = 0, lastT = 0, lastVerdict = 0;
   const SILENCE = 22;
@@ -866,7 +890,8 @@ function initMatch() {
   });
 
   // tap-to-place (touch & keyboard-friendly)
-  document.getElementById("match").addEventListener("click", (e) => {
+  const matchWrap = document.getElementById("match") || pool.closest(".section") || document.body;
+  matchWrap.addEventListener("click", (e) => {
     const card = e.target.closest(".mcard");
     if (card) {
       if (picked === card) { unpick(); return; }
@@ -966,6 +991,7 @@ function initQuiz() {
     try { r = await api("/quiz/finish", { answers }); } catch (e) { toast(e.message); return; }
     if (r.score > progress.quiz) saveProgress({ quiz: r.score });
     const badge = r.badge || { icon: "🎓", title: "Cultural Awareness", text: "" };
+    const certUrl = r.certificate && r.certificate.url ? r.certificate.url : null;
     box.innerHTML = `${progressBar()}
       <div class="badge">
         <div class="badge-medal"><span>${esc(badge.icon)}</span></div>
@@ -973,8 +999,9 @@ function initQuiz() {
         <div class="score-big">${r.score} / ${r.total}</div>
         <h3 class="grad" style="font-size:1.6rem">${esc(badge.title)}</h3>
         <p class="muted">${esc(badge.text)}</p>
+        ${certUrl ? `<div style="margin:16px 0"><a href="${certUrl}" target="_blank" class="btn primary">🎓 View &amp; Print Your Certificate →</a></div>` : ""}
         <div class="explain-grid" style="text-align:left">${r.review.map((q) => `<div class="dec-block"><h4>${q.correct ? "✅" : "❌"} ${esc(q.flag)} ${esc(q.topic)}</h4><p>${esc(q.answer)}</p></div>`).join("")}</div>
-        <div class="match-actions" style="justify-content:center"><button class="btn primary" id="qRestart">Try again</button></div>
+        <div class="match-actions" style="justify-content:center"><button class="btn ghost" id="qRestart">Try again</button></div>
       </div>`;
     if (r.score >= Math.round(r.total * 10 / 12)) confetti();
   }
@@ -1001,6 +1028,348 @@ function confetti() {
 }
 
 /* ---------------------------------------------------------------------
+   Stats page
+   --------------------------------------------------------------------- */
+function initStats() {
+  const statUsers = $("#statUsers"); if (!statUsers) return;
+  api("/stats").then((s) => {
+    if (!s) return;
+    statUsers.textContent = s.total_users || "—";
+    const attempts = $("#statAttempts"); if (attempts) attempts.textContent = s.total_attempts || "—";
+    const avg = $("#statAvg"); if (avg) avg.textContent = s.avg_score ? Math.round(s.avg_score) + "%" : "—";
+    const experts = $("#statExperts"); if (experts) experts.textContent = s.expert_count || "—";
+    // Level bars
+    const total = Math.max(1, (s.level_distribution?.expert || 0) + (s.level_distribution?.learner || 0) + (s.level_distribution?.beginner || 0));
+    const pcts = {
+      expert: ((s.level_distribution?.expert || 0) / total * 100).toFixed(0),
+      learner: ((s.level_distribution?.learner || 0) / total * 100).toFixed(0),
+      beginner: ((s.level_distribution?.beginner || 0) / total * 100).toFixed(0)
+    };
+    for (const level of ["expert", "learner", "beginner"]) {
+      const bar = $(`#bar${level.charAt(0).toUpperCase() + level.slice(1)}`);
+      const pct = $(`#pct${level.charAt(0).toUpperCase() + level.slice(1)}`);
+      if (bar) bar.style.width = pcts[level] + "%";
+      if (pct) pct.textContent = pcts[level] + "%";
+    }
+    // Hardest questions
+    const box = $("#hardestQuestions");
+    if (box && s.hardest_questions) {
+      box.innerHTML = s.hardest_questions.map((q) =>
+        `<div class="hardest-item"><span class="q-text">${esc(q.topic || q.text || "Question")}</span><span class="miss-rate">${q.miss_rate || q.error_rate || 0}% errors</span></div>`
+      ).join("");
+    }
+    // Activity chart
+    const actCanvas = $("#activityChart");
+    if (actCanvas && s.activity_timeline && typeof Chart !== "undefined") {
+      new Chart(actCanvas, {
+        type: "line",
+        data: {
+          labels: s.activity_timeline.map((d) => d.date || d.day),
+          datasets: [{
+            label: "Attempts",
+            data: s.activity_timeline.map((d) => d.count),
+            borderColor: css("--accent"),
+            backgroundColor: "rgba(139,108,255,0.1)",
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: css("--border") }, ticks: { color: css("--muted") } },
+            y: { beginAtZero: true, grid: { color: css("--border") }, ticks: { color: css("--muted") } }
+          }
+        }
+      });
+    }
+  }).catch(() => {});
+}
+
+/* ---------------------------------------------------------------------
+   Proxemics bar chart (per-country comfort distance)
+   --------------------------------------------------------------------- */
+function initProxBars() {
+  const box = $("#proxBars"); if (!box) return;
+  const distances = CODES.map((c) => ({
+    name: COUNTRIES[c].name,
+    flag: COUNTRIES[c].flag,
+    dist: COUNTRIES[c].proxemics || 80
+  })).sort((a, b) => a.dist - b.dist);
+  const maxDist = Math.max(...distances.map((d) => d.dist), 120);
+  box.innerHTML = distances.map((d) =>
+    `<div class="bar-row"><span>${d.flag} ${esc(d.name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(d.dist / maxDist * 100)}%">${d.dist}</div></div><span class="muted">${d.dist}cm</span></div>`
+  ).join("");
+}
+
+/* ---------------------------------------------------------------------
+   3D particle background (Three.js) — floating particles on home page
+   --------------------------------------------------------------------- */
+function init3DBackground() {
+  const container = $("#three-bg"); if (!container || typeof THREE === "undefined") return;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 1, 1000);
+  camera.position.z = 300;
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const COUNT = 200;
+  const geom = new THREE.BufferGeometry();
+  const positions = new Float32Array(COUNT * 3);
+  const colors = new Float32Array(COUNT * 3);
+  const palette = [
+    new THREE.Color(css("--accent") || "#8b6cff"),
+    new THREE.Color(css("--accent-2") || "#22d3ee"),
+    new THREE.Color(css("--accent-3") || "#f472b6")
+  ];
+  for (let i = 0; i < COUNT; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 800;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 800;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 500;
+    const c = palette[i % 3];
+    colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
+  }
+  geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geom.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  const mat = new THREE.PointsMaterial({ size: 3, vertexColors: true, transparent: true, opacity: 0.5, sizeAttenuation: true });
+  const points = new THREE.Points(geom, mat);
+  scene.add(points);
+
+  // Connecting lines between nearby particles
+  const lineMat = new THREE.LineBasicMaterial({ color: css("--accent") || "#8b6cff", transparent: true, opacity: 0.06 });
+  const lineGeom = new THREE.BufferGeometry();
+  const linePositions = [];
+  for (let i = 0; i < COUNT; i++) {
+    for (let j = i + 1; j < COUNT; j++) {
+      const dx = positions[i*3] - positions[j*3], dy = positions[i*3+1] - positions[j*3+1], dz = positions[i*3+2] - positions[j*3+2];
+      if (dx*dx + dy*dy + dz*dz < 12000) {
+        linePositions.push(positions[i*3], positions[i*3+1], positions[i*3+2], positions[j*3], positions[j*3+1], positions[j*3+2]);
+      }
+    }
+  }
+  lineGeom.setAttribute("position", new THREE.Float32BufferAttribute(linePositions, 3));
+  scene.add(new THREE.LineSegments(lineGeom, lineMat));
+
+  let visible = true;
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(container);
+  function resize() { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); }
+  window.addEventListener("resize", resize);
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (!visible) return;
+    points.rotation.x += 0.0003;
+    points.rotation.y += 0.0005;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+/* ---------------------------------------------------------------------
+   Learning Accounts & Auth
+   --------------------------------------------------------------------- */
+function initAuth() {
+  const tabLogin = $("#tabLoginBtn"), tabReg = $("#tabRegisterBtn");
+  const formLogin = $("#loginForm"), formReg = $("#registerForm");
+  const loginMsg = $("#loginMsg"), regMsg = $("#regMsg");
+  const logoutBtn = $("#profileLogoutBtn");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await api("/auth/logout");
+      window.location.reload();
+    });
+  }
+
+  if (tabLogin && tabReg) {
+    tabLogin.addEventListener("click", () => {
+      tabLogin.classList.add("active"); tabReg.classList.remove("active");
+      formLogin.hidden = false; formReg.hidden = true;
+    });
+    tabReg.addEventListener("click", () => {
+      tabReg.classList.add("active"); tabLogin.classList.remove("active");
+      formReg.hidden = false; formLogin.hidden = true;
+    });
+  }
+
+  if (formLogin) {
+    formLogin.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      loginMsg.className = "auth-msg"; loginMsg.textContent = "Signing in…";
+      try {
+        await api("/auth/login", {
+          username: $("#loginUsername").value.trim(),
+          password: $("#loginPassword").value
+        });
+        loginMsg.className = "auth-msg ok"; loginMsg.textContent = "Success! Redirecting to your learning tracks…";
+        setTimeout(() => { window.location.href = "/learn"; }, 600);
+      } catch (err) {
+        loginMsg.className = "auth-msg error"; loginMsg.textContent = err.message;
+      }
+    });
+  }
+
+  if (formReg) {
+    formReg.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      regMsg.className = "auth-msg"; regMsg.textContent = "Creating account…";
+      try {
+        await api("/auth/register", {
+          username: $("#regUsername").value.trim(),
+          full_name: $("#regFullName").value.trim(),
+          target_country: $("#regCountry").value,
+          password: $("#regPassword").value
+        });
+        regMsg.className = "auth-msg ok"; regMsg.textContent = "Account created! Loading your tracks…";
+        setTimeout(() => { window.location.href = "/learn"; }, 600);
+      } catch (err) {
+        regMsg.className = "auth-msg error"; regMsg.textContent = err.message;
+      }
+    });
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Systematic Country Learning Tracks
+   --------------------------------------------------------------------- */
+function initTracks() {
+  const roadmapEl = $("#roadmapList"); if (!roadmapEl) return;
+  const sel = $("#trackCountrySelect");
+  const tracksGrid = $("#allTracksGrid");
+  let activeCode = new URLSearchParams(window.location.search).get("country") || "DE";
+
+  async function loadTrack(code) {
+    activeCode = code;
+    try {
+      const data = await api(`/tracks/${code}`);
+      renderTrackHero(data);
+      renderRoadmap(data);
+    } catch (err) {
+      roadmapEl.innerHTML = `<div class="empty">⚠️ ${esc(err.message)}</div>`;
+    }
+  }
+
+  function renderTrackHero(data) {
+    const c = data.country, p = data.progress;
+    $("#curFlag").textContent = c.flag;
+    $("#curContext").textContent = `${c.context} · ${c.name}`;
+    $("#curTitle").textContent = `Kazakhstan ➔ ${c.name} Adaptation Track`;
+    $("#progressSummary").textContent = `${p.completedCount} of ${p.totalSteps} lessons completed`;
+    $("#progressPct").textContent = `${p.percent}%`;
+    $("#progressBar").style.width = `${p.percent}%`;
+    if (sel) sel.value = c.code;
+  }
+
+  function renderRoadmap(data) {
+    const steps = data.curriculum, c = data.country, p = data.progress;
+    roadmapEl.innerHTML = steps.map((s) => {
+      const badgeText = s.isCompleted ? "✅ Completed" : s.isCurrent ? "⏳ In Progress" : "🔒 Locked";
+      const badgeClass = s.isCompleted ? "status-completed" : s.isCurrent ? "status-current" : "status-locked";
+
+      return `
+        <div class="roadmap-card ${s.isCompleted ? 'completed' : ''} ${s.isUnlocked ? 'unlocked' : 'locked'}">
+          <div class="roadmap-top">
+            <div class="roadmap-title-row">
+              <span class="roadmap-step-num">${s.isCompleted ? '✓' : s.number}</span>
+              <div>
+                <h4>${s.icon} ${esc(s.title)}</h4>
+                <span class="muted" style="font-size:.8rem">Stage ${s.number} of 5</span>
+              </div>
+            </div>
+            <span class="roadmap-status-badge ${badgeClass}">${badgeText}</span>
+          </div>
+
+          <p class="roadmap-desc">${esc(s.objective)}</p>
+          <div class="roadmap-theory"><b>Theoretical Foundation:</b> ${esc(s.theory)}</div>
+
+          <ul class="roadmap-tasks">
+            ${s.tasks.map((t) => `<li>${esc(t)}</li>`).join("")}
+          </ul>
+
+          <div class="roadmap-actions">
+            ${s.isUnlocked ? `
+              <button class="btn primary small btn-step-action" data-step="${s.id}">
+                ${s.isCompleted ? 'Review Lesson ↺' : 'Complete Stage ✦'}
+              </button>
+            ` : `<button class="btn ghost small" disabled>Complete Stage ${s.number - 1} First 🔒</button>`}
+            ${s.id === 'exam' && p.certificateToken ? `
+              <a href="/certificate/${p.certificateToken}" target="_blank" class="btn ghost small">🎓 View Certificate</a>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    $$(".btn-step-action", roadmapEl).forEach((b) => {
+      b.addEventListener("click", async () => {
+        const stepId = b.dataset.step;
+        b.disabled = true; b.textContent = "Recording progress…";
+        try {
+          const res = await api(`/tracks/${activeCode}/step/${stepId}/complete`, { step_id: stepId, score: 95 });
+          toast(`Stage completed! ${res.cqLevel ? `CQ Level: ${res.cqLevel}` : ''}`);
+          confetti();
+          loadTrack(activeCode);
+          loadAllTracks();
+        } catch (e) {
+          toast(e.message);
+          b.disabled = false;
+          b.textContent = "Complete Stage ✦";
+        }
+      });
+    });
+  }
+
+  async function loadAllTracks() {
+    try {
+      const all = await api("/tracks");
+      if (sel) {
+        sel.innerHTML = all.map((t) => `<option value="${t.code}" ${t.code === activeCode ? 'selected' : ''}>${t.flag} ${esc(t.name)} (${t.percent}%)</option>`).join("");
+      }
+      if (tracksGrid) {
+        tracksGrid.innerHTML = all.map((t) => `
+          <div class="card track-card ${t.code === activeCode ? 'active-track' : ''}" data-code="${t.code}">
+            <div class="track-card-top">
+              <span class="track-card-flag">${t.flag}</span>
+              <div>
+                <h4>${esc(t.name)}</h4>
+                <p>${esc(t.context)}</p>
+              </div>
+            </div>
+            <div class="track-card-progress">
+              <span>${t.completedCount}/${t.totalSteps} lessons</span>
+              <b>${t.percent}%</b>
+            </div>
+            <div class="track-progress-track" style="margin-top:6px;height:6px">
+              <div class="track-progress-bar" style="width:${t.percent}%"></div>
+            </div>
+          </div>
+        `).join("");
+
+        $$(".track-card", tracksGrid).forEach((card) => {
+          card.addEventListener("click", () => {
+            loadTrack(card.dataset.code);
+            const target = $("#trackHero");
+            if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: "smooth" });
+          });
+        });
+      }
+    } catch (e) {}
+  }
+
+  if (sel) {
+    sel.addEventListener("change", () => loadTrack(sel.value));
+  }
+
+  loadTrack(activeCode);
+  loadAllTracks();
+}
+
+/* ---------------------------------------------------------------------
    Boot: load reference data from the API, then start every module
    --------------------------------------------------------------------- */
 async function boot() {
@@ -1009,7 +1378,8 @@ async function boot() {
     [data, scenarios] = await Promise.all([api("/bootstrap"), api("/scenarios"),
       document.fonts ? document.fonts.load('16px "Twemoji Country Flags"', "🇰🇿").catch(() => {}) : null]);
   } catch (e) {
-    $("#loader").innerHTML = `⚠️ Could not reach the server: ${esc(e.message)}`;
+    const loader = $("#loader");
+    if (loader) loader.innerHTML = `⚠️ Could not reach the server: ${esc(e.message)}`;
     return;
   }
   COUNTRIES = data.countries;
@@ -1020,24 +1390,60 @@ async function boot() {
   ROLEPLAYS = scenarios;
   CODES.forEach((c) => { ISO_TO_CODE[COUNTRIES[c].iso] = c; });
 
-  const unis = CODES.reduce((n, c) => n + (COUNTRIES[c].alumni ? COUNTRIES[c].alumni.universities.length : 0), 0);
-  const s = data.stats;
-  countUp($('[data-count="countries"]'), CODES.length);
-  countUp($('[data-count="universities"]'), unis);
-  countUp($('[data-count="attempts"]'), s.quiz.count + s.match.count + s.roleplay.count);
-  $("#refs").innerHTML = data.references.map((r) => `<li>${esc(r)}</li>`).join("");
+  // Home page stat counters (only exist on home page)
+  const cntCountries = $('[data-count="countries"]');
+  if (cntCountries) {
+    const unis = CODES.reduce((n, c) => n + (COUNTRIES[c].alumni ? COUNTRIES[c].alumni.universities.length : 0), 0);
+    const s = data.stats;
+    countUp(cntCountries, CODES.length);
+    const cntUni = $('[data-count="universities"]'); if (cntUni) countUp(cntUni, unis);
+    const cntAtt = $('[data-count="attempts"]'); if (cntAtt) countUp(cntAtt, s.quiz.count + s.match.count + s.roleplay.count);
+  }
+  // References footer (if on page)
+  const refsEl = $("#refs");
+  if (refsEl && data.references) refsEl.innerHTML = data.references.map((r) => `<li>${esc(r)}</li>`).join("");
 
-  initGlobe();
-  initAtlas();
-  initGreetings();
-  radar = initRadar();
-  initDecoder(data.presets, data.ai);
-  initProxemics(initVoice());
-  initRoleplay();
-  initMatch();
-  initQuiz();
-  renderPassport();
-  $("#loader").remove();
+  // Conditionally init each module (guard on DOM presence)
+  if ($("#globe")) initGlobe();
+  if ($("#worldMap")) initAtlas();
+  if ($("#marquee1")) initGreetings();
+  if ($("#radarChart")) radar = initRadar();
+  if ($("#decInput")) initDecoder(data.presets, data.ai);
+  if ($("#proxSvg")) { initProxemics(initVoice()); initProxBars(); }
+  if ($("#rpChat")) initRoleplay();
+  if ($("#matchPool")) initMatch();
+  if ($("#quizCard")) initQuiz();
+  if ($("#passportBars")) renderPassport();
+  if ($("#statUsers")) initStats();
+  if ($("#three-bg")) init3DBackground();
+  if ($("#loginForm") || $("#profileLogoutBtn")) initAuth();
+  if ($("#roadmapList")) initTracks();
+
+  const navLogout = $("#navLogout");
+  if (navLogout) navLogout.addEventListener("click", () => api("/auth/logout").then(() => window.location.reload()));
+
+
+  // Story form (atlas page)
+  const storyForm = $("#storyForm");
+  if (storyForm) {
+    const sel = $("#storyCountry");
+    if (sel) countryOptions(sel, "IT");
+    storyForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const body = {
+        country: ($("#storyCountry") || {}).value || "KZ",
+        quote: ($("#storyText") || {}).value || "",
+        university: ($("#storyUni") || {}).value || "",
+        student_name: ($("#storyName") || {}).value || ""
+      };
+      if (!body.quote.trim()) { toast("Please write your story first"); return; }
+      try { await api("/alumni/add", body); toast("Thank you! Your story has been submitted for moderation."); storyForm.reset(); }
+      catch (err) { toast(err.message); }
+    });
+  }
+
+  const loader = $("#loader");
+  if (loader) loader.remove();
 }
 
 boot();

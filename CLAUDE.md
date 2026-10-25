@@ -26,27 +26,36 @@ Git установлен в `C:\Program Files\Git\cmd\git.exe` (может не 
 ## Структура файлов
 ```
 app/
-  __init__.py     create_app(): конфиг, ProxyFix, blueprints, security headers, CLI `flask seed`, db.create_all() + автосид пустой БД
+  __init__.py     create_app(): конфиг, ProxyFix, blueprints, security headers, CLI `flask seed`/`upgrade-db`/`import-alumni`, автосид
   config.py       Config (env/.env) и TestConfig (sqlite://, AI off, ADMIN_PASSWORD="test-admin")
   extensions.py   db = SQLAlchemy(model_class=Base)
-  models.py       все ORM-модели (см. «Схема БД»)
-  schemas.py      Pydantic-схемы входа: DecodeIn, QuizAnswerIn, QuizFinishIn, MatchCheckIn, RoleplayResultIn, QuizCreate, QuizPatch, VoiceCreate, EtiquetteCreate, ScenarioCreate(+Step/Option)
+  models.py       все ORM-модели (countries, dimensions, alumni, etiquette, greetings, match, quiz, roleplay, attempts, cache)
+  schemas.py      Pydantic-схемы входа: DecodeIn, QuizAnswerIn, QuizFinishIn, MatchCheckIn, RoleplayResultIn, CRUD-схемы
   api.py          blueprint /api (публичный) + ApiError, parse(schema), register_error_handlers(app), in-memory rate limiter
+  web.py          blueprint / (страницы сайта, SEO: robots.txt, sitemap.xml, manifest, /certificate/<token>, healthz)
   admin.py        blueprint pages /admin (логин/логаут, шаблоны) + blueprint api /api/admin (CRUD, требует session["admin"])
   ai.py           AI-декодер: цепочка кэш → LLM → экспертный кэш → движок; _call_llm(), PROMPT, phrase_hash()
-  pragma.py       rule-based прагматический движок analyze(text, country, lexicon) — порт клиентского движка
-  services.py     сериализация (country_dict, scenario_dict, …), radar(a, b), community_stats(), badge_for()
-  seeding.py      seed(reset) — заливает всё из seed_data/research_data.json + предрасчёт 60 экспертных разборов
+  pragma.py       rule-based прагматический движок analyze(text, country, lexicon)
+  localize.py     офлайн-разговорник (PHRASEBOOK): polite rephrasings на 10 языках + альтернативные регистры английского
+  migrate.py      ensure_schema(): автоматическая миграция схемы SQLite/PostgreSQL без внешних инструментов
+  tracks.py       движок страновых треков (5 этапов по Колбу), прогресс, уровни CQ, стрики и выдача сертификатов
+  services.py     сериализация (country_dict, scenario_dict, …), radar(a, b), community_stats(), certificate_data()
+  seeding.py      seed(reset) — заливает всё из seed_data/research_data.json + предрасчёт 60 экспертных разборов; import_alumni()
   templates/
-    base.html           общий <head>, тема из localStorage
-    index.html          одностраничный сайт: 8 секций (id: atlas, greetings, radar, decoder, proxemics, roleplay, match, quiz) + hero + footer
+    base.html           базовый каркас (HTML5, шрифты, CSP, тема)
+    page_shell.html     общий shell для страниц (навигация, хлебные крошки, hero, карточка следующего модуля, футер)
+    error.html          страницы ошибок (404, 500)
     admin.html          админка (Alpine: function admin()), вкладки dash/quiz/voices/etiquette/scenarios/cache
     admin_login.html    форма пароля
+    partials/           nav.html, footer.html
+    pages/              home.html, learn.html, auth.html, atlas.html, greetings.html, radar.html, decoder.html,
+                        proxemics.html, roleplay.html, match.html, quiz.html, stats.html, about.html, docs.html, certificate.html
   static/
-    css/styles.css      вся дизайн-система сайта (glassmorphism, bento, токены тем :root / [data-theme=light]); в админке НЕ используется
-    js/app.js           весь фронтенд сайта (одна IIFE, см. «Фронтенд»)
-    vendor/             d3.min.js, topojson-client.min.js, world-110m.js (window.WORLD_TOPO), chart.umd.js, alpine.min.js, tailwind.js, TwemojiCountryFlags.woff2
-seed_data/research_data.json   ЕДИНСТВЕННЫЙ источник контента (страны, опрос, квиз, матч, сценарии, приветствия, лексикон движка)
+    css/styles.css      базовая дизайн-система (glassmorphism, bento, токены тем :root / [data-theme=light])
+    css/pages.css       стили многостраничного интерфейса (module cards, theory cards, stats hero, certificate, print styles)
+    js/app.js           фронтенд (null-safe для всех страниц, Three.js 3D-фон, Chart.js, D3 Atlas, Audio, Speech)
+    vendor/             d3, topojson-client, world-110m, chart.umd, alpine, tailwind, three.min.js, TwemojiCountryFlags
+seed_data/research_data.json   первичный источник контента (страны, опрос, квиз, матч, сценарии, приветствия, лексикон)
 seed.py  wsgi.py  tests/test_api.py
 requirements.txt  Dockerfile  Procfile  render.yaml  .env.example  .gitignore  .gitattributes(eol=lf)  .dockerignore  README.md
 ```

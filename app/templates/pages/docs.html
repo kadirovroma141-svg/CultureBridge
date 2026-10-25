@@ -1,0 +1,66 @@
+{% extends "page_shell.html" %}
+{% block page_title %}REST API <span class="grad">Reference</span>{% endblock %}
+{% block page_lead %}Reference of the public REST endpoints: countries, compare, subtext translator, roleplay, quiz, matching, alumni stories and statistics.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <div class="card reveal">
+    <h3>🔗 Base URL</h3>
+    <code class="api-base" id="apiBase">{{ site_url }}/api</code>
+    <p class="muted" style="margin-top:8px">All endpoints return JSON. POST endpoints expect <code>Content-Type: application/json</code>.</p>
+  </div>
+
+  <div class="card reveal">
+    <h3>📡 Endpoints</h3>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead><tr><th>Method</th><th>Path</th><th>Description</th><th>Auth</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method get">GET</span></td><td>/api/bootstrap</td><td>All reference data: countries, dimensions, greetings, roleplays, match items, quiz questions</td><td>—</td></tr>
+          <tr><td><span class="method get">GET</span></td><td>/api/health</td><td>Readiness probe with database check and AI key status</td><td>—</td></tr>
+          <tr><td><span class="method get">GET</span></td><td>/api/countries</td><td>List of all countries with dimension scores, etiquette and alumni voices</td><td>—</td></tr>
+          <tr><td><span class="method get">GET</span></td><td>/api/countries/&lt;code&gt;</td><td>Single country by ISO-2 code</td><td>—</td></tr>
+          <tr><td><span class="method post">POST</span></td><td>/api/compare</td><td>Compare two countries: CDI, gap analysis, adaptation checklist. Body: <code>{"from":"KZ","to":"IT"}</code></td><td>—</td></tr>
+          <tr><td><span class="method post">POST</span></td><td>/api/subtext</td><td>AI pragmatic analysis of a phrase. Body: <code>{"phrase":"...","country":"IT"}</code></td><td>—</td></tr>
+          <tr><td><span class="method post">POST</span></td><td>/api/ai/roleplay</td><td>Send a reply in a roleplay scenario. Body: <code>{"scenario_id":1,"message":"...","trust":50,"history":[]}</code></td><td>—</td></tr>
+          <tr><td><span class="method post">POST</span></td><td>/api/quiz/answer</td><td>Check a quiz answer. Body: <code>{"question_id":1,"answer_index":0}</code></td><td>—</td></tr>
+          <tr><td><span class="method post">POST</span></td><td>/api/quiz/finish</td><td>Submit quiz results to earn a certificate. Body: <code>{"score":10,"total":12,"answers":[...]}</code></td><td>—</td></tr>
+          <tr><td><span class="method post">POST</span></td><td>/api/match/check</td><td>Check match answers. Body: <code>{"pairs":[{"custom_id":1,"situation_id":3},...]}</code></td><td>—</td></tr>
+          <tr><td><span class="method post">POST</span></td><td>/api/alumni/add</td><td>Submit an alumni story for moderation. Body: <code>{"country":"IT","quote":"...","university":"..."}</code></td><td>—</td></tr>
+          <tr><td><span class="method get">GET</span></td><td>/api/stats</td><td>Community statistics: attempt counts, score distribution, hardest questions</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Example requests -->
+  <div class="card reveal">
+    <h3>💻 Example: Compare two cultures</h3>
+    <pre class="code-block"><code>curl -X POST {{ site_url }}/api/compare \
+  -H "Content-Type: application/json" \
+  -d '{"from":"KZ","to":"IT"}'</code></pre>
+    <p class="muted" style="margin-top:8px">Returns CDI score, per-dimension gaps, culture-shock risk level, and an adaptation checklist.</p>
+  </div>
+
+  <div class="card reveal">
+    <h3>💻 Example: AI Subtext Decoder</h3>
+    <pre class="code-block"><code>curl -X POST {{ site_url }}/api/subtext \
+  -H "Content-Type: application/json" \
+  -d '{"phrase":"Your idea won'\''t work","country":"JP"}'</code></pre>
+    <p class="muted" style="margin-top:8px">Returns conflict risk (0–100), interpretation, face-threatening features, and polite rephrasings in English and Japanese.</p>
+  </div>
+
+  <!-- Error handling -->
+  <div class="card reveal">
+    <h3>⚠️ Error Responses</h3>
+    <p class="muted">All errors return JSON with an <code>error</code> field:</p>
+    <pre class="code-block"><code>{"error": "Validation failed", "details": [{"field": "country", "msg": "value is not a valid country code"}]}</code></pre>
+    <div class="error-codes">
+      <div class="error-code"><code>400</code> Bad request — missing or malformed JSON body</div>
+      <div class="error-code"><code>404</code> Not found — country code or resource does not exist</div>
+      <div class="error-code"><code>422</code> Validation error — body does not match expected schema</div>
+      <div class="error-code"><code>429</code> Rate limited — too many requests</div>
+      <div class="error-code"><code>500</code> Internal error — logged server-side</div>
+    </div>
+  </div>
+</section>
+{% endblock %}

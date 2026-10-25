@@ -1,0 +1,35 @@
+<!-- ============ FOOTER ============ -->
+<footer class="section footer">
+  <div class="card reveal">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo"><span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-ai">AI</small></span>
+        <p class="muted">Intercultural Intelligence Platform built on real NIS alumni survey data and published cross-cultural research.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Explore</h4>
+        <a href="{{ url_for('web.atlas') }}">World Atlas</a>
+        <a href="{{ url_for('web.greetings') }}">Greetings</a>
+        <a href="{{ url_for('web.radar') }}">Gap Radar</a>
+        <a href="{{ url_for('web.decoder') }}">AI Decoder</a>
+      </div>
+      <div class="footer-links">
+        <h4>Train</h4>
+        <a href="{{ url_for('web.proxemics') }}">Proxemics Lab</a>
+        <a href="{{ url_for('web.roleplay') }}">Roleplay</a>
+        <a href="{{ url_for('web.match') }}">Match Customs</a>
+        <a href="{{ url_for('web.quiz') }}">Awareness Quiz</a>
+      </div>
+      <div class="footer-links">
+        <h4>About</h4>
+        <a href="{{ url_for('web.stats') }}">Live Stats</a>
+        <a href="{{ url_for('web.about') }}">Methodology</a>
+        <a href="{{ url_for('web.docs') }}">API Docs</a>
+        <a href="/api/health">API Status</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="muted center">© {{ year }} CultureBridge AI · Flask + SQLAlchemy + server-side Gemini/OpenAI with offline cache</p>
+    </div>
+  </div>
+</footer>

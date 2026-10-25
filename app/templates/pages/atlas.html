@@ -1,0 +1,38 @@
+{% extends "page_shell.html" %}
+{% block page_title %}World Map &amp; <span class="grad">Voices of NIS Alumni</span>{% endblock %}
+{% block page_lead %}Click a highlighted country to see its mentality, etiquette and first-hand experience from our survey of NIS graduates. Share your own story.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <div class="atlas-grid">
+    <div class="card map-card reveal">
+      <div class="map-wrap" id="mapWrap">
+        <svg id="worldMap" role="img" aria-label="World map"></svg>
+        <div class="map-tip" id="mapTip"></div>
+      </div>
+      <div class="chip-row" id="countryChips"></div>
+      <div class="map-legend"><span><i class="lg lg-alumni"></i> Alumni survey data</span><span><i class="lg lg-base"></i> Exercise base</span></div>
+    </div>
+    <div class="card country-card reveal" id="countryCard"></div>
+  </div>
+
+  <!-- Share Your Story -->
+  <div class="card reveal share-story" id="shareStory">
+    <h3>📝 Share Your Experience</h3>
+    <p class="muted">Are you a NIS alumnus or alumna studying abroad? Help fellow students by sharing your intercultural experience.</p>
+    <form id="storyForm" class="story-form">
+      <div class="field-row">
+        <label class="field"><span>Your name (optional)</span><input id="storyName" maxlength="100" placeholder="Anonymous"></label>
+        <label class="field"><span>Country you studied in</span><select id="storyCountry"></select></label>
+      </div>
+      <label class="field"><span>University</span><input id="storyUni" maxlength="120" placeholder="e.g. Politecnico di Milano"></label>
+      <label class="field"><span>Your story or advice</span><textarea id="storyText" rows="4" maxlength="600" placeholder="What surprised you? What advice would you give?"></textarea></label>
+      <button class="btn primary" type="submit">Submit Story ✦</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
+{% block page_vendor %}
+<script src="{{ url_for('static', filename='vendor/d3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/topojson-client.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/world-110m.js') }}"></script>
+{% endblock %}

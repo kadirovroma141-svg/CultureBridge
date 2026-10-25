@@ -1,0 +1,63 @@
+{% extends "page_shell.html" %}
+{% block page_title %}Cultural Decoder: translate the <span class="grad">subtext</span>, not the words{% endblock %}
+{% block page_lead %}High-context vs low-context communication (Hall) + politeness &amp; face theory (Brown &amp; Levinson). Type a phrase, choose who will hear it.{% endblock %}
+{% block page_content %}
+<section class="section">
+  <div class="decoder-grid">
+    <div class="card reveal">
+      <label class="field"><span>Your phrase (English)</span>
+        <textarea id="decInput" rows="3" maxlength="500" placeholder="e.g. Your idea won't work, we need another solution."></textarea>
+      </label>
+      <div class="chip-row small" id="decPresets"></div>
+      <div class="field-row">
+        <label class="field"><span>Listener's culture</span><select id="decCountry"></select></label>
+        <button class="btn primary" id="decRun">Decode ✦</button>
+      </div>
+      <div class="engine-badge" id="engineBadge"></div>
+    </div>
+    <div class="card dec-out reveal" id="decOut">
+      <div class="empty">Type a phrase and press <b>Decode</b> to see how it lands.</div>
+    </div>
+  </div>
+
+  <!-- Theory section -->
+  <div class="card reveal decoder-theory">
+    <h3>📖 The science behind the Decoder</h3>
+    <div class="theory-grid two-col">
+      <div class="theory-card card">
+        <h4>High vs Low Context (Edward T. Hall)</h4>
+        <p class="muted">In <b>high-context</b> cultures (Japan, Korea, Kazakhstan), much of the meaning is conveyed through tone, situation, and relationships — not the words themselves. In <b>low-context</b> cultures (Germany, USA, Canada), communication is explicit and literal. The Decoder analyses which context your listener expects.</p>
+      </div>
+      <div class="theory-card card">
+        <h4>Face-Threatening Acts (Brown & Levinson)</h4>
+        <p class="muted">Every utterance can threaten the listener's <em>positive face</em> (desire to be liked) or <em>negative face</em> (desire for autonomy). The conflict-risk meter evaluates how many face-threatening features your phrase contains and how seriously the target culture perceives them.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example phrases -->
+  <div class="card reveal">
+    <h3>💡 Common pitfalls for Kazakh students abroad</h3>
+    <div class="pitfall-grid">
+      <div class="pitfall">
+        <span class="pitfall-bad">❌ "Your idea won't work"</span>
+        <span class="pitfall-arrow">→</span>
+        <span class="pitfall-good">✅ "I like where you're going — could we explore another angle together?"</span>
+        <p class="muted">Direct criticism of an idea is face-threatening in most cultures.</p>
+      </div>
+      <div class="pitfall">
+        <span class="pitfall-bad">❌ "I don't want to eat this"</span>
+        <span class="pitfall-arrow">→</span>
+        <span class="pitfall-good">✅ "Everything looks wonderful! May I try a small portion?"</span>
+        <p class="muted">Refusing food directly is offensive in many hospitality cultures (Italy, Hungary).</p>
+      </div>
+      <div class="pitfall">
+        <span class="pitfall-bad">❌ "You're always late"</span>
+        <span class="pitfall-arrow">→</span>
+        <span class="pitfall-good">✅ "Could we agree on a fixed time next time so everyone can plan?"</span>
+        <p class="muted">Personalising time complaints attacks the listener's face.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

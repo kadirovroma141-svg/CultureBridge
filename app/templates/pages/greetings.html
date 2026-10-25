@@ -1,0 +1,20 @@
+{% extends "page_shell.html" %}
+{% block page_title %}Say hello in <span class="grad"><span id="greetCount">20</span> cultures</span>{% endblock %}
+{% block page_lead %}Hover or tap a card to flip it and see the gesture. Press 🔊 to hear the pronunciation (Web Speech API).{% endblock %}
+{% block page_content %}
+<section class="section">
+  <div class="marquee reveal"><div class="marquee-track" id="marquee1"></div></div>
+  <div class="marquee reverse reveal"><div class="marquee-track" id="marquee2"></div></div>
+
+  <div class="card reveal greet-info">
+    <h3>🌐 Why greetings matter</h3>
+    <p class="muted">First impressions are culturally coded. In Kazakhstan a firm handshake with elders is expected; in Japan, a bow replaces physical contact. Getting the greeting right signals respect and opens doors.</p>
+    <div class="greet-zones">
+      <div class="greet-zone"><span class="greet-zone-icon">🤝</span><h4>Handshake cultures</h4><p class="muted">Germany, Canada, USA, Hungary — firm, brief, eye contact.</p></div>
+      <div class="greet-zone"><span class="greet-zone-icon">💋</span><h4>Kiss/cheek cultures</h4><p class="muted">Italy, France, Spain — one or two cheek kisses, depending on region.</p></div>
+      <div class="greet-zone"><span class="greet-zone-icon">🙇</span><h4>Bow cultures</h4><p class="muted">Japan, Korea — depth and duration of bow convey status and respect.</p></div>
+      <div class="greet-zone"><span class="greet-zone-icon">🙏</span><h4>Gesture cultures</h4><p class="muted">Thailand (wai), India (namaste) — palms together, slight nod.</p></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

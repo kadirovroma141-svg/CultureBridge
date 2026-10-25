@@ -11,7 +11,7 @@ from .api import ApiError, parse
 from .extensions import db
 from .models import (AlumniVoice, Attempt, Country, EtiquetteRule, QuizOption, QuizQuestion, Scenario, ScenarioOption,
                      ScenarioStep, TranslationCache)
-from .schemas import EtiquetteCreate, QuizCreate, QuizPatch, ScenarioCreate, VoiceCreate
+from .schemas import EtiquetteCreate, QuizCreate, QuizPatch, ScenarioCreate, VoiceCreate, VoicePatch
 
 pages = Blueprint("admin", __name__, url_prefix="/admin")
 api = Blueprint("admin_api", __name__, url_prefix="/api/admin")
@@ -72,8 +72,8 @@ def stats():
         attempts=by_module,
         quiz_questions=db.session.scalar(select(func.count(QuizQuestion.id))),
         scenarios=db.session.scalar(select(func.count(Scenario.id))),
-        recent=[{"module": a.module, "ref": a.ref, "score": a.score, "max": a.max_score,
-                 "at": a.created_at.isoformat()} for a in recent],
+        recent=[{"module": a.module, "ref": a.ref, "score": a.score, "max": a.max_score, "name": a.user_name,
+                 "level": a.cultural_level, "at": a.created_at.isoformat()} for a in recent],
     )
 
 
@@ -127,16 +127,34 @@ def quiz_delete(qid):
 def voices_list():
     vs = db.session.scalars(select(AlumniVoice).options(selectinload(AlumniVoice.country)).order_by(AlumniVoice.id.desc())).all()
     return jsonify([{"id": v.id, "country": v.country.code, "flag": v.country.flag, "university": v.university,
-                     "text": v.text, "approved": v.approved} for v in vs])
+                     "text": v.text, "approved": v.approved, "verified": v.is_verified is not False,
+                     "source": v.source or "survey", "student": v.student_name, "branch": v.nis_branch,
+                     "duration": v.program_duration, "advice": v.advice,
+                     "created": v.created_at.isoformat() if v.created_at else None} for v in vs])
 
 
 @api.post("/voices")
 def voices_create():
     body = parse(VoiceCreate)
-    v = AlumniVoice(country=_country(body.country), university=body.university, text=body.text)
+    v = AlumniVoice(country=_country(body.country), university=body.university, text=body.text,
+                    student_name=body.student_name, nis_branch=body.nis_branch,
+                    program_duration=body.program_duration, advice=body.advice, is_verified=body.is_verified,
+                    source="admin")
     db.session.add(v)
     db.session.commit()
     return jsonify(id=v.id), 201
+
+
+@api.patch("/voices/<int:vid>")
+def voices_patch(vid):
+    body = parse(VoicePatch)
+    v = db.session.get(AlumniVoice, vid) or abort404()
+    if body.approved is not None:
+        v.approved = body.approved
+    if body.is_verified is not None:
+        v.is_verified = body.is_verified
+    db.session.commit()
+    return jsonify(ok=True)
 
 
 @api.delete("/voices/<int:vid>")

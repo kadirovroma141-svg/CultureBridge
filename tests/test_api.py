@@ -150,3 +150,105 @@ def test_admin_rejects_form_posts(client):
     login(client)
     r = client.post("/api/admin/voices", data={"country": "JP"})
     assert r.status_code == 415
+
+
+def test_web_pages_and_seo(client):
+    pages = ["/", "/learn", "/auth", "/atlas", "/greetings", "/radar", "/decoder", "/proxemics",
+             "/roleplay", "/match", "/quiz", "/stats", "/about", "/docs"]
+    for path in pages:
+        res = client.get(path)
+        assert res.status_code == 200, f"Page {path} failed with {res.status_code}"
+        assert b"Culture" in res.data and b"Bridge" in res.data
+
+    # SEO & probe endpoints
+    assert client.get("/robots.txt").status_code == 200
+    assert client.get("/sitemap.xml").status_code == 200
+    assert client.get("/manifest.webmanifest").status_code == 200
+    assert client.get("/healthz").status_code == 200
+
+    # Quiz finish generates a valid certificate token
+    finish_res = client.post("/api/quiz/finish", json={"answers": {}}).get_json()
+    assert "certificate" in finish_res and "token" in finish_res["certificate"]
+    token = finish_res["certificate"]["token"]
+    cert_page = client.get(f"/certificate/{token}")
+    assert cert_page.status_code == 200
+    assert b"Certificate of Cultural Awareness" in cert_page.data
+
+    # Non-existent certificate returns 404
+    assert client.get("/certificate/invalid-token-12345").status_code == 404
+
+
+def test_auth_and_systematic_tracks(client):
+    # 1. Unauthenticated state
+    me = client.get("/api/auth/me").get_json()
+    assert me["user"] is None
+
+    # Tracks list works for guests
+    tracks_list = client.get("/api/tracks").get_json()
+    assert len(tracks_list) == 10
+    de_track = client.get("/api/tracks/DE").get_json()
+    assert len(de_track["curriculum"]) == 5
+    assert de_track["curriculum"][0]["id"] == "first_contact"
+
+    # Step completion requires auth
+    unauth_step = client.post("/api/tracks/DE/step/first_contact/complete", json={"step_id": "first_contact"})
+    assert unauth_step.status_code == 401
+
+    # 2. Registration
+    reg_data = {
+        "username": "scholar_dana",
+        "password": "secretpassword123",
+        "full_name": "Dana Bolatova",
+        "target_country": "DE"
+    }
+    r = client.post("/api/auth/register", json=reg_data)
+    assert r.status_code == 201
+    user_info = r.get_json()["user"]
+    assert user_info["username"] == "scholar_dana"
+    assert user_info["targetCountry"] == "DE"
+
+    # Duplicate username returns 409
+    dup = client.post("/api/auth/register", json=reg_data)
+    assert dup.status_code == 409
+
+    # Auth me now returns logged-in user
+    me = client.get("/api/auth/me").get_json()
+    assert me["user"]["username"] == "scholar_dana"
+
+    # 3. Systematic track progression
+    step1 = client.post("/api/tracks/DE/step/first_contact/complete", json={"step_id": "first_contact", "score": 90}).get_json()
+    assert step1["percent"] == 20
+    assert not step1["isCompleted"]
+
+    step2 = client.post("/api/tracks/DE/step/shock_radar/complete", json={"step_id": "shock_radar", "score": 85}).get_json()
+    assert step2["percent"] == 40
+
+    step3 = client.post("/api/tracks/DE/step/pragmatics/complete", json={"step_id": "pragmatics", "score": 95}).get_json()
+    step4 = client.post("/api/tracks/DE/step/simulation/complete", json={"step_id": "simulation", "score": 90}).get_json()
+    step5 = client.post("/api/tracks/DE/step/exam/complete", json={"step_id": "exam", "score": 100}).get_json()
+
+    assert step5["percent"] == 100
+    assert step5["isCompleted"]
+    assert step5["certificateToken"]
+    assert step5["certificateUrl"].startswith("/certificate/")
+    assert step5["cqLevel"] == "Cultural Analyst"
+
+    # Verify unlocked certificate works
+    cert_res = client.get(step5["certificateUrl"])
+    assert cert_res.status_code == 200
+    assert b"Dana Bolatova" in cert_res.data
+
+    # 4. Logout and Login
+    client.post("/api/auth/logout")
+    assert client.get("/api/auth/me").get_json()["user"] is None
+
+    # Login with bad password fails
+    bad_login = client.post("/api/auth/login", json={"username": "scholar_dana", "password": "wrong"})
+    assert bad_login.status_code == 401
+
+    # Login with good password succeeds
+    login_res = client.post("/api/auth/login", json={"username": "scholar_dana", "password": "secretpassword123"})
+    assert login_res.status_code == 200
+    assert login_res.get_json()["user"]["username"] == "scholar_dana"
+
+

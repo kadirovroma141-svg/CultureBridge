@@ -35,6 +35,98 @@ class MatchCheckIn(BaseModel):
 
 class RoleplayResultIn(BaseModel):
     trust: float = Field(ge=0, le=100)
+    mode: Literal["guided", "free"] = "guided"
+    session_id: str | None = Field(default=None, max_length=64, pattern=r"^[A-Za-z0-9_-]{8,64}$")
+
+
+SessionId = Field(default=None, max_length=64, pattern=r"^[A-Za-z0-9_-]{8,64}$")
+
+
+def _clean(v: str | None) -> str | None:
+    if v is None:
+        return None
+    v = " ".join(v.split())
+    return v or None
+
+
+class SubtextIn(BaseModel):
+    """POST /api/ai/translate-subtext"""
+    text: str = Field(min_length=1, max_length=500)
+    target_country: str = CountryCode
+    fresh: bool = False
+
+    @field_validator("text")
+    @classmethod
+    def strip(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("text must not be empty")
+        return v
+
+
+class RoleplayTurnIn(BaseModel):
+    """POST /api/ai/roleplay — one free-text reply inside a scenario."""
+    scenario: str = Field(min_length=3, max_length=60, pattern=r"^[a-z0-9-]+$")
+    message: str = Field(min_length=1, max_length=400)
+    trust: float = Field(default=50, ge=0, le=100)
+    turn: int = Field(default=1, ge=1, le=30)
+    history: list[str] = Field(default_factory=list, max_length=12)
+
+    @field_validator("message")
+    @classmethod
+    def strip(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("message must not be empty")
+        return v
+
+    @field_validator("history")
+    @classmethod
+    def cut(cls, v: list[str]) -> list[str]:
+        return [h[:400] for h in v]
+
+
+class LearnerIn(BaseModel):
+    """Identity block shared by the trainer submissions (all optional — anonymous by default)."""
+    session_id: str | None = SessionId
+    user_name: str | None = Field(default=None, max_length=80)
+    origin_country: str | None = Field(default=None, min_length=2, max_length=2, pattern=r"^[A-Z]{2}$")
+    target_country: str | None = Field(default=None, min_length=2, max_length=2, pattern=r"^[A-Z]{2}$")
+
+    @field_validator("user_name")
+    @classmethod
+    def tidy_name(cls, v):
+        return _clean(v)
+
+
+class QuizSubmitIn(LearnerIn):
+    answers: dict[int, int] = Field(description="question_id → option_id")
+
+
+class MatchSubmitIn(LearnerIn):
+    pairs: dict[int, str] = Field(description="situation_id → custom slug")
+
+
+class AlumniAddIn(BaseModel):
+    """POST /api/alumni/add — 'Share your study-abroad experience'."""
+    country: str = CountryCode
+    university: str = Field(min_length=2, max_length=160)
+    cultural_observations: str = Field(min_length=20, max_length=1200)
+    advice_for_students: str | None = Field(default=None, max_length=800)
+    student_name: str | None = Field(default=None, max_length=120)
+    nis_branch: str | None = Field(default=None, max_length=120)
+    program_duration: str | None = Field(default=None, max_length=60)
+    consent_to_publish_name: bool = False
+    website: str = Field(default="", max_length=200)   # honeypot: real users leave it empty
+
+    @field_validator("university", "cultural_observations", "advice_for_students", "student_name", "nis_branch",
+                     "program_duration")
+    @classmethod
+    def tidy(cls, v):
+        if v is None:
+            return None
+        v = v.strip()
+        return v or None
 
 
 # ---------------------------------------------------------------- admin
@@ -63,7 +155,17 @@ class QuizPatch(BaseModel):
 class VoiceCreate(BaseModel):
     country: str = CountryCode
     university: str = Field(min_length=2, max_length=160)
-    text: str = Field(min_length=10, max_length=1000)
+    text: str = Field(min_length=10, max_length=1200)
+    student_name: str | None = Field(default=None, max_length=120)
+    nis_branch: str | None = Field(default=None, max_length=120)
+    program_duration: str | None = Field(default=None, max_length=60)
+    advice: str | None = Field(default=None, max_length=800)
+    is_verified: bool = True
+
+
+class VoicePatch(BaseModel):
+    approved: bool | None = None
+    is_verified: bool | None = None
 
 
 class EtiquetteCreate(BaseModel):
@@ -94,3 +196,22 @@ class ScenarioCreate(BaseModel):
     intro: str = Field(min_length=5, max_length=1000)
     start_trust: int = Field(default=50, ge=0, le=100)
     steps: list[ScenarioStepIn] = Field(min_length=1, max_length=10)
+
+
+class RegisterIn(BaseModel):
+    username: str = Field(min_length=3, max_length=40, pattern=r"^[A-Za-z0-9_.-]+$")
+    password: str = Field(min_length=6, max_length=100)
+    full_name: str | None = Field(default=None, max_length=100)
+    target_country: str = CountryCode
+
+
+class LoginIn(BaseModel):
+    username: str = Field(min_length=1, max_length=100)
+    password: str = Field(min_length=1, max_length=100)
+
+
+class TrackStepCompleteIn(BaseModel):
+    step_id: str = Field(min_length=2, max_length=40)
+    score: float | None = Field(default=None, ge=0, le=100)
+    detail: dict | None = None
+

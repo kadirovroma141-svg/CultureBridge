@@ -1,0 +1,26 @@
+<header class="nav">
+  <a href="{{ url_for('web.home') }}" class="logo"><span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-ai">AI</small></a>
+  <nav class="nav-links" id="navLinks">
+    {% for p in pages if p.key != 'home' %}
+    <a href="{{ p.path }}" class="{% if current_key == p.key %}active{% endif %}" title="{{ p.nav }}">
+      <span class="nav-icon">{{ p.icon }}</span> {{ p.nav }}
+    </a>
+    {% endfor %}
+  </nav>
+  <div class="nav-actions">
+    {% if current_user %}
+    <a class="nav-user-pill" href="{{ url_for('web.learn') }}" title="Account: {{ current_user.full_name or current_user.username }}">
+      <span class="user-avatar">👤</span>
+      <span class="user-name">{{ (current_user.full_name or current_user.username)[:10] }}</span>
+      {% if current_user.streak_days and current_user.streak_days > 1 %}
+      <span class="user-streak" title="{{ current_user.streak_days }} days streak">🔥{{ current_user.streak_days }}</span>
+      {% endif %}
+    </a>
+    <button class="icon-btn text-btn" id="navLogout" title="Log out" aria-label="Log out">🚪</button>
+    {% else %}
+    <a class="btn primary small nav-login-btn" href="{{ url_for('web.auth') }}">Sign In</a>
+    {% endif %}
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☾</button>
+    <a class="icon-btn" href="{{ url_for('admin.panel') }}" title="Admin panel" aria-label="Admin panel">⚙</a>
+  </div>
+</header>

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block head %}
+<meta name="description" content="{{ page.desc }}">
+<link rel="canonical" href="{{ canonical }}">
+<link rel="manifest" href="{{ url_for('web.manifest') }}">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.desc }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ canonical }}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v={{ asset_v }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}?v={{ asset_v }}">
+{% endblock %}
+{% block body_class %}page-home{% endblock %}
+{% block body %}
+  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  {% include "partials/nav.html" %}
+
+  <div class="loader" id="loader"><span class="spinner"></span> Loading research data…</div>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero bento">
+      <div class="card hero-main reveal">
+        <span class="pill"><span class="dot"></span> Intercultural Intelligence Platform · <span id="aiPill">AI</span></span>
+        <h1>Cross the <span class="grad">cultural barrier</span> before you cross the border.</h1>
+        <p class="lead">CultureBridge AI turns a survey of NIS alumni studying abroad and classic intercultural models
+          (Hall, Hofstede, Meyer, Brown &amp; Levinson) into interactive simulators: a server-side AI cultural decoder,
+          a 6D gap radar, a proxemics lab and roleplay with a live trust meter.</p>
+        <div class="hero-cta">
+          <a href="{{ url_for('web.radar') }}" class="btn primary">Measure my culture gap →</a>
+          <a href="{{ url_for('web.decoder') }}" class="btn ghost">Try the AI Decoder</a>
+        </div>
+      </div>
+      <div class="card hero-globe reveal">
+        <canvas id="globe" aria-label="Rotating globe with routes from Kazakhstan to study destinations"></canvas>
+        <div class="globe-caption"><span class="dot"></span> Routes of NIS alumni from Astana</div>
+      </div>
+      <div class="card stat reveal"><b data-count="countries">0</b><span>cultures modelled</span></div>
+      <div class="card stat reveal"><b data-count="universities">0</b><span>alumni universities</span></div>
+      <div class="card stat reveal"><b data-count="attempts">0</b><span>trainings completed</span></div>
+      <div class="card passport reveal" id="passport">
+        <div class="passport-head"><span>🛂 My CQ Passport</span><b id="cqScore">0</b></div>
+        <div class="passport-bars" id="passportBars"></div>
+        <small class="muted">Cultural Intelligence grows as you complete modules (saved in this browser).</small>
+      </div>
+    </section>
+
+    <!-- ============ MODULE CARDS ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <span class="eyebrow">Explore & Train</span>
+        <h2>Choose your <span class="grad">learning path</span></h2>
+        <p class="lead">Eight interactive modules to build your intercultural intelligence — from knowledge and awareness to empathy and communication skills.</p>
+      </div>
+      <div class="modules-grid reveal">
+        {% for p in pages if p.key not in ('home','stats','about','docs') %}
+        <a href="{{ p.path }}" class="module-card card" id="module-{{ p.key }}">
+          <span class="module-icon">{{ p.icon }}</span>
+          <h3>{{ p.nav }}</h3>
+          <p class="muted">{{ p.desc[:100] }}…</p>
+          <span class="module-arrow">→</span>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ============ QUICK PREVIEW SECTIONS ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <span class="eyebrow">Featured</span>
+        <h2>How it works</h2>
+      </div>
+      <div class="features-row reveal">
+        <div class="feature-card card">
+          <span class="feature-num">01</span>
+          <h3>Interactive Atlas</h3>
+          <p class="muted">Click a country on the map to read its mentality, etiquette and alumni stories — real voices from NIS graduates who studied abroad.</p>
+          <a href="{{ url_for('web.atlas') }}" class="btn ghost">Explore Atlas →</a>
+        </div>
+        <div class="feature-card card">
+          <span class="feature-num">02</span>
+          <h3>6D Culture Gap Radar</h3>
+          <p class="muted">Compare any two countries on six cultural dimensions. Get a Cultural Distance Index, shock-risk zones and a personal adaptation checklist.</p>
+          <a href="{{ url_for('web.radar') }}" class="btn ghost">Compare Cultures →</a>
+        </div>
+        <div class="feature-card card">
+          <span class="feature-num">03</span>
+          <h3>AI Pragmatic Decoder</h3>
+          <p class="muted">Type a direct phrase and see how a local really hears it: conflict-risk meter, interpretation, and polite rephrasings in the local language.</p>
+          <a href="{{ url_for('web.decoder') }}" class="btn ghost">Try Decoder →</a>
+        </div>
+      </div>
+    </section>
+
+    {% include "partials/footer.html" %}
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <div id="three-bg" class="three-bg" aria-hidden="true"></div>
+{% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='vendor/d3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/topojson-client.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/world-110m.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/three.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v={{ asset_v }}"></script>
+{% endblock %}
