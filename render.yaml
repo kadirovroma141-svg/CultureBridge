@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: culturebridge-ai
+    runtime: docker
+    plan: starter            # a persistent disk needs a paid plan; on free, use a Render PostgreSQL DATABASE_URL instead
+    healthCheckPath: /api/health
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

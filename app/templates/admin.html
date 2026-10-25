@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block title %}Admin · CultureBridge AI{% endblock %}
+{% block head %}
+  <script src="{{ url_for('static', filename='vendor/tailwind.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='vendor/alpine.min.js') }}"></script>
+  <style>[x-cloak]{display:none!important}</style>
+{% endblock %}
+{% block body_class %}min-h-screen bg-slate-950 text-slate-100{% endblock %}
+{% block body %}
+<div x-data="admin()" x-init="init()" class="mx-auto max-w-6xl p-4 sm:p-8">
+  <header class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <a href="/" class="text-sm text-slate-400 hover:text-white">← Back to platform</a>
+      <h1 class="text-2xl font-bold">CultureBridge AI · Admin</h1>
+    </div>
+    <form method="post" action="{{ url_for('admin.logout') }}"><button class="rounded-xl border border-white/10 px-4 py-2 text-sm hover:bg-white/10">Log out</button></form>
+  </header>
+
+  <nav class="mt-6 flex flex-wrap gap-2">
+    <template x-for="t in tabs" :key="t.id">
+      <button @click="tab = t.id" class="rounded-full px-4 py-2 text-sm"
+              :class="tab === t.id ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white' : 'bg-white/5 hover:bg-white/10'" x-text="t.label"></button>
+    </template>
+  </nav>
+
+  <p x-show="msg" x-cloak x-text="msg" class="mt-4 rounded-xl px-4 py-3 text-sm" :class="msgOk ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/15 text-red-300'"></p>
+
+  <!-- DASHBOARD -->
+  <section x-show="tab === 'dash'" class="mt-6 space-y-6">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <template x-for="card in statCards()" :key="card.label">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div class="text-3xl font-bold" x-text="card.value"></div>
+          <div class="text-sm text-slate-400" x-text="card.label"></div>
+        </div>
+      </template>
+    </div>
+    <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+      <h2 class="font-semibold">Recent activity</h2>
+      <table class="mt-3 w-full text-sm">
+        <thead class="text-left text-slate-400"><tr><th class="py-1">Module</th><th>Ref</th><th>Score</th><th>When (UTC)</th></tr></thead>
+        <tbody>
+          <template x-for="a in stats.recent || []">
+            <tr class="border-t border-white/5"><td class="py-1" x-text="a.module"></td><td x-text="a.ref || '—'"></td><td x-text="`${Math.round(a.score)}/${a.max}`"></td><td x-text="a.at.slice(0,16).replace('T',' ')"></td></tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- QUIZ CASES -->
+  <section x-show="tab === 'quiz'" x-cloak class="mt-6 grid gap-6 lg:grid-cols-2">
+    <form @submit.prevent="addQuiz()" class="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5">
+      <h2 class="font-semibold">Add a quiz case</h2>
+      <div class="flex gap-2">
+        <input x-model="quiz.flag" class="w-20 rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="🌍">
+        <input x-model="quiz.topic" required class="flex-1 rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="Topic (e.g. Tipping)">
+      </div>
+      <textarea x-model="quiz.question" required rows="3" class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="Situation / question"></textarea>
+      <template x-for="(o, i) in quiz.options" :key="i">
+        <label class="flex items-center gap-2">
+          <input type="radio" name="correct" :value="i" x-model.number="quiz.correct_index" class="accent-emerald-500">
+          <input x-model="quiz.options[i]" required class="flex-1 rounded-xl border border-white/10 bg-slate-900 px-3 py-2" :placeholder="'Option ' + 'ABCDEF'[i]">
+        </label>
+      </template>
+      <div class="flex gap-2 text-sm">
+        <button type="button" @click="quiz.options.length < 6 && quiz.options.push('')" class="rounded-lg bg-white/5 px-3 py-1">+ option</button>
+        <button type="button" @click="quiz.options.length > 2 && quiz.options.pop()" class="rounded-lg bg-white/5 px-3 py-1">− option</button>
+        <span class="text-slate-400 self-center">Select the radio of the correct answer</span>
+      </div>
+      <textarea x-model="quiz.explanation" required rows="3" class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="Scientific explanation shown after answering"></textarea>
+      <button class="rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-5 py-2 font-semibold">Save case</button>
+    </form>
+    <div class="space-y-3">
+      <template x-for="q in quizList" :key="q.id">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4" :class="!q.active && 'opacity-50'">
+          <div class="flex items-start justify-between gap-3">
+            <div><b x-text="`${q.flag} ${q.topic}`"></b><p class="mt-1 text-sm text-slate-300" x-text="q.question"></p></div>
+            <div class="flex shrink-0 gap-1 text-xs">
+              <button @click="toggleQuiz(q)" class="rounded-lg bg-white/10 px-2 py-1" x-text="q.active ? 'Hide' : 'Show'"></button>
+              <button @click="del(`/quiz/${q.id}`, loadQuiz)" class="rounded-lg bg-red-500/20 px-2 py-1 text-red-300">Delete</button>
+            </div>
+          </div>
+          <ul class="mt-2 text-xs text-slate-400"><template x-for="o in q.options"><li :class="o.correct && 'text-emerald-300'" x-text="(o.correct ? '✓ ' : '• ') + o.text"></li></template></ul>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- ALUMNI VOICES -->
+  <section x-show="tab === 'voices'" x-cloak class="mt-6 grid gap-6 lg:grid-cols-2">
+    <form @submit.prevent="post('/voices', voice, () => { voice.text=''; loadVoices(); })" class="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5">
+      <h2 class="font-semibold">Add a NIS alumni survey response</h2>
+      <select x-model="voice.country" class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2">
+        <template x-for="c in countries"><option :value="c.code" x-text="`${c.flag} ${c.name}`"></option></template>
+      </select>
+      <input x-model="voice.university" required class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="University">
+      <textarea x-model="voice.text" required rows="4" class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="Anonymised quote"></textarea>
+      <button class="rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-5 py-2 font-semibold">Save voice</button>
+    </form>
+    <div class="space-y-3">
+      <template x-for="v in voices" :key="v.id">
+        <div class="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div><b x-text="`${v.flag} ${v.university}`"></b><p class="mt-1 text-sm text-slate-300" x-text="'“' + v.text + '”'"></p></div>
+          <button @click="del(`/voices/${v.id}`, loadVoices)" class="shrink-0 rounded-lg bg-red-500/20 px-2 py-1 text-xs text-red-300">Delete</button>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- ETIQUETTE -->
+  <section x-show="tab === 'etiquette'" x-cloak class="mt-6 grid gap-6 lg:grid-cols-2">
+    <form @submit.prevent="post('/etiquette', etq, () => { etq.title=''; etq.text=''; loadEtiquette(); })" class="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5">
+      <h2 class="font-semibold">Add an etiquette rule</h2>
+      <select x-model="etq.country" class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2">
+        <template x-for="c in countries"><option :value="c.code" x-text="`${c.flag} ${c.name}`"></option></template>
+      </select>
+      <input x-model="etq.title" required class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="Title (e.g. Quiet Sundays)">
+      <textarea x-model="etq.text" required rows="3" class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2" placeholder="Explanation"></textarea>
+      <button class="rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-5 py-2 font-semibold">Save rule</button>
+    </form>
+    <div class="space-y-2">
+      <template x-for="e in etiquette" :key="e.id">
+        <div class="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div><b x-text="`${e.flag} ${e.title}`"></b><p class="mt-1 text-sm text-slate-300" x-text="e.text"></p></div>
+          <button @click="del(`/etiquette/${e.id}`, loadEtiquette)" class="shrink-0 rounded-lg bg-red-500/20 px-2 py-1 text-xs text-red-300">Delete</button>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- SCENARIOS -->
+  <section x-show="tab === 'scenarios'" x-cloak class="mt-6 grid gap-6 lg:grid-cols-2">
+    <form @submit.prevent="addScenario()" class="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5">
+      <h2 class="font-semibold">Add a roleplay scenario (JSON)</h2>
+      <p class="text-xs text-slate-400">Fields: slug, country, title, npc, npc_role, avatar, intro, start_trust, steps[{npc, options[{text, delta (−50…50), mood (happy|neutral|annoyed|sad|angry), feedback}]}]</p>
+      <textarea x-model="scenarioJson" rows="18" class="w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2 font-mono text-xs"></textarea>
+      <button class="rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-5 py-2 font-semibold">Validate &amp; save</button>
+    </form>
+    <div class="space-y-3">
+      <template x-for="s in scenarios" :key="s.id">
+        <div class="flex items-start justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div><b x-text="`${s.avatar} ${s.title}`"></b><p class="text-sm text-slate-400" x-text="`${s.id} · ${s.country} · ${s.steps.length} steps`"></p></div>
+          <button @click="del(`/scenarios/${s.id}`, loadScenarios)" class="shrink-0 rounded-lg bg-red-500/20 px-2 py-1 text-xs text-red-300">Delete</button>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- AI CACHE -->
+  <section x-show="tab === 'cache'" x-cloak class="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 class="font-semibold">AI translation cache <span class="text-sm text-slate-400" x-text="`(${cache.length})`"></span></h2>
+      <button @click="del('/cache', loadCache)" class="rounded-lg bg-red-500/20 px-3 py-1 text-sm text-red-300">Clear live-LLM entries</button>
+    </div>
+    <p class="mt-1 text-xs text-slate-400">“expert” rows are seeded offline analyses; gemini/openai rows are live answers saved for offline replay.</p>
+    <div class="mt-3 overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="text-left text-slate-400"><tr><th class="py-1">Phrase</th><th>Country</th><th>Provider</th><th>Risk</th><th>Hits</th><th></th></tr></thead>
+        <tbody>
+          <template x-for="r in cache" :key="r.id">
+            <tr class="border-t border-white/5"><td class="py-1 pr-3" x-text="r.phrase"></td><td x-text="r.country"></td><td x-text="r.provider"></td><td x-text="r.risk + '%'"></td><td x-text="r.hits"></td>
+              <td><button @click="del(`/cache/${r.id}`, loadCache)" class="text-xs text-red-300">✕</button></td></tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+function admin() {
+  const SAMPLE = {
+    slug: "jp-group-project", country: "JP", title: "Disagreeing in a Japanese group project",
+    npc: "Haruto", npc_role: "Teammate, Waseda University", avatar: "🧑🏻", start_trust: 50,
+    intro: "Haruto proposes a plan you think is weak. The deadline is in two days.",
+    steps: [{ npc: "So, I think we should use my plan. What do you think?", options: [
+      { text: "Your plan is bad, mine is better.", delta: -25, mood: "sad", feedback: "Direct criticism causes loss of face in Japan." },
+      { text: "Thank you, it's a thoughtful plan. Maybe we could also consider one small alternative?", delta: 20, mood: "happy", feedback: "Indirect, appreciative framing preserves harmony (wa)." }
+    ] }]
+  };
+  return {
+    tab: "dash",
+    tabs: [{ id: "dash", label: "Dashboard" }, { id: "quiz", label: "Quiz cases" }, { id: "voices", label: "Alumni voices" },
+           { id: "etiquette", label: "Etiquette" }, { id: "scenarios", label: "Roleplay" }, { id: "cache", label: "AI cache" }],
+    msg: "", msgOk: true,
+    stats: {}, countries: [], quizList: [], voices: [], etiquette: [], scenarios: [], cache: [],
+    quiz: { flag: "🌍", topic: "", question: "", options: ["", "", "", ""], correct_index: 0, explanation: "" },
+    voice: { country: "IT", university: "", text: "" },
+    etq: { country: "KZ", title: "", text: "" },
+    scenarioJson: JSON.stringify(SAMPLE, null, 2),
+
+    async init() {
+      await Promise.all([this.loadStats(), this.loadCountries(), this.loadQuiz(), this.loadVoices(), this.loadEtiquette(), this.loadScenarios(), this.loadCache()]);
+    },
+    async req(method, path, body) {
+      const res = await fetch("/api/admin" + path, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) { location.href = "/admin/"; throw new Error("Session expired"); }
+      if (!res.ok) throw new Error(data.details ? data.details.map((d) => `${d.field}: ${d.msg}`).join("; ") : (data.error || res.status));
+      return data;
+    },
+    flash(text, ok = true) { this.msg = text; this.msgOk = ok; setTimeout(() => { this.msg = ""; }, 4000); },
+    async post(path, body, done) {
+      try { await this.req("POST", path, body); this.flash("Saved ✓"); done && done(); this.loadStats(); }
+      catch (e) { this.flash(e.message, false); }
+    },
+    async del(path, done) {
+      if (!confirm("Delete?")) return;
+      try { await this.req("DELETE", path); this.flash("Deleted"); done && done(); this.loadStats(); }
+      catch (e) { this.flash(e.message, false); }
+    },
+    statCards() {
+      const c = this.stats.community || {};
+      return [
+        { label: "Quiz attempts", value: c.quiz ? `${c.quiz.count} · ${c.quiz.avg_pct}%` : 0 },
+        { label: "Match attempts", value: c.match ? `${c.match.count} · ${c.match.avg_pct}%` : 0 },
+        { label: "Roleplays · avg trust", value: c.roleplay ? `${c.roleplay.count} · ${c.roleplay.avg_pct}%` : 0 },
+        { label: "AI decodes · cached", value: `${c.decodes || 0} · ${c.cached_analyses || 0}` },
+      ];
+    },
+    async loadStats() { this.stats = await this.req("GET", "/stats"); },
+    async loadCountries() { this.countries = await this.req("GET", "/countries"); },
+    async loadQuiz() { this.quizList = await this.req("GET", "/quiz"); },
+    async loadVoices() { this.voices = await this.req("GET", "/voices"); },
+    async loadEtiquette() { this.etiquette = await this.req("GET", "/etiquette"); },
+    async loadScenarios() { this.scenarios = await this.req("GET", "/scenarios"); },
+    async loadCache() { this.cache = await this.req("GET", "/cache"); },
+    async addQuiz() {
+      await this.post("/quiz", this.quiz, () => {
+        this.quiz = { flag: "🌍", topic: "", question: "", options: ["", "", "", ""], correct_index: 0, explanation: "" };
+        this.loadQuiz();
+      });
+    },
+    async toggleQuiz(q) {
+      try { await this.req("PATCH", `/quiz/${q.id}`, { active: !q.active }); this.loadQuiz(); }
+      catch (e) { this.flash(e.message, false); }
+    },
+    async addScenario() {
+      let body;
+      try { body = JSON.parse(this.scenarioJson); } catch (e) { this.flash("Invalid JSON: " + e.message, false); return; }
+      await this.post("/scenarios", body, () => this.loadScenarios());
+    },
+  };
+}
+</script>
+{% endblock %}

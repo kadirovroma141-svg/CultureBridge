@@ -1,0 +1,1848 @@
+{
+ "countries": [
+  {
+   "code": "KZ",
+   "name": "Kazakhstan",
+   "flag": "🇰🇿",
+   "iso": "398",
+   "lang": "kk-KZ",
+   "context": "High-context",
+   "lon": 71.43,
+   "lat": 51.13,
+   "mentality": "Hospitality is a sacred duty: a guest is “a gift from God”. Respect for elders and family ties shapes every interaction.",
+   "etiquette": [
+    {
+     "title": "Tea first",
+     "text": "A guest is always offered tea (often with milk) and dastarkhan treats. Refusing completely can feel like rejecting the host."
+    },
+    {
+     "title": "Elders lead",
+     "text": "Greet the eldest person first, stand when elders enter, and let them start the meal."
+    },
+    {
+     "title": "The cup rule",
+     "text": "A host pours tea only half-full so they can refill it often — a full cup can hint it is time to leave."
+    },
+    {
+     "title": "Modern, not nomadic",
+     "text": "Most people live in modern cities; asking whether they live in yurts is a hurtful stereotype."
+    }
+   ],
+   "dims": {
+    "direct": 40,
+    "express": 55,
+    "contact": 65,
+    "time": 40,
+    "hierarchy": 80,
+    "smalltalk": 50
+   },
+   "proxemics": 60,
+   "voice_min": 45,
+   "voice_max": 70,
+   "hospitality": 1.6,
+   "universities": [],
+   "alumni_voices": []
+  },
+  {
+   "code": "IT",
+   "name": "Italy",
+   "flag": "🇮🇹",
+   "iso": "380",
+   "lang": "it-IT",
+   "context": "High-context",
+   "lon": 9.19,
+   "lat": 45.46,
+   "mentality": "“Dolce vita”: life is to be enjoyed. People value freedom of self-expression and speak loudly, emotionally and with their hands.",
+   "etiquette": [
+    {
+     "title": "Language is love",
+     "text": "Italians are proud of their language. Reach at least A2 Italian — even simple phrases open doors that English cannot."
+    },
+    {
+     "title": "Loud ≠ angry",
+     "text": "A raised voice and fast gestures usually mean engagement and passion, not conflict."
+    },
+    {
+     "title": "Show up to class",
+     "text": "Attendance is taken seriously at Italian universities and can affect your right to sit exams."
+    },
+    {
+     "title": "Meals are rituals",
+     "text": "Long lunches and dinners are social events; rushing or skipping the conversation is seen as cold."
+    }
+   ],
+   "dims": {
+    "direct": 60,
+    "express": 92,
+    "contact": 85,
+    "time": 35,
+    "hierarchy": 60,
+    "smalltalk": 70
+   },
+   "proxemics": 50,
+   "voice_min": 60,
+   "voice_max": 85,
+   "hospitality": 1.45,
+   "universities": [
+    "IED Moda Milano",
+    "LUISS Guido Carli",
+    "University of Siena",
+    "Politecnico di Milano",
+    "Ca’ Foscari University of Venice"
+   ],
+   "alumni_voices": [
+    {
+     "university": "IED Moda Milano",
+     "text": "People here live by ‘dolce vita’ — you feel free to express yourself, in style and in opinion."
+    },
+    {
+     "university": "Politecnico di Milano",
+     "text": "Italians speak really loudly and emotionally, with a lot of gestures. At first I thought they were arguing."
+    },
+    {
+     "university": "University of Siena",
+     "text": "They love their language. Learn at least A2 Italian — locals treat you completely differently."
+    },
+    {
+     "university": "Ca’ Foscari",
+     "text": "Attendance matters a lot. Don’t assume you can skip lectures like at some other universities."
+    }
+   ]
+  },
+  {
+   "code": "HU",
+   "name": "Hungary",
+   "flag": "🇭🇺",
+   "iso": "348",
+   "lang": "hu-HU",
+   "context": "Medium-context",
+   "lon": 19.04,
+   "lat": 47.5,
+   "mentality": "Reserved, sincere and respectful of personal boundaries. People care little about clothing brands or appearance and value substance over show.",
+   "etiquette": [
+    {
+     "title": "Formal address",
+     "text": "Use titles and formal forms with elders and professors (e.g. “Tanár úr / Tanárnő”, “Jó napot kívánok”)."
+    },
+    {
+     "title": "Boundaries",
+     "text": "Hungarians respect privacy; personal questions come only after trust is built."
+    },
+    {
+     "title": "Patience with paperwork",
+     "text": "Be ready for slow bureaucracy: residence permits and documents take time — start early and keep copies."
+    },
+    {
+     "title": "No brand-chasing",
+     "text": "Nobody judges you by labels or looks; modesty is the norm."
+    }
+   ],
+   "dims": {
+    "direct": 70,
+    "express": 55,
+    "contact": 50,
+    "time": 65,
+    "hierarchy": 60,
+    "smalltalk": 40
+   },
+   "proxemics": 75,
+   "voice_min": 40,
+   "voice_max": 65,
+   "hospitality": 1.1,
+   "universities": [
+    "Corvinus University of Budapest",
+    "ELTE (Eötvös Loránd University)",
+    "University of Dunaújváros"
+   ],
+   "alumni_voices": [
+    {
+     "university": "Corvinus University",
+     "text": "Nobody pays attention to clothing brands or how you look. It was a relief."
+    },
+    {
+     "university": "ELTE",
+     "text": "People respect personal boundaries, and with teachers and older people formal address is very important."
+    },
+    {
+     "university": "University of Dunaújváros",
+     "text": "Be ready for slow bureaucracy with documents — start your residence paperwork as early as possible."
+    }
+   ]
+  },
+  {
+   "code": "CA",
+   "name": "Canada",
+   "flag": "🇨🇦",
+   "iso": "124",
+   "lang": "en-CA",
+   "context": "Low-context",
+   "lon": -114.07,
+   "lat": 51.05,
+   "mentality": "Polite, multicultural and egalitarian. Personal space is a strict priority — people keep distance and apologise often.",
+   "etiquette": [
+    {
+     "title": "Keep an arm’s length",
+     "text": "Don’t hug people you barely know; a smile or handshake is the safe default."
+    },
+    {
+     "title": "“Sorry” is social glue",
+     "text": "Canadians say sorry constantly — it signals courtesy, not guilt."
+    },
+    {
+     "title": "Equality in class",
+     "text": "Professors are often called by first name, but deadlines and academic integrity are strict."
+    },
+    {
+     "title": "Diversity is normal",
+     "text": "Avoid generalisations about any group; inclusiveness is a core value."
+    }
+   ],
+   "dims": {
+    "direct": 45,
+    "express": 50,
+    "contact": 25,
+    "time": 80,
+    "hierarchy": 30,
+    "smalltalk": 75
+   },
+   "proxemics": 100,
+   "voice_min": 40,
+   "voice_max": 65,
+   "hospitality": 1,
+   "universities": [
+    "University of Calgary"
+   ],
+   "alumni_voices": [
+    {
+     "university": "University of Calgary",
+     "text": "Personal space is a strict priority. Don’t hug people you don’t know well — keep your distance and be polite."
+    }
+   ]
+  },
+  {
+   "code": "US",
+   "name": "USA",
+   "flag": "🇺🇸",
+   "iso": "840",
+   "lang": "en-US",
+   "context": "Low-context",
+   "lon": -87.55,
+   "lat": 33.21,
+   "mentality": "Friendly, optimistic and individualistic. Small talk is the ritual that builds a warm atmosphere before getting down to business.",
+   "etiquette": [
+    {
+     "title": "Small talk first",
+     "text": "Weather, weekend plans, sports — a short friendly chat before the actual topic is expected."
+    },
+    {
+     "title": "“How are you?” is a greeting",
+     "text": "Answer briefly and positively (“Good, thanks! You?”); it is not a request for details."
+    },
+    {
+     "title": "Positive framing",
+     "text": "Criticism is wrapped in praise (“Great start! One thing to improve…”)."
+    },
+    {
+     "title": "Southern hospitality",
+     "text": "In Alabama expect “ma’am/sir”, warm manners and lots of friendliness."
+    }
+   ],
+   "dims": {
+    "direct": 55,
+    "express": 70,
+    "contact": 30,
+    "time": 80,
+    "hierarchy": 35,
+    "smalltalk": 95
+   },
+   "proxemics": 90,
+   "voice_min": 50,
+   "voice_max": 75,
+   "hospitality": 0.95,
+   "universities": [
+    "The University of Alabama"
+   ],
+   "alumni_voices": [
+    {
+     "university": "University of Alabama",
+     "text": "Small talk culture is everywhere — people chat about the weather or the weekend to create a friendly atmosphere before getting to the point."
+    }
+   ]
+  },
+  {
+   "code": "CN",
+   "name": "China",
+   "flag": "🇨🇳",
+   "iso": "156",
+   "lang": "zh-CN",
+   "context": "High-context",
+   "lon": 116.4,
+   "lat": 39.9,
+   "mentality": "Harmony and “face” (mianzi) guide communication. Relationships (guanxi) and symbolism matter deeply.",
+   "etiquette": [
+    {
+     "title": "Never gift a clock",
+     "text": "送钟 (sòng zhōng, “give a clock”) sounds like 送终 — attending a dying person. Clocks are a funeral taboo."
+    },
+    {
+     "title": "Gift ritual",
+     "text": "Offer and receive gifts with both hands; the recipient may politely refuse a few times before accepting."
+    },
+    {
+     "title": "Avoid sets of four",
+     "text": "四 (sì) sounds like 死 (death). Even numbers like 8 are lucky."
+    },
+    {
+     "title": "Save face",
+     "text": "Never criticise someone publicly — use private, indirect conversation."
+    }
+   ],
+   "dims": {
+    "direct": 30,
+    "express": 35,
+    "contact": 55,
+    "time": 55,
+    "hierarchy": 85,
+    "smalltalk": 35
+   },
+   "proxemics": 70,
+   "voice_min": 50,
+   "voice_max": 75,
+   "hospitality": 1.5,
+   "universities": [],
+   "alumni_voices": []
+  },
+  {
+   "code": "JP",
+   "name": "Japan",
+   "flag": "🇯🇵",
+   "iso": "392",
+   "lang": "ja-JP",
+   "context": "Very high-context",
+   "lon": 139.69,
+   "lat": 35.69,
+   "mentality": "Harmony (wa), humility and reading the air (kuuki wo yomu). What is left unsaid often matters more than what is said.",
+   "etiquette": [
+    {
+     "title": "Bow depth matters",
+     "text": "15° eshaku for casual greetings, 30° keirei for teachers and clients, 45° saikeirei for deep apology or gratitude."
+    },
+    {
+     "title": "Indirect “no”",
+     "text": "“That might be a little difficult…” (chotto muzukashii) usually means no."
+    },
+    {
+     "title": "Quiet in public",
+     "text": "Phone calls on trains and loud conversations are avoided."
+    },
+    {
+     "title": "Punctual to the minute",
+     "text": "Trains and meetings run on precise schedules; arriving 5 minutes early is normal."
+    }
+   ],
+   "dims": {
+    "direct": 10,
+    "express": 15,
+    "contact": 15,
+    "time": 95,
+    "hierarchy": 90,
+    "smalltalk": 20
+   },
+   "proxemics": 110,
+   "voice_min": 30,
+   "voice_max": 55,
+   "hospitality": 1.4,
+   "universities": [],
+   "alumni_voices": []
+  },
+  {
+   "code": "KR",
+   "name": "South Korea",
+   "flag": "🇰🇷",
+   "iso": "410",
+   "lang": "ko-KR",
+   "context": "High-context",
+   "lon": 126.98,
+   "lat": 37.57,
+   "mentality": "Confucian respect for age and status, fast-paced “ppalli-ppalli” life and strong group belonging (jeong).",
+   "etiquette": [
+    {
+     "title": "Two hands",
+     "text": "Give and receive objects, money and drinks with both hands (or right hand supported by the left) to show respect to elders."
+    },
+    {
+     "title": "Age first",
+     "text": "Age determines speech level; honorifics (-yo, -sumnida) are used with older people and strangers."
+    },
+    {
+     "title": "Drinking etiquette",
+     "text": "Turn your head away from elders when drinking, and pour for others, not yourself."
+    },
+    {
+     "title": "Shoes off",
+     "text": "Remove shoes in homes and many traditional restaurants."
+    }
+   ],
+   "dims": {
+    "direct": 25,
+    "express": 45,
+    "contact": 40,
+    "time": 70,
+    "hierarchy": 90,
+    "smalltalk": 35
+   },
+   "proxemics": 80,
+   "voice_min": 40,
+   "voice_max": 65,
+   "hospitality": 1.4,
+   "universities": [],
+   "alumni_voices": []
+  },
+  {
+   "code": "GB",
+   "name": "England (UK)",
+   "flag": "🇬🇧",
+   "iso": "826",
+   "lang": "en-GB",
+   "context": "High-context (in politeness)",
+   "lon": -0.13,
+   "lat": 51.51,
+   "mentality": "Understatement, irony and fair play. Politeness is coded: “not bad” may mean excellent, “interesting” may mean nonsense.",
+   "etiquette": [
+    {
+     "title": "The queue is sacred",
+     "text": "Queue patiently for buses, shops and lectures. Jumping the queue is one of the worst social offences."
+    },
+    {
+     "title": "Understatement",
+     "text": "“I’m slightly concerned” can mean a serious problem — listen to the soft words."
+    },
+    {
+     "title": "Please & thank you",
+     "text": "Constant “please”, “thanks”, “cheers” and “sorry” are expected in every exchange."
+    },
+    {
+     "title": "Weather talk",
+     "text": "Weather is the universal safe topic for small talk."
+    }
+   ],
+   "dims": {
+    "direct": 25,
+    "express": 35,
+    "contact": 30,
+    "time": 75,
+    "hierarchy": 45,
+    "smalltalk": 70
+   },
+   "proxemics": 95,
+   "voice_min": 35,
+   "voice_max": 60,
+   "hospitality": 1,
+   "universities": [],
+   "alumni_voices": []
+  },
+  {
+   "code": "DE",
+   "name": "Germany",
+   "flag": "🇩🇪",
+   "iso": "276",
+   "lang": "de-DE",
+   "context": "Low-context",
+   "lon": 13.4,
+   "lat": 52.52,
+   "mentality": "Reliability, order and directness. Punctuality is a sign of respect and trustworthiness; feedback is honest and about the task, not the person.",
+   "etiquette": [
+    {
+     "title": "Punctuality = reliability",
+     "text": "Arrive on time or slightly early. Being 10 minutes late without notice damages trust."
+    },
+    {
+     "title": "Direct feedback",
+     "text": "“This does not work” is a factual statement about the task, not a personal attack."
+    },
+    {
+     "title": "Sie vs du",
+     "text": "Use “Sie” and surnames with professors and new contacts until invited to use “du”."
+    },
+    {
+     "title": "Plans are commitments",
+     "text": "Agreed deadlines and plans are taken literally; changes are discussed early."
+    }
+   ],
+   "dims": {
+    "direct": 92,
+    "express": 40,
+    "contact": 30,
+    "time": 98,
+    "hierarchy": 45,
+    "smalltalk": 25
+   },
+   "proxemics": 90,
+   "voice_min": 40,
+   "voice_max": 65,
+   "hospitality": 0.8,
+   "universities": [],
+   "alumni_voices": []
+  }
+ ],
+ "dimensions": [
+  {
+   "key": "direct",
+   "label": "Direct feedback",
+   "short": "Directness",
+   "low": "Indirect, implicit criticism",
+   "high": "Direct, explicit criticism"
+  },
+  {
+   "key": "express",
+   "label": "Emotional expressiveness",
+   "short": "Expressiveness",
+   "low": "Neutral, controlled",
+   "high": "Expressive, emotional"
+  },
+  {
+   "key": "contact",
+   "label": "Contact & proxemics",
+   "short": "Closeness",
+   "low": "Large distance, little touch",
+   "high": "Close distance, touch is normal"
+  },
+  {
+   "key": "time",
+   "label": "Time perception",
+   "short": "Time strictness",
+   "low": "Polychronic / flexible",
+   "high": "Monochronic / strict"
+  },
+  {
+   "key": "hierarchy",
+   "label": "Hierarchy & formality",
+   "short": "Hierarchy",
+   "low": "Egalitarian, informal",
+   "high": "Hierarchical, formal"
+  },
+  {
+   "key": "smalltalk",
+   "label": "Small talk & openness",
+   "short": "Small talk",
+   "low": "Reserved with strangers",
+   "high": "Chatty, open with strangers"
+  }
+ ],
+ "gap_advice": {
+  "direct": {
+   "up": [
+    "Expect blunt feedback — it criticises the task, not you.",
+    "State disagreement clearly with facts; hints will be missed.",
+    "Don’t read “No, this is wrong” as rudeness."
+   ],
+   "down": [
+    "Soften criticism: start with appreciation, use “perhaps / might”.",
+    "Never criticise anyone in front of the group.",
+    "Listen for hidden “no”: “it may be difficult” often means refusal."
+   ]
+  },
+  "express": {
+   "up": [
+    "Loud voices and big gestures usually signal interest, not anger.",
+    "Show more visible emotion — a flat face may read as boredom.",
+    "Join the energy: enthusiasm builds connection."
+   ],
+   "down": [
+    "Lower your voice in public spaces and transport.",
+    "Keep gestures small; dramatic emotion may cause discomfort.",
+    "Silence in a conversation is normal and respectful."
+   ]
+  },
+  "contact": {
+   "up": [
+    "Expect cheek kisses, touches on the arm and closer distance.",
+    "Stepping back may look cold — stay relaxed.",
+    "Warm physical greetings are a sign of acceptance."
+   ],
+   "down": [
+    "Keep about an arm’s length (≈1 m) in conversations.",
+    "No hugs or touching with people you barely know.",
+    "Ask before physical contact; a handshake or nod is safest."
+   ]
+  },
+  "time": {
+   "up": [
+    "Arrive 5 minutes early; lateness damages trust.",
+    "Treat deadlines as fixed commitments, not estimates.",
+    "Notify in advance if a plan changes — even by 10 minutes."
+   ],
+   "down": [
+    "Meetings may start late — bring patience, not irritation.",
+    "Relationships may matter more than the schedule.",
+    "Build buffer time into plans and paperwork."
+   ]
+  },
+  "hierarchy": {
+   "up": [
+    "Use titles, surnames and formal language with professors and elders.",
+    "Wait for seniors to lead; avoid openly contradicting them.",
+    "Show respect through posture, two-handed giving and greetings."
+   ],
+   "down": [
+    "Professors may expect you to speak up and challenge ideas.",
+    "First names are common — follow the other person’s lead.",
+    "Initiative is valued: don’t wait for permission to contribute."
+   ]
+  },
+  "smalltalk": {
+   "up": [
+    "Prepare small-talk topics: weather, weekend, sports, food.",
+    "“How are you?” is a greeting: answer briefly and positively.",
+    "Chat with strangers in queues and classes — it’s normal."
+   ],
+   "down": [
+    "Don’t expect strangers to chat; reserve is not hostility.",
+    "Get to the point in professional communication.",
+    "Avoid personal questions until a relationship is built."
+   ]
+  }
+ },
+ "greetings": [
+  {
+   "word": "Сәлеметсіз бе",
+   "roman": "Sälemetsiz be",
+   "lang": "Kazakh",
+   "code": "kk-KZ",
+   "gesture": "🤝",
+   "gestureName": "Two-hand handshake",
+   "note": "Men often shake with both hands; touch the heart for elders."
+  },
+  {
+   "word": "こんにちは",
+   "roman": "Konnichiwa",
+   "lang": "Japanese",
+   "code": "ja-JP",
+   "gesture": "🙇",
+   "gestureName": "Bow (15–45°)",
+   "note": "Deeper bow = more respect."
+  },
+  {
+   "word": "안녕하세요",
+   "roman": "Annyeonghaseyo",
+   "lang": "Korean",
+   "code": "ko-KR",
+   "gesture": "🙇",
+   "gestureName": "Slight bow",
+   "note": "Bow and greet elders first."
+  },
+  {
+   "word": "你好",
+   "roman": "Nǐ hǎo",
+   "lang": "Chinese",
+   "code": "zh-CN",
+   "gesture": "🙂",
+   "gestureName": "Nod / light handshake",
+   "note": "Address the most senior person first."
+  },
+  {
+   "word": "Buongiorno",
+   "roman": "Bwon-JOR-no",
+   "lang": "Italian",
+   "code": "it-IT",
+   "gesture": "😘",
+   "gestureName": "Cheek kiss (friends)",
+   "note": "Handshake for first meetings."
+  },
+  {
+   "word": "Jó napot kívánok",
+   "roman": "Yo NA-pot KEE-vaa-nok",
+   "lang": "Hungarian",
+   "code": "hu-HU",
+   "gesture": "🤝",
+   "gestureName": "Handshake",
+   "note": "Formal greeting for elders & teachers."
+  },
+  {
+   "word": "Guten Tag",
+   "roman": "GOO-ten tahk",
+   "lang": "German",
+   "code": "de-DE",
+   "gesture": "🤝",
+   "gestureName": "Firm handshake",
+   "note": "Eye contact while shaking hands."
+  },
+  {
+   "word": "Hello",
+   "roman": "heh-LOH",
+   "lang": "English (US)",
+   "code": "en-US",
+   "gesture": "👋",
+   "gestureName": "Wave / handshake",
+   "note": "Smile + “How are you?”."
+  },
+  {
+   "word": "Good morning",
+   "roman": "good MOR-ning",
+   "lang": "English (UK)",
+   "code": "en-GB",
+   "gesture": "🤝",
+   "gestureName": "Brief handshake",
+   "note": "Keep it short and polite."
+  },
+  {
+   "word": "Здравствуйте",
+   "roman": "Zdravstvuyte",
+   "lang": "Russian",
+   "code": "ru-RU",
+   "gesture": "🤝",
+   "gestureName": "Handshake",
+   "note": "Formal form for strangers & elders."
+  },
+  {
+   "word": "Bonjour",
+   "roman": "bon-ZHOOR",
+   "lang": "French",
+   "code": "fr-FR",
+   "gesture": "😘",
+   "gestureName": "La bise",
+   "note": "1–4 cheek kisses depending on region."
+  },
+  {
+   "word": "Hola",
+   "roman": "OH-la",
+   "lang": "Spanish",
+   "code": "es-ES",
+   "gesture": "😘",
+   "gestureName": "Two kisses",
+   "note": "Warm and close greeting."
+  },
+  {
+   "word": "السلام عليكم",
+   "roman": "As-salāmu ʿalaykum",
+   "lang": "Arabic",
+   "code": "ar-SA",
+   "gesture": "🫶",
+   "gestureName": "Hand on heart",
+   "note": "Response: Wa ʿalaykumu s-salām."
+  },
+  {
+   "word": "नमस्ते",
+   "roman": "Namaste",
+   "lang": "Hindi",
+   "code": "hi-IN",
+   "gesture": "🙏",
+   "gestureName": "Palms together",
+   "note": "Slight bow with joined palms."
+  },
+  {
+   "word": "สวัสดี",
+   "roman": "Sawasdee",
+   "lang": "Thai",
+   "code": "th-TH",
+   "gesture": "🙏",
+   "gestureName": "Wai",
+   "note": "Higher hands = more respect."
+  },
+  {
+   "word": "Merhaba",
+   "roman": "MER-ha-ba",
+   "lang": "Turkish",
+   "code": "tr-TR",
+   "gesture": "🤝",
+   "gestureName": "Handshake / kiss",
+   "note": "Kiss the hand of elders on holidays."
+  },
+  {
+   "word": "Olá",
+   "roman": "oh-LAH",
+   "lang": "Portuguese",
+   "code": "pt-BR",
+   "gesture": "🤗",
+   "gestureName": "Hug / kiss",
+   "note": "Brazilians greet warmly."
+  },
+  {
+   "word": "Jambo",
+   "roman": "JAHM-bo",
+   "lang": "Swahili",
+   "code": "sw-KE",
+   "gesture": "🤝",
+   "gestureName": "Long handshake",
+   "note": "Handshakes can last a while."
+  },
+  {
+   "word": "Kia ora",
+   "roman": "kee-ah OR-ah",
+   "lang": "Māori",
+   "code": "mi-NZ",
+   "gesture": "👃",
+   "gestureName": "Hongi (press noses)",
+   "note": "Sharing the breath of life."
+  },
+  {
+   "word": "Hej",
+   "roman": "hey",
+   "lang": "Swedish",
+   "code": "sv-SE",
+   "gesture": "🙂",
+   "gestureName": "Nod / handshake",
+   "note": "Reserved, informal greeting."
+  }
+ ],
+ "match_items": [
+  {
+   "id": "bow",
+   "custom": "Bowing",
+   "icon": "🙇",
+   "country": "JP",
+   "situation": "🇯🇵 Japan — you greet your teacher at the school entrance in Tokyo.",
+   "explain": "Bowing (ojigi) expresses respect and humility. Its depth encodes the relationship: 15° for peers, 30° for teachers and clients, 45° for deep apology. It replaces handshakes and reflects the hierarchical, harmony-oriented culture (Hofstede Power Distance 54, very high Uncertainty Avoidance 92)."
+  },
+  {
+   "id": "tea",
+   "custom": "Offering tea to guests",
+   "icon": "🍵",
+   "country": "KZ",
+   "situation": "🇰🇿 Kazakhstan — an unexpected guest knocks on the door of a family home.",
+   "explain": "In Kazakh tradition a guest is “a gift from God” (Қонақ — Құдайдың қонағы). Tea and the dastarkhan are offered immediately, regardless of the time or purpose of the visit. Hospitality maintains social bonds rooted in nomadic survival ethics."
+  },
+  {
+   "id": "hands",
+   "custom": "Giving with both hands",
+   "icon": "🤲",
+   "country": "KR",
+   "situation": "🇰🇷 South Korea — you hand your homework to an older professor.",
+   "explain": "Using both hands (or the right hand supported by the left) shows full attention and respect to elders. It comes from Confucian ethics where age and status define behaviour; one-handed giving can seem careless or disrespectful."
+  },
+  {
+   "id": "gest",
+   "custom": "Expressive gestures",
+   "icon": "🤌",
+   "country": "IT",
+   "situation": "🇮🇹 Italy — friends passionately discuss last night’s football match in Milan.",
+   "explain": "Italians use a rich vocabulary of gestures (over 250 documented) that carry meaning on their own. High emotional expressiveness is a sign of engagement and sincerity — NIS alumni noted that loud, gestural speech is normal, not aggressive."
+  },
+  {
+   "id": "small",
+   "custom": "Small talk",
+   "icon": "☀️",
+   "country": "US",
+   "situation": "🇺🇸 USA — before a group meeting in Alabama, classmates ask about your weekend.",
+   "explain": "Small talk about weather, weekends or sports builds a friendly, low-risk connection before business. In low-context, individualistic cultures it quickly creates trust between strangers — our University of Alabama respondent highlighted it as key."
+  },
+  {
+   "id": "gift",
+   "custom": "Respectful gift giving",
+   "icon": "🎁",
+   "country": "CN",
+   "situation": "🇨🇳 China — you are choosing a present for your host family.",
+   "explain": "Gifts carry symbolism: clocks (送钟 sòng zhōng ≈ 送终 ‘seeing off the dying’) and sets of four (四 ≈ 死 death) are taboo. Gifts are offered with both hands and may be refused politely a few times before acceptance — this protects ‘face’ for both sides."
+  },
+  {
+   "id": "space",
+   "custom": "Respecting personal space",
+   "icon": "↔️",
+   "country": "CA",
+   "situation": "🇨🇦 Canada — you meet a new classmate for the first time in Calgary.",
+   "explain": "North Americans keep a personal zone of roughly 0.5–1.2 m (Hall’s ‘personal distance’). Hugging strangers or standing too close causes discomfort. Our University of Calgary respondent named personal space a strict priority."
+  },
+  {
+   "id": "queue",
+   "custom": "Queuing politely",
+   "icon": "🚏",
+   "country": "GB",
+   "situation": "🇬🇧 England — dozens of people are waiting for a bus in London.",
+   "explain": "The orderly queue is a symbol of British fair play and equality: first come, first served. Queue-jumping triggers strong silent disapproval (‘tutting’). It reflects low tolerance for unfairness and a strong norm of self-restraint."
+  },
+  {
+   "id": "formal",
+   "custom": "Formal greetings",
+   "icon": "🎓",
+   "country": "HU",
+   "situation": "🇭🇺 Hungary — you approach your professor after a lecture at ELTE.",
+   "explain": "Hungarians use formal address (Ön, ‘Jó napot kívánok’, ‘Tanár úr/Tanárnő’) with elders and teachers. NIS alumni at ELTE and Corvinus stressed that formal address signals respect, even though everyday life is otherwise relaxed."
+  },
+  {
+   "id": "punct",
+   "custom": "Being punctual",
+   "icon": "⏰",
+   "country": "DE",
+   "situation": "🇩🇪 Germany — your study group agreed to meet at exactly 9:00.",
+   "explain": "In monochronic cultures (Hall) time is linear and segmented; punctuality signals reliability and respect for others’ time. Germany scores among the highest in Uncertainty Avoidance-driven planning — 10 minutes late without notice damages trust."
+  }
+ ],
+ "quiz": [
+  {
+   "topic": "Personal Space",
+   "flag": "🇨🇦",
+   "q": "You meet a Canadian classmate for the first time at the University of Calgary. How do you greet them?",
+   "options": [
+    "Give them a warm hug — it shows friendliness",
+    "Smile, say hello and offer a handshake while keeping some distance",
+    "Stand very close so they can hear you well",
+    "Avoid any greeting until they talk to you"
+   ],
+   "correct": 1,
+   "explain": "Canadians value personal space (about an arm’s length). Hugs are reserved for close friends. A smile and a handshake show politeness without crossing boundaries (Hall’s personal distance: 45–120 cm)."
+  },
+  {
+   "topic": "Expressive Communication",
+   "flag": "🇮🇹",
+   "q": "Your Italian groupmates are talking loudly with lots of gestures during a discussion. What is most likely happening?",
+   "options": [
+    "They are angry and about to fight",
+    "They are engaged and passionate about the topic",
+    "They are making fun of you",
+    "They want you to leave"
+   ],
+   "correct": 1,
+   "explain": "In Italy emotional, loud and gestural communication signals involvement and sincerity. NIS alumni in Milan noted they first mistook it for arguing. Interpret behaviour through the local norm, not your own."
+  },
+  {
+   "topic": "Eye Contact",
+   "flag": "🌏",
+   "q": "A Japanese professor avoids long direct eye contact while talking to you. What does it usually mean?",
+   "options": [
+    "They are hiding something",
+    "They are not interested in you",
+    "It is a sign of politeness and respect",
+    "They are angry with you"
+   ],
+   "correct": 2,
+   "explain": "In many East Asian cultures prolonged eye contact, especially with someone of different status, can feel confrontational. Looking slightly down or away is polite. In the US or Germany, by contrast, steady eye contact signals honesty."
+  },
+  {
+   "topic": "Food Traditions",
+   "flag": "🇰🇿",
+   "q": "You visit a Kazakh family. The host immediately offers tea and food, but you are not hungry. What is the best response?",
+   "options": [
+    "Firmly refuse — you are not hungry",
+    "Accept the tea and taste a little, thanking the host",
+    "Ask for something different from the menu",
+    "Leave quickly so you don’t disturb them"
+   ],
+   "correct": 1,
+   "explain": "In Kazakh culture offering tea is an essential act of hospitality. Accepting at least a cup and tasting the food honours the host; a complete refusal may be read as rejecting their respect."
+  },
+  {
+   "topic": "Stereotypes",
+   "flag": "🇰🇿",
+   "q": "A foreign student asks you: “Do people in Kazakhstan still live in yurts?” How should you respond?",
+   "options": [
+    "Get offended and stop talking",
+    "Laugh at them for being ignorant",
+    "Calmly explain that people live in modern cities, and the yurt is a cultural symbol used for celebrations",
+    "Say yes to avoid an awkward conversation"
+   ],
+   "correct": 2,
+   "explain": "Stereotypes usually come from lack of information, not malice. A calm, friendly explanation turns a stereotype into a learning moment and builds a positive image of your culture (contact hypothesis, Allport 1954)."
+  },
+  {
+   "topic": "Local Celebrations",
+   "flag": "🎉",
+   "q": "Your host family invites you to celebrate a local holiday you know nothing about. What do you do?",
+   "options": [
+    "Decline — it is not your culture",
+    "Accept, ask respectful questions and follow what others do",
+    "Go but stay on your phone",
+    "Suggest celebrating Nauryz instead"
+   ],
+   "correct": 1,
+   "explain": "Participation in local celebrations is one of the fastest routes to integration (Berry’s acculturation model). Curiosity and respectful questions show openness without losing your own identity."
+  },
+  {
+   "topic": "Direct Communication",
+   "flag": "🇩🇪",
+   "q": "In a group project, a German teammate says: “Your part has several mistakes. It needs to be redone.” How should you interpret it?",
+   "options": [
+    "They dislike you personally",
+    "They are being rude on purpose",
+    "It is honest, task-focused feedback aimed at improving the work",
+    "They want to take over your part"
+   ],
+   "correct": 2,
+   "explain": "Germany is a low-context, direct-feedback culture (Meyer’s Culture Map). Criticism targets the task, not the person. Respond with facts and a plan, not with hurt feelings."
+  },
+  {
+   "topic": "Language Barriers",
+   "flag": "🗣️",
+   "q": "A local is speaking too fast and you don’t understand. What is the most effective response?",
+   "options": [
+    "Nod and pretend to understand",
+    "Politely ask them to repeat more slowly, or rephrase",
+    "Walk away",
+    "Answer in your native language"
+   ],
+   "correct": 1,
+   "explain": "Pretending to understand leads to bigger misunderstandings later. Asking politely (“Sorry, could you say that a bit more slowly?”) is normal everywhere and shows you care about communication."
+  },
+  {
+   "topic": "Attitudes Towards Time",
+   "flag": "⏰",
+   "q": "Your seminar in Germany starts at 10:00. When should you arrive?",
+   "options": [
+    "10:15 — a little late is fine",
+    "Around 9:55, a few minutes early",
+    "Exactly when you feel ready",
+    "10:30, the first part is not important"
+   ],
+   "correct": 1,
+   "explain": "In monochronic cultures like Germany, Japan or Switzerland punctuality means respect and reliability. Arriving a few minutes early is the norm; lateness requires advance notice."
+  },
+  {
+   "topic": "Greetings",
+   "flag": "🤝",
+   "q": "You meet your new Italian host family and the mother leans in for cheek kisses. Meanwhile, in England, your landlord offers a handshake. What does this show?",
+   "options": [
+    "Italians are less polite than the English",
+    "Greeting styles differ: closeness is normal in Italy, while a handshake is the norm in England",
+    "You should always hug everyone to be safe",
+    "Handshakes are rude in Italy"
+   ],
+   "correct": 1,
+   "explain": "Contact cultures (Italy, Spain, Latin America) use kisses and hugs, while non-contact cultures (UK, Canada, Japan) prefer handshakes or bows. Follow the other person’s lead."
+  },
+  {
+   "topic": "Cultural Generalisations",
+   "flag": "🧠",
+   "q": "After meeting two quiet Hungarians, your friend says “All Hungarians are unfriendly.” What is the best reaction?",
+   "options": [
+    "Agree — two examples prove it",
+    "Point out that it is a generalisation; individuals differ, and reserve is not unfriendliness",
+    "Decide never to talk to Hungarians",
+    "Tell everyone at home that Hungarians are rude"
+   ],
+   "correct": 1,
+   "explain": "Cultural dimensions describe tendencies of groups, never every individual (the ‘ecological fallacy’, Hofstede). Reserved behaviour often reflects respect for boundaries — as NIS alumni in Budapest noticed."
+  },
+  {
+   "topic": "Handling Misunderstandings",
+   "flag": "🕊️",
+   "q": "You accidentally offended a classmate because of a cultural difference. What should you do?",
+   "options": [
+    "Ignore it — it was not intentional",
+    "Apologise sincerely, explain your intention and ask about their norm",
+    "Blame their culture for being too sensitive",
+    "Avoid them for the rest of the year"
+   ],
+   "correct": 1,
+   "explain": "Intercultural competence (Deardorff, 2006) includes recognising mistakes, apologising and learning. Explaining your intention and asking questions turns conflict into mutual understanding."
+  }
+ ],
+ "quiz_badges": [
+  {
+   "min": 0,
+   "max": 6,
+   "title": "Cultural Awareness Beginner",
+   "icon": "🌱",
+   "text": "You are starting your intercultural journey. Explore the Atlas and Gap Radar, then try again!"
+  },
+  {
+   "min": 7,
+   "max": 9,
+   "title": "Cultural Awareness Learner",
+   "icon": "🧭",
+   "text": "Good intuition! A few more scenarios in the Roleplay Simulator and you will be an expert."
+  },
+  {
+   "min": 10,
+   "max": 12,
+   "title": "Cultural Awareness Expert",
+   "icon": "🏆",
+   "text": "Outstanding! You read cultural codes like a diplomat. You are ready to study abroad."
+  }
+ ],
+ "translator_presets": [
+  "Your idea won't work, we need another solution.",
+  "I don't want to eat this dish.",
+  "You are late again. This is unacceptable.",
+  "Professor, I need you to check my essay by tomorrow.",
+  "No, I can't come to your party.",
+  "Hey, give me the notes from yesterday's lecture."
+ ],
+ "pragma_features": [
+  {
+   "id": "criticism",
+   "label": "Direct criticism",
+   "weight": 26,
+   "amp": "indirect",
+   "patterns": [
+    "won'?t work",
+    "doesn'?t work",
+    "\\bwrong\\b",
+    "\\bbad\\b",
+    "terrible",
+    "awful",
+    "useless",
+    "stupid",
+    "mistake",
+    "\\bfail",
+    "not good",
+    "makes no sense",
+    "nonsense",
+    "boring"
+   ]
+  },
+  {
+   "id": "rejection",
+   "label": "Flat negation / refusal",
+   "weight": 16,
+   "amp": "indirect",
+   "patterns": [
+    "^no\\b",
+    "\\bno[,.!]",
+    "\\bcan'?t\\b",
+    "\\bcannot\\b",
+    "\\bwon'?t\\b",
+    "\\bdon'?t want\\b",
+    "\\brefuse",
+    "\\bnever\\b"
+   ]
+  },
+  {
+   "id": "food",
+   "label": "Rejecting hospitality",
+   "weight": 30,
+   "amp": "hospitality",
+   "patterns": [
+    "(don'?t|do not) (want|like) to eat",
+    "(don'?t|do not) like (this|the|your) (food|dish|meal)",
+    "not (eat|eating) (this|that)",
+    "\\b(this|the) (food|dish|meal) is\\b.*(bad|strange|weird|disgusting)",
+    "disgusting",
+    "no more food",
+    "(don'?t|do not) want (this|the|your) (food|dish|tea|meal)",
+    "eat this"
+   ]
+  },
+  {
+   "id": "blame",
+   "label": "“You”-blame",
+   "weight": 16,
+   "amp": "indirect",
+   "patterns": [
+    "\\byour (idea|work|part|fault|plan|essay)\\b",
+    "\\byou are (late|wrong|lazy|rude)",
+    "\\byou (always|never)\\b",
+    "\\byou didn'?t\\b",
+    "\\bbecause of you\\b"
+   ]
+  },
+  {
+   "id": "imperative",
+   "label": "Command / pressure",
+   "weight": 14,
+   "amp": "hierarchy",
+   "patterns": [
+    "\\bi need you to\\b",
+    "\\byou (must|have to|need to|should)\\b",
+    "^(give|send|check|do|bring|tell|fix|stop)\\b",
+    "\\b(give|send) me\\b",
+    "by tomorrow",
+    "\\basap\\b",
+    "right now",
+    "immediately"
+   ]
+  },
+  {
+   "id": "superior",
+   "label": "Demand to a superior",
+   "weight": 18,
+   "amp": "hierarchy",
+   "patterns": [
+    "(professor|teacher|sir|madam|\\bdr\\b|doctor|sensei).*(i need you to|you (must|have to|need to|should)|by tomorrow|asap|right now|immediately)"
+   ]
+  },
+  {
+   "id": "informal",
+   "label": "Too informal for status",
+   "weight": 12,
+   "amp": "hierarchy",
+   "patterns": [
+    "^hey\\b",
+    "\\bdude\\b",
+    "\\bguys\\b",
+    "\\byo\\b",
+    "\\bbro\\b",
+    "\\bwhatever\\b",
+    "\\bgonna\\b",
+    "\\bwanna\\b"
+   ]
+  },
+  {
+   "id": "absolute",
+   "label": "Absolutes / exaggeration",
+   "weight": 10,
+   "amp": "indirect",
+   "patterns": [
+    "\\balways\\b",
+    "\\bcompletely\\b",
+    "\\btotally\\b",
+    "\\bimpossible\\b",
+    "\\bunacceptable\\b",
+    "\\babsolutely\\b",
+    "\\bagain\\b"
+   ]
+  },
+  {
+   "id": "time",
+   "label": "Time / lateness issue",
+   "weight": 10,
+   "amp": "time",
+   "patterns": [
+    "\\blate\\b",
+    "\\bdeadline\\b",
+    "\\bwait(ing)?\\b",
+    "\\bdelay",
+    "\\bschedule\\b"
+   ]
+  },
+  {
+   "id": "intensity",
+   "label": "Emotional intensity (!, CAPS)",
+   "weight": 8,
+   "amp": "neutral",
+   "patterns": [
+    "!{1,}",
+    "\\b[A-Z]{3,}\\b"
+   ]
+  }
+ ],
+ "pragma_softeners": [
+  "\\bplease\\b",
+  "\\bmaybe\\b",
+  "\\bperhaps\\b",
+  "\\bcould\\b",
+  "\\bwould\\b",
+  "\\bi think\\b",
+  "\\bi feel\\b",
+  "\\bsorry\\b",
+  "\\bthank",
+  "\\bmight\\b",
+  "\\bit seems\\b",
+  "\\bi wonder\\b",
+  "\\bgrateful\\b",
+  "\\bappreciate\\b",
+  "\\bif possible\\b"
+ ],
+ "pragma_categories": [
+  {
+   "id": "food",
+   "test": [
+    "food"
+   ]
+  },
+  {
+   "id": "time",
+   "test": [
+    "time"
+   ]
+  },
+  {
+   "id": "criticism",
+   "test": [
+    "criticism",
+    "blame",
+    "absolute"
+   ]
+  },
+  {
+   "id": "request",
+   "test": [
+    "imperative",
+    "superior"
+   ]
+  },
+  {
+   "id": "decline",
+   "test": [
+    "rejection"
+   ]
+  }
+ ],
+ "pragma_adapt": {
+  "criticism": {
+   "KZ": "Thank you, this is a good starting point. I have a small concern — maybe we can think together about another option that could work even better?",
+   "IT": "Guarda, I really like the energy behind this idea! But honestly, I’m worried it may not work in practice — what if we try another direction together?",
+   "HU": "I see the logic, but I think this solution has a weak point. Could we look at an alternative?",
+   "CA": "Thanks for putting this together! I wonder if we might run into some challenges with it — would you be open to exploring another option too?",
+   "US": "Great start — I love the thinking here! One thing I’d suggest: let’s explore another solution that might be even stronger.",
+   "CN": "Thank you for your effort, I learned a lot from this idea. Perhaps we could also consider another approach, so we have more choices for the team?",
+   "JP": "Thank you very much for this idea — I can see how much thought went into it. It might be a little difficult in our situation… perhaps we could also consider one more option?",
+   "KR": "Thank you for sharing this. I think it is a very good effort. Maybe, if it is okay, we could review one more option together?",
+   "GB": "That’s an interesting idea. I’m just slightly concerned it might not quite work — perhaps we could consider an alternative?",
+   "DE": "I think this solution will not work, because of [reason]. I suggest we evaluate alternative B instead. What do you think?"
+  },
+  "food": {
+   "KZ": "Рахмет! Everything looks delicious. I’ll gladly have some tea and just a little taste — I had a big meal earlier.",
+   "IT": "Grazie mille, it smells amazing! I’m really full right now, but I’d love to taste just a little — and please tell me the recipe!",
+   "HU": "Thank you very much, it looks lovely. I’m afraid I’m quite full, but I’ll try a small piece.",
+   "CA": "Thank you so much — this looks great! I’m actually pretty full, so I’ll just have a small taste, if that’s okay.",
+   "US": "Wow, thank you! This looks awesome. I’m honestly stuffed, but I’d love a small bite.",
+   "CN": "Thank you, you are so kind! Everything is wonderful. I’ll try a little of this — I’m already very full from your generous meal.",
+   "JP": "Itadakimasu — thank you very much. It looks wonderful. I’m afraid I can only manage a little, but I’ll gratefully try it.",
+   "KR": "Thank you so much, it looks delicious! I’m quite full, but I’ll gladly try a little. (Receive the plate with both hands.)",
+   "GB": "That’s very kind of you, thank you. I’m actually rather full, but I’ll have a little taste.",
+   "DE": "Thank you, that looks good. I’m honestly full, so I’ll just try a small portion. (A clear, polite no is also acceptable.)"
+  },
+  "time": {
+   "KZ": "I know everyone is busy. Next time, could we try to keep the agreed time? It would really help us finish on schedule.",
+   "IT": "Ciao! No problem — but for the presentation we really need to start on time. Can we agree to meet at 10 sharp?",
+   "HU": "I noticed we started late again. Could we please stick to the agreed time in the future?",
+   "CA": "Hey, no worries — just a heads-up that we’re on a tight schedule. Could we try to start on time next meeting?",
+   "US": "Glad you made it! Quick thing — let’s try to start right on time next meeting so we can wrap up early.",
+   "CN": "I understand you must be very busy. To help the whole team, perhaps we can all try to arrive on time next time?",
+   "JP": "Thank you for coming. I’m sorry to mention it, but our schedule is a little tight… it would help us all if we could start on time.",
+   "KR": "Thanks for coming! Our schedule is a bit tight, so it would be really helpful if we could all start on time next time.",
+   "GB": "Not to worry — though it might be helpful if we could all try to be on time next time, just so we finish on schedule.",
+   "DE": "You were 15 minutes late. Please let us know in advance next time, because we need to start at the agreed time."
+  },
+  "request": {
+   "KZ": "Excuse me, Professor, I am sorry to disturb you. If it is possible for you, could you please look at my essay? I would be very grateful.",
+   "IT": "Buongiorno Professore, I hope you’re well! Would it be possible for you to look at my essay when you have a moment? Grazie mille!",
+   "HU": "Jó napot kívánok, Tanár úr. Would it be possible for you to review my essay? I would be very grateful.",
+   "CA": "Hi Professor, I hope you’re doing well. Would you have a chance to look over my essay? Totally understand if you’re busy.",
+   "US": "Hi Professor, hope your week is going great! Would you have time to look over my essay? I’d really appreciate it.",
+   "CN": "Respected Professor, I apologise for taking your valuable time. If it is convenient, could you kindly give me some advice on my essay?",
+   "JP": "Sensei, I am very sorry to trouble you when you are busy. If it is not too much trouble, could you possibly look at my essay?",
+   "KR": "Professor-nim, I’m sorry to bother you. If you have time, could you please look at my essay? Thank you very much.",
+   "GB": "Hello Professor, sorry to bother you — I was wondering if you might have a moment to look over my essay? No rush at all.",
+   "DE": "Guten Tag, Professor Müller. Could you please review my essay by Friday? I would like to submit it next week. Thank you."
+  },
+  "decline": {
+   "KZ": "Thank you so much for inviting me, it means a lot! Unfortunately, I already promised to help my family that day. Let’s definitely meet soon!",
+   "IT": "Che peccato! I’d love to come, but I already have plans that day. Let’s grab a coffee together soon, okay?",
+   "HU": "Thank you for the invitation. Unfortunately, I can’t come this time, but I’d be happy to join next time.",
+   "CA": "Thanks so much for the invite! I’m so sorry, I already have something that day. I hope it’s a great party!",
+   "US": "Aw, thanks for inviting me! I’ve got something I can’t move that day, but I’d love to hang out soon!",
+   "CN": "Thank you for thinking of me, I am honoured. I’m afraid I have a family commitment that day. I hope we can meet another time.",
+   "JP": "Thank you very much for the kind invitation. That day is a little… difficult for me. I am really sorry. Please invite me again.",
+   "KR": "Thank you so much for the invitation! I’m really sorry, I have a prior appointment that day. Let’s meet next time for sure!",
+   "GB": "Oh, that’s really kind of you! I’m afraid I can’t make it that day — such a shame. Do have a lovely time.",
+   "DE": "Thank you for the invitation, but I can’t come on Saturday because I have an exam on Monday. Have fun!"
+  },
+  "ask": {
+   "KZ": "Hi! Sorry to bother you — could you please share {obj}? I’d be really grateful. Рахмет!",
+   "IT": "Ciao! Scusa — could you share {obj} with me? You’d save my life, grazie!",
+   "HU": "Hi, could you please share {obj}? Thank you very much.",
+   "CA": "Hey, sorry to bug you — would you mind sharing {obj}? Totally okay if not!",
+   "US": "Hey! Would you mind sharing {obj}? That would be super helpful, thanks!",
+   "CN": "Excuse me, if it’s convenient for you, could you kindly share {obj}? Thank you so much.",
+   "JP": "I’m sorry to trouble you… if it’s not inconvenient, could I possibly borrow {obj}? Thank you very much.",
+   "KR": "Excuse me, sorry to bother you — could you share {obj}, if that’s okay? Thank you!",
+   "GB": "Sorry to be a pain — would you mind awfully sharing {obj}? Cheers!",
+   "DE": "Could you please send me {obj}? I need it to prepare for the next session. Thanks!"
+  },
+  "neutral": {
+   "KZ": "With respect: {text}",
+   "IT": "Senti, {text} 😊",
+   "HU": "{text}",
+   "CA": "Just a thought — {text}",
+   "US": "Hey, quick one — {text}",
+   "CN": "If possible, {text}",
+   "JP": "If it is not too much trouble, {text}",
+   "KR": "If it’s okay, {text}",
+   "GB": "Sorry, I was just wondering — {text}",
+   "DE": "{text}"
+  }
+ },
+ "pragma_hearing": {
+  "KZ": [
+   "Sounds friendly and respectful — especially if you address elders properly.",
+   "A bit sharp. Older people may feel you lack respect (sylay); add warmth and gratitude.",
+   "Feels disrespectful. Rejecting hospitality or speaking bluntly to elders damages the relationship."
+  ],
+  "IT": [
+   "Sounds natural and warm — Italians appreciate sincerity with emotion.",
+   "Acceptable, but slightly cold. Add warmth and personal emotion to avoid sounding robotic.",
+   "Your host may feel personally hurt — especially about food or family. Emotion and gratitude are essential."
+  ],
+  "HU": [
+   "Sounds clear and polite — Hungarians value sincerity.",
+   "Okay among peers, but with professors or elders it may seem too casual.",
+   "Too abrupt — formality with elders and teachers is expected."
+  ],
+  "CA": [
+   "Sounds polite and considerate — very Canadian.",
+   "Slightly blunt. Canadians soften with “maybe”, “I wonder” and “sorry”.",
+   "Comes across as rude and aggressive. Canadians expect diplomatic, cushioned phrasing."
+  ],
+  "US": [
+   "Sounds friendly and positive — great!",
+   "A bit negative. Americans expect positive framing (praise → suggestion).",
+   "Sounds harsh and confrontational. The listener may feel attacked and disengage."
+  ],
+  "CN": [
+   "Respectful and face-saving — the relationship is safe.",
+   "Risky: your counterpart may lose face, even if they smile and stay silent.",
+   "Severe loss of face (diu mianzi). The relationship (guanxi) may be damaged permanently."
+  ],
+  "JP": [
+   "Polite and humble — this matches Japanese expectations of harmony.",
+   "Too direct. Your listener may smile and agree, but feel uncomfortable inside.",
+   "Extremely direct by Japanese standards — perceived as aggressive and shameful for both sides. Harmony (wa) is broken."
+  ],
+  "KR": [
+   "Respectful — appropriate honorific tone.",
+   "May sound impolite, especially to someone older. Respect for age is key.",
+   "Very disrespectful — seen as ignoring age and status hierarchy."
+  ],
+  "GB": [
+   "Perfectly polite — well understated.",
+   "A little too blunt; the British expect softeners and understatement.",
+   "Perceived as rude. Expect a polite smile — and a cold relationship afterwards."
+  ],
+  "DE": [
+   "Clear and efficient — Germans appreciate this.",
+   "Fine. Germans prefer clarity; just add a reason or suggestion.",
+   "Even by German standards this is personal, not factual. Criticise the task, not the person."
+  ]
+ },
+ "roleplays": [
+  {
+   "id": "de-deadline",
+   "country": "DE",
+   "title": "Deadline dispute with a German teammate",
+   "npc": "Lukas",
+   "npcRole": "Teammate, TU Munich",
+   "avatar": "🧑🏼‍💻",
+   "start": 50,
+   "intro": "Your joint project is due Friday. You promised your part on Monday — it’s now Wednesday and it’s not ready.",
+   "steps": [
+    {
+     "npc": "Hi. We agreed you would send your part on Monday. It is Wednesday. What happened?",
+     "options": [
+      {
+       "text": "Sorry, I had a lot going on. Don’t worry, it will be fine, I’ll send it sometime soon.",
+       "delta": -18,
+       "mood": "annoyed",
+       "feedback": "“Sometime soon” is vague. In a monochronic culture an unclear promise sounds unreliable. Germans want a concrete date and reason."
+      },
+      {
+       "text": "You’re right, I missed the deadline. I underestimated the data analysis. I can send it tomorrow at 14:00.",
+       "delta": 20,
+       "mood": "neutral",
+       "feedback": "Excellent: you acknowledged the fact, gave a reason and a precise new commitment. This is exactly how trust is rebuilt in Germany."
+      },
+      {
+       "text": "Why are you so strict? It’s only two days, relax.",
+       "delta": -25,
+       "mood": "angry",
+       "feedback": "Questioning the norm itself feels disrespectful. For Germans, a deadline is an agreement, not a suggestion."
+      }
+     ]
+    },
+    {
+     "npc": "Okay. But honestly, the introduction you sent last week has several problems. The structure is not logical.",
+     "options": [
+      {
+       "text": "Wow, that’s rude. I worked hard on it.",
+       "delta": -15,
+       "mood": "annoyed",
+       "feedback": "German feedback is direct and task-focused (Meyer’s ‘direct negative feedback’). Taking it personally escalates the situation."
+      },
+      {
+       "text": "Thanks for telling me directly. Which parts exactly? I’ll fix the structure.",
+       "delta": 18,
+       "mood": "happy",
+       "feedback": "Perfect. You separated the task from the person and asked for specifics — Lukas sees you as a reliable partner."
+      },
+      {
+       "text": "Hmm… okay… maybe…",
+       "delta": -6,
+       "mood": "neutral",
+       "feedback": "Silence and vague agreement don’t show commitment. In a low-context culture, say clearly what you will do."
+      }
+     ]
+    },
+    {
+     "npc": "Section 2 and 3. Also, can we meet on Thursday at 9:00 to merge everything?",
+     "options": [
+      {
+       "text": "Sure, 9:00 works. I’ll be there and bring the corrected sections.",
+       "delta": 15,
+       "mood": "happy",
+       "feedback": "Clear confirmation and preparation — exactly what builds trust. Now be there at 8:55!"
+      },
+      {
+       "text": "Let’s just meet when we’re both free, maybe after lunch?",
+       "delta": -10,
+       "mood": "annoyed",
+       "feedback": "Too flexible. Germans prefer fixed times; propose an exact alternative if 9:00 doesn’t work."
+      },
+      {
+       "text": "9:00 is early for me — can we do 11:00 instead? I’ll still bring everything.",
+       "delta": 6,
+       "mood": "neutral",
+       "feedback": "Acceptable: a precise counter-proposal is fine in Germany. Directness goes both ways."
+      }
+     ]
+    },
+    {
+     "npc": "Good. Then we have a plan. Please don’t be late this time.",
+     "options": [
+      {
+       "text": "I won’t. I’ll even send the draft tonight so you can look at it in advance.",
+       "delta": 14,
+       "mood": "happy",
+       "feedback": "Exceeding the commitment shows reliability (Zuverlässigkeit) — the highest form of respect in German teams."
+      },
+      {
+       "text": "Haha, we’ll see!",
+       "delta": -14,
+       "mood": "annoyed",
+       "feedback": "Joking about punctuality after missing a deadline undermines everything you just promised."
+      },
+      {
+       "text": "Okay.",
+       "delta": 2,
+       "mood": "neutral",
+       "feedback": "Neutral, but a little cold. A brief confirmation with a commitment would be stronger."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "it-dinner",
+   "country": "IT",
+   "title": "Refusing food at an Italian host family dinner",
+   "npc": "Nonna Lucia",
+   "npcRole": "Host grandmother, Siena",
+   "avatar": "👵🏻",
+   "start": 55,
+   "intro": "Your host family in Siena prepared a huge Sunday lunch. You’ve eaten pasta and you are full — but the main course is coming.",
+   "steps": [
+    {
+     "npc": "Ecco! Now the arista — roast pork, my mother’s recipe! You must eat, you are too thin!",
+     "options": [
+      {
+       "text": "No, thanks. I don’t want it.",
+       "delta": -22,
+       "mood": "sad",
+       "feedback": "A flat refusal of a family recipe feels like rejecting Nonna herself. In Italy food is love and identity."
+      },
+      {
+       "text": "Nonna, it smells incredible! I’m so full from your pasta — can I have just a small piece?",
+       "delta": 20,
+       "mood": "happy",
+       "feedback": "Bravo! Praise first, then a small portion. You honoured the dish and explained with warmth."
+      },
+      {
+       "text": "Maybe later.",
+       "delta": -6,
+       "mood": "neutral",
+       "feedback": "Vague and cool. Italians value emotional warmth — show your appreciation openly."
+      }
+     ]
+    },
+    {
+     "npc": "Brava! Tell me, do you like it? In your country, what do you eat on Sunday?",
+     "options": [
+      {
+       "text": "It’s delicious! In Kazakhstan we cook beshbarmak for family gatherings — I could make it for you!",
+       "delta": 20,
+       "mood": "happy",
+       "feedback": "Wonderful cultural exchange! Sharing your own traditions with enthusiasm creates real connection."
+      },
+      {
+       "text": "It’s okay. We have similar food.",
+       "delta": -10,
+       "mood": "sad",
+       "feedback": "Too reserved. Italians expect emotion and enthusiasm when talking about food."
+      },
+      {
+       "text": "Good.",
+       "delta": -4,
+       "mood": "neutral",
+       "feedback": "Short answers can seem disinterested in an expressive culture. Elaborate a little!"
+      }
+     ]
+    },
+    {
+     "npc": "(raising voice and waving hands) Marco! Bring the tiramisù! Nobody leaves this table hungry!",
+     "options": [
+      {
+       "text": "(Looks worried) Is everything okay? Are you angry?",
+       "delta": -4,
+       "mood": "neutral",
+       "feedback": "Understandable, but loud voices and gestures in Italy usually signal excitement, not anger — just as NIS alumni noticed."
+      },
+      {
+       "text": "(Laughing) Tiramisù! Okay Nonna, you win — but just a little piece!",
+       "delta": 16,
+       "mood": "happy",
+       "feedback": "You matched the playful energy. Accepting a small portion of dessert is the perfect compromise."
+      },
+      {
+       "text": "I said I’m full. Please stop.",
+       "delta": -20,
+       "mood": "sad",
+       "feedback": "Too blunt; this breaks the warm atmosphere. Soften with humour and gratitude."
+      }
+     ]
+    },
+    {
+     "npc": "Ahh, finally you smile! You are part of the family now.",
+     "options": [
+      {
+       "text": "Grazie di cuore, Nonna! Everything was amazing. Can you teach me the recipe?",
+       "delta": 16,
+       "mood": "happy",
+       "feedback": "Using Italian and asking for the recipe is the highest compliment. You have earned Nonna’s trust."
+      },
+      {
+       "text": "Thanks. I need to go study now.",
+       "delta": -8,
+       "mood": "neutral",
+       "feedback": "Leaving quickly after a family meal feels cold. Italians enjoy long conversations at the table."
+      },
+      {
+       "text": "Thank you for the food.",
+       "delta": 4,
+       "mood": "neutral",
+       "feedback": "Polite, but a bit formal for a warm family moment."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hu-prof",
+   "country": "HU",
+   "title": "Meeting your professor in Hungary",
+   "npc": "Dr. Kovács",
+   "npcRole": "Professor, ELTE Budapest",
+   "avatar": "👨🏻‍🏫",
+   "start": 50,
+   "intro": "You need to ask Dr. Kovács about your term paper topic during office hours at ELTE.",
+   "steps": [
+    {
+     "npc": "(You knock on the door) Igen? Come in.",
+     "options": [
+      {
+       "text": "Hi! Got a minute? I need to ask you something.",
+       "delta": -16,
+       "mood": "annoyed",
+       "feedback": "Too informal. In Hungary professors are addressed formally — alumni at ELTE stressed this point."
+      },
+      {
+       "text": "Jó napot kívánok, Kovács tanár úr! Thank you for seeing me. May I ask about my term paper?",
+       "delta": 22,
+       "mood": "happy",
+       "feedback": "Perfect formal greeting. Using Hungarian and the title “tanár úr” shows great respect."
+      },
+      {
+       "text": "(Walks in silently and sits down)",
+       "delta": -12,
+       "mood": "annoyed",
+       "feedback": "Entering without greeting or waiting for an invitation to sit is impolite in a formal setting."
+      }
+     ]
+    },
+    {
+     "npc": "Of course. Which topic would you like to choose?",
+     "options": [
+      {
+       "text": "Whatever you think is best.",
+       "delta": -6,
+       "mood": "neutral",
+       "feedback": "European professors expect students to show initiative and their own opinion, even in formal relationships."
+      },
+      {
+       "text": "I’d like to research intercultural adaptation of Central Asian students. Here is a short outline.",
+       "delta": 18,
+       "mood": "happy",
+       "feedback": "Excellent: specific, prepared and independent. Formal tone + initiative is the winning combination."
+      },
+      {
+       "text": "I want an easy topic so I can finish fast.",
+       "delta": -14,
+       "mood": "annoyed",
+       "feedback": "Honest, but it signals low academic commitment."
+      }
+     ]
+    },
+    {
+     "npc": "Interesting. But you will need to submit the registration form to the Dean’s office. It may take a few weeks.",
+     "options": [
+      {
+       "text": "A few weeks?! That’s too slow, can’t you just do it now?",
+       "delta": -16,
+       "mood": "annoyed",
+       "feedback": "Hungarian bureaucracy is slow — complaining to the professor won’t help and seems disrespectful. Alumni advise patience."
+      },
+      {
+       "text": "I understand. I’ll submit it this week so there is enough time. Which documents do I need?",
+       "delta": 16,
+       "mood": "happy",
+       "feedback": "Great — you accepted the system and planned ahead. That’s exactly the alumni’s advice for Hungary."
+      },
+      {
+       "text": "Okay, I’ll do it sometime.",
+       "delta": -6,
+       "mood": "neutral",
+       "feedback": "Risky — with slow paperwork, delays can cost you the deadline."
+      }
+     ]
+    },
+    {
+     "npc": "Here is the list. Good luck with your research.",
+     "options": [
+      {
+       "text": "Köszönöm szépen, tanár úr. Viszontlátásra!",
+       "delta": 16,
+       "mood": "happy",
+       "feedback": "A formal Hungarian goodbye (“Goodbye, sir”) leaves an excellent impression."
+      },
+      {
+       "text": "Bye!",
+       "delta": -8,
+       "mood": "neutral",
+       "feedback": "Too casual for a professor in Hungary."
+      },
+      {
+       "text": "Thanks a lot, see you!",
+       "delta": 2,
+       "mood": "neutral",
+       "feedback": "Friendly, but formal register would be more appropriate."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "us-smalltalk",
+   "country": "US",
+   "title": "First day small talk in Alabama",
+   "npc": "Jessica",
+   "npcRole": "Classmate, University of Alabama",
+   "avatar": "👩🏼",
+   "start": 50,
+   "intro": "You sit down next to a student before your first lecture at the University of Alabama.",
+   "steps": [
+    {
+     "npc": "Hey there! How are you doing?",
+     "options": [
+      {
+       "text": "Honestly, not great. I slept badly, my visa took forever, and I miss home…",
+       "delta": -8,
+       "mood": "neutral",
+       "feedback": "“How are you?” is a greeting, not a real question. A long list of problems may make a stranger uncomfortable."
+      },
+      {
+       "text": "I’m good, thanks! How about you? I’m new here, by the way — I’m from Kazakhstan.",
+       "delta": 18,
+       "mood": "happy",
+       "feedback": "Perfect: positive reply, return question and an easy hook for conversation."
+      },
+      {
+       "text": "(Nods silently and opens laptop)",
+       "delta": -14,
+       "mood": "neutral",
+       "feedback": "In the US silence after a greeting reads as unfriendly. Small talk is expected."
+      }
+     ]
+    },
+    {
+     "npc": "Oh wow, Kazakhstan! That’s so cool. Is it super cold there?",
+     "options": [
+      {
+       "text": "It can be — winters reach −30 °C in Astana! But summers are hot. Is Alabama always this warm?",
+       "delta": 18,
+       "mood": "happy",
+       "feedback": "Great small talk: weather is a classic safe topic, and you asked back."
+      },
+      {
+       "text": "Why do Americans always ask about cold? That’s a stereotype.",
+       "delta": -16,
+       "mood": "sad",
+       "feedback": "Even if it feels stereotypical, it’s friendly curiosity. Turn it into a positive exchange instead."
+      },
+      {
+       "text": "Yes.",
+       "delta": -6,
+       "mood": "neutral",
+       "feedback": "Too short — it ends the conversation."
+      }
+     ]
+    },
+    {
+     "npc": "Pretty much! Any plans for the weekend? There’s a football game on Saturday — Roll Tide!",
+     "options": [
+      {
+       "text": "I’ve never been to an American football game! Would you mind if I joined?",
+       "delta": 18,
+       "mood": "happy",
+       "feedback": "Enthusiasm and openness — exactly how friendships start in US campus culture."
+      },
+      {
+       "text": "I don’t like sports. I’ll study.",
+       "delta": -10,
+       "mood": "neutral",
+       "feedback": "Fine to decline, but frame it positively (“Not my thing, but have fun!”)."
+      },
+      {
+       "text": "What is Roll Tide? Sounds strange.",
+       "delta": -2,
+       "mood": "neutral",
+       "feedback": "Curiosity is good, but “strange” sounds judgmental. Ask with interest instead."
+      }
+     ]
+    },
+    {
+     "npc": "Of course! Let’s swap numbers. Oh — class is starting!",
+     "options": [
+      {
+       "text": "Awesome! Great to meet you, Jessica. See you Saturday!",
+       "delta": 14,
+       "mood": "happy",
+       "feedback": "Warm, positive closing — you’ve made your first American friend."
+      },
+      {
+       "text": "Okay. Number?",
+       "delta": -4,
+       "mood": "neutral",
+       "feedback": "A bit abrupt — Americans value warm verbal closings."
+      },
+      {
+       "text": "Thanks for talking to me, I was nervous.",
+       "delta": 8,
+       "mood": "happy",
+       "feedback": "Sincere and friendly — Americans appreciate openness."
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "moods": {
+  "happy": {
+   "emoji": "😊",
+   "label": "Comfortable"
+  },
+  "neutral": {
+   "emoji": "😐",
+   "label": "Neutral"
+  },
+  "annoyed": {
+   "emoji": "😒",
+   "label": "Irritated"
+  },
+  "sad": {
+   "emoji": "😟",
+   "label": "Hurt"
+  },
+  "angry": {
+   "emoji": "😠",
+   "label": "Offended"
+  }
+ },
+ "references": [
+  "Hall, E. T. (1966). The Hidden Dimension. — proxemics, zones of distance",
+  "Hall, E. T. (1976). Beyond Culture. — high- vs low-context communication",
+  "Hofstede, G., Hofstede, G. J., & Minkov, M. (2010). Cultures and Organizations. — 6-D model",
+  "Meyer, E. (2014). The Culture Map. — 8 scales incl. evaluating, scheduling",
+  "Brown, P., & Levinson, S. (1987). Politeness: Some Universals in Language Usage. — face theory",
+  "Oberg, K. (1960). Culture shock: adjustment to new cultural environments.",
+  "Berry, J. W. (1997). Immigration, acculturation, and adaptation.",
+  "Deardorff, D. K. (2006). Intercultural competence model.",
+  "Sorokowska, A. et al. (2017). Preferred interpersonal distances: a global comparison. J. Cross-Cultural Psychology."
+ ]
+}

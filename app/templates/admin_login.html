@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Admin · CultureBridge AI{% endblock %}
+{% block head %}
+  <script src="{{ url_for('static', filename='vendor/tailwind.js') }}"></script>
+{% endblock %}
+{% block body_class %}min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4{% endblock %}
+{% block body %}
+  <div class="w-full max-w-sm rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+    <a href="/" class="text-sm text-slate-400 hover:text-white">← Back to platform</a>
+    <h1 class="mt-4 text-2xl font-bold">Admin panel</h1>
+    {% if not enabled %}
+      <p class="mt-4 text-amber-300 text-sm">The admin panel is disabled. Set <code class="text-white">ADMIN_PASSWORD</code> in the environment (.env) and restart the server.</p>
+    {% else %}
+      <form method="post" action="{{ url_for('admin.login') }}" class="mt-6 space-y-4">
+        <input type="password" name="password" required autofocus placeholder="Admin password"
+               class="w-full rounded-xl border border-white/10 bg-slate-900 px-4 py-3 outline-none focus:border-violet-500">
+        {% if error %}<p class="text-sm text-red-400">{{ error }}</p>{% endif %}
+        <button class="w-full rounded-xl bg-gradient-to-r from-violet-600 to-cyan-500 px-4 py-3 font-semibold">Sign in</button>
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}
