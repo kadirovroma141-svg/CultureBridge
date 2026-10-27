@@ -18,7 +18,7 @@ python wsgi.py            # dev-сервер, PORT (по умолчанию 5000
 pytest -q                 # 19 тестов, in-memory SQLite, AI выключен
 gunicorn wsgi:app         # прод (только Linux)
 ```
-**Деплой: Vercel + Supabase.** `api/index.py` (точка входа) + `vercel.json` (все запросы → Flask) + `.python-version` (3.12) + `.vercelignore`.
+**Деплой: Vercel + Supabase.** Vercel сам определяет Flask и запускает `wsgi.py` (никаких `vercel.json`/rewrites — с ними Flask получает путь `/api/index` и отдаёт 404); `.python-version` (3.12) + `.vercelignore`.
 На Vercel (`VERCEL=1`) пул соединений `NullPool`, `AUTO_SEED`/`AUTO_MIGRATE` по умолчанию выключены — схему и данные заливать локально:
 `DATABASE_URL=<pooler-строка Supabase> python seed.py`. Прямой хост `db.<ref>.supabase.co` только IPv6 → использовать пулер
 `aws-0-ap-northeast-2.pooler.supabase.com:6543`, пользователь `postgres.<ref>`, `@` в пароле → `%40`. `sslmode=require` добавляется сам.
