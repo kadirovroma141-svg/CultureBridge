@@ -24,7 +24,7 @@ def test_health_and_index(client):
 
 def test_bootstrap_contains_research_data(client):
     d = client.get("/api/bootstrap").get_json()
-    assert len(d["countries"]) == 10
+    assert len(d["countries"]) == 11 and d["countries"]["TR"]["lang"] == "tr-TR"
     it = d["countries"]["IT"]
     assert len(it["alumni"]["universities"]) == 5 and it["dims"]["express"] == 92
     assert d["countries"]["JP"]["alumni"] is None
@@ -185,7 +185,7 @@ def test_auth_and_systematic_tracks(client):
 
     # Tracks list works for guests
     tracks_list = client.get("/api/tracks").get_json()
-    assert len(tracks_list) == 10
+    assert len(tracks_list) == 11
     de_track = client.get("/api/tracks/DE").get_json()
     assert len(de_track["curriculum"]) == 5
     assert de_track["curriculum"][0]["id"] == "first_contact"
@@ -252,3 +252,104 @@ def test_auth_and_systematic_tracks(client):
     assert login_res.get_json()["user"]["username"] == "scholar_dana"
 
 
+
+
+def test_sandbox_matrix_any_nation_any_situation(client):
+    m = client.get("/api/roleplay/sandbox").get_json()
+    assert len(m["situations"]) == 8 and len(m["personas"]) == 11 and len(m["animations"]) == 9
+    codes = list(client.get("/api/bootstrap").get_json()["countries"])
+    for code in codes:                                   # 11 nations × 8 situations, opening turn
+        for s in m["situations"]:
+            body = {"country": code, "situation": s["id"], "turn": 0, "custom_context": "Asking a landlord to fix the heating"}
+            r = client.post("/api/roleplay/interact", json=body)
+            assert r.status_code == 200, (code, s["id"])
+            j = r.get_json()
+            assert j["animation"] in m["animations"] and j["npc_reply"] and j["delta"] == 0 and j["hints"]
+            assert j["voice"]["lang"] == client.get(f"/api/countries/{code}").get_json()["lang"]
+
+
+def test_sandbox_gestures_and_proxemics(client):
+    def turn(**kw):
+        r = client.post("/api/roleplay/interact", json={"turn": 1, "trust": 50, **kw})
+        assert r.status_code == 200, r.get_json()
+        return r.get_json()
+
+    clock = turn(country="CN", situation="gift_ceremony", user_action="give_clock")
+    assert clock["delta"] < -15 and clock["animation"] == "offended_look_away" and clock["gaze"] == "averted"
+    assert turn(country="DE", situation="gift_ceremony", user_action="give_clock")["delta"] > 0
+    hug_jp = turn(country="JP", situation="first_contact", user_action="hug")
+    hug_it = turn(country="IT", situation="first_contact", user_action="hug")
+    assert hug_jp["animation"] == "step_back_uncomfortable" and hug_jp["delta"] < 0 < hug_it["delta"]
+    assert turn(country="KR", situation="gift_ceremony", user_action="give_two_hands")["animation"] == "two_hands_present"
+    assert turn(country="JP", situation="academic_dispute", user_action="bow")["animation"] == "bow_respect"
+    refuse = turn(country="KZ", situation="home_hospitality", user_action="refuse_food_bluntly")
+    assert refuse["delta"] < turn(country="DE", situation="home_hospitality", user_action="refuse_food_bluntly")["delta"] < 0
+    # closer than 0.75 × proxemics_cm (JP = 110 cm → 82 cm) → the character steps back and says so
+    close = turn(country="JP", situation="first_contact", user_message="Hello, nice to meet you!", distance_cm=60)
+    assert close["proximity"]["violated"] and close["animation"] == "step_back_uncomfortable"
+    assert close["body"]["step_back_cm"] > 0 and close["proximity"]["zone"] == "personal"
+    assert not turn(country="IT", situation="first_contact", user_message="Ciao!", distance_cm=60)["proximity"]["violated"]
+    sorry = turn(country="DE", situation="lateness_crisis",
+                 user_message="I am very sorry for being late, the train was delayed. It won't happen again.")
+    rude = turn(country="DE", situation="lateness_crisis", user_message="whatever, I'm late")
+    assert sorry["delta"] > 5 > rude["delta"] and sorry["source"] == "engine"
+    assert sorry["trust_score"] == 50 + sorry["delta"]
+
+
+def test_sandbox_validation_and_result(client):
+    post = lambda body: client.post("/api/roleplay/interact", json=body)
+    assert post({"country": "JP", "situation": "custom_sandbox", "turn": 0}).status_code == 422
+    assert post({"country": "JP", "situation": "first_contact", "turn": 2}).status_code == 422          # nothing done
+    assert post({"country": "JP", "situation": "dance_battle", "turn": 0}).status_code == 422
+    assert post({"country": "JP", "situation": "first_contact", "user_action": "kiss", "turn": 1}).status_code == 422
+    assert post({"country": "ZZ", "situation": "first_contact", "turn": 0}).status_code == 404
+    r = client.post("/api/roleplay/sandbox/result", json={"country": "TR", "situation": "home_hospitality", "trust": 82, "turns": 5})
+    assert r.get_json() == {"ok": True}
+
+
+def test_sandbox_llm_drives_the_character_but_not_physics(monkeypatch):
+    from app import ai
+
+    class LiveConfig(TestConfig):
+        AI_PROVIDER, GEMINI_API_KEY = "gemini", "fake-key"
+
+    c = create_app(LiveConfig).test_client()
+    prompts = []
+
+    def fake_llm(provider, key, model, prompt):
+        prompts.append(prompt)
+        return ('{"npc_reply": "Ah, thank you, Sensei will be pleased.", "animation": "nod_approval", "emotion": "joy",'
+                ' "gaze": "soft", "mood": "happy", "delta": 9, "feedback": "Two hands show respect.", "signals": []}')
+
+    monkeypatch.setattr(ai, "_call_llm", fake_llm)
+    body = {"country": "JP", "situation": "gift_ceremony", "user_action": "give_two_hands", "turn": 1, "trust": 50}
+    r = c.post("/api/roleplay/interact", json=body).get_json()
+    assert r["source"] == "live" and r["animation"] == "nod_approval" and r["trust_score"] == 59
+    assert "Tanaka" not in prompts[0] and "Mrs. Sato" in prompts[0] and "both hands" in prompts[0]
+    r = c.post("/api/roleplay/interact", json={**body, "distance_cm": 50}).get_json()   # space invaded
+    assert r["animation"] == "step_back_uncomfortable" and r["proximity"]["violated"]
+
+    monkeypatch.setattr(ai, "_call_llm", lambda *a: (_ for _ in ()).throw(ConnectionError("offline")))
+    r = c.post("/api/roleplay/interact", json=body).get_json()
+    assert r["source"] == "engine" and r["animation"] == "two_hands_present"
+
+
+def test_new_countries_are_added_to_an_existing_database():
+    from sqlalchemy import delete, select
+
+    from app.extensions import db
+    from app.models import Country, Setting, TranslationCache
+    from app.seeding import add_new_countries, seed
+
+    app = create_app(TestConfig)
+    with app.app_context():
+        db.session.delete(db.session.scalar(select(Country).where(Country.code == "TR")))   # an "old" DB without Turkey
+        db.session.execute(delete(TranslationCache).where(TranslationCache.country_code == "TR"))
+        s = db.session.get(Setting, "pragma")
+        s.value = {**s.value, "hearing": {k: v for k, v in s.value["hearing"].items() if k != "TR"}}
+        db.session.commit()
+        assert add_new_countries() == ["TR"] and add_new_countries() == []
+        assert "TR" in db.session.get(Setting, "pragma").value["hearing"]
+        assert "nothing to do" in seed()
+    r = app.test_client().post("/api/decode", json={"text": "Your idea won't work, we need another solution.", "country": "TR"})
+    assert r.get_json()["source"] == "expert-cache"

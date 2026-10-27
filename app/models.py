@@ -1,9 +1,55 @@
+"""Relational schema for CultureBridge AI.
+
+Reference data (countries, dimensions, cases) is filled by seed.py from
+seed_data/research_data.json. Activity tables (attempts, AI cache) grow at runtime.
+"""
+from datetime import datetime, timezone
+
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import true
+
+from .extensions import db
 
 
+def utcnow():
+    return datetime.now(timezone.utc)
 
 
+# ---------------------------------------------------------------------------
+# Countries and cultural dimensions
+# ---------------------------------------------------------------------------
+class Country(db.Model):
+    __tablename__ = "countries"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(String(2), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(80))
+    flag: Mapped[str] = mapped_column(String(16))
+    iso_numeric: Mapped[str] = mapped_column(String(3))
+    lang: Mapped[str] = mapped_column(String(10))
+    context: Mapped[str] = mapped_column(String(60))
+    lat: Mapped[float] = mapped_column(Float)
+    lon: Mapped[float] = mapped_column(Float)
+    mentality: Mapped[str] = mapped_column(Text)
+    proxemics_cm: Mapped[int] = mapped_column(Integer)
+    voice_min: Mapped[int] = mapped_column(Integer)
+    voice_max: Mapped[int] = mapped_column(Integer)
+    hospitality: Mapped[float] = mapped_column(Float, default=1.0)
+
+    etiquette: Mapped[list["EtiquetteRule"]] = relationship(back_populates="country", cascade="all, delete-orphan", order_by="EtiquetteRule.position")
+    universities: Mapped[list["University"]] = relationship(back_populates="country", cascade="all, delete-orphan")
+    voices: Mapped[list["AlumniVoice"]] = relationship(back_populates="country", cascade="all, delete-orphan")
+    scores: Mapped[list["CountryDimension"]] = relationship(back_populates="country", cascade="all, delete-orphan")
+
+    def dims(self) -> dict:
+        return {s.dimension.key: s.value for s in self.scores}
 
 
+class Dimension(db.Model):
+    __tablename__ = "dimensions"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    key: Mapped[str] = mapped_column(String(20), unique=True)
+    label: Mapped[str] = mapped_column(String(80))
     short: Mapped[str] = mapped_column(String(40))
     low_label: Mapped[str] = mapped_column(String(120))
     high_label: Mapped[str] = mapped_column(String(120))

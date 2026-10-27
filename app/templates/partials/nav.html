@@ -1,26 +1,319 @@
-<header class="nav">
-  <a href="{{ url_for('web.home') }}" class="logo"><span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-ai">AI</small></a>
-  <nav class="nav-links" id="navLinks">
-    {% for p in pages if p.key != 'home' %}
-    <a href="{{ p.path }}" class="{% if current_key == p.key %}active{% endif %}" title="{{ p.nav }}">
-      <span class="nav-icon">{{ p.icon }}</span> {{ p.nav }}
+<header class="nav" id="mainNav">
+  <div class="nav-container">
+    <!-- Brand -->
+    <a href="{{ url_for('web.home') }}" class="logo" title="CultureBridge AI — Home">
+      <span class="logo-mark">◐</span>
+      <span class="logo-name">Culture<b>Bridge</b></span>
+      <span class="logo-badge">AI</span>
     </a>
-    {% endfor %}
-  </nav>
-  <div class="nav-actions">
-    {% if current_user %}
-    <a class="nav-user-pill" href="{{ url_for('web.learn') }}" title="Account: {{ current_user.full_name or current_user.username }}">
-      <span class="user-avatar">👤</span>
-      <span class="user-name">{{ (current_user.full_name or current_user.username)[:10] }}</span>
-      {% if current_user.streak_days and current_user.streak_days > 1 %}
-      <span class="user-streak" title="{{ current_user.streak_days }} days streak">🔥{{ current_user.streak_days }}</span>
+
+    <!-- Desktop Navigation with Dropdowns -->
+    <nav class="nav-links" id="desktopNav" aria-label="Main Navigation">
+      <!-- 01 Core: Guided Tracks -->
+      <a href="{{ url_for('web.learn') }}" class="nav-link nav-highlight {% if current_key == 'learn' %}active{% endif %}">
+        <span class="nav-link-icon">🎓</span>
+        <span>Tracks</span>
+        <span class="nav-pill-mini">5-Stage</span>
+      </a>
+
+      <!-- 02 Explore Dropdown -->
+      <div class="nav-dropdown {% if current_key in ('atlas', 'greetings', 'radar') %}active-group{% endif %}" data-dropdown>
+        <button class="nav-link nav-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="nav-link-icon">🌍</span>
+          <span>Explore</span>
+          <span class="nav-chevron">▾</span>
+        </button>
+        <div class="dropdown-panel">
+          <div class="dropdown-header">
+            <span class="dropdown-eyebrow">Cultural Foundations</span>
+            <p class="dropdown-sub">Maps, gestures & distance models</p>
+          </div>
+          <div class="dropdown-grid">
+            {% for item in nav_groups.explore.pages %}
+            <a href="{{ item.path }}" class="dropdown-item {% if current_key == item.key %}active{% endif %}">
+              <span class="dropdown-item-icon">{{ item.icon }}</span>
+              <div class="dropdown-item-body">
+                <div class="dropdown-item-title">{{ item.nav }}</div>
+                <div class="dropdown-item-desc">{{ item.short }}</div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 AI Tools Dropdown -->
+      <div class="nav-dropdown {% if current_key in ('decoder', 'proxemics', 'roleplay') %}active-group{% endif %}" data-dropdown>
+        <button class="nav-link nav-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="nav-link-icon">⚡</span>
+          <span>AI Tools</span>
+          <span class="nav-chevron">▾</span>
+        </button>
+        <div class="dropdown-panel">
+          <div class="dropdown-header">
+            <span class="dropdown-eyebrow">Interactive Simulators</span>
+            <p class="dropdown-sub">Pragmatics, non-verbal space & trust</p>
+          </div>
+          <div class="dropdown-grid">
+            {% for item in nav_groups.tools.pages %}
+            <a href="{{ item.path }}" class="dropdown-item {% if current_key == item.key %}active{% endif %}">
+              <span class="dropdown-item-icon">{{ item.icon }}</span>
+              <div class="dropdown-item-body">
+                <div class="dropdown-item-title">{{ item.nav }}</div>
+                <div class="dropdown-item-desc">{{ item.short }}</div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 Practice Dropdown -->
+      <div class="nav-dropdown {% if current_key in ('match', 'quiz', 'stats') %}active-group{% endif %}" data-dropdown>
+        <button class="nav-link nav-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="nav-link-icon">🎮</span>
+          <span>Practice</span>
+          <span class="nav-chevron">▾</span>
+        </button>
+        <div class="dropdown-panel">
+          <div class="dropdown-header">
+            <span class="dropdown-eyebrow">Assess & Compete</span>
+            <p class="dropdown-sub">Challenges, certificates & live leaderboards</p>
+          </div>
+          <div class="dropdown-grid">
+            {% for item in nav_groups.practice.pages %}
+            <a href="{{ item.path }}" class="dropdown-item {% if current_key == item.key %}active{% endif %}">
+              <span class="dropdown-item-icon">{{ item.icon }}</span>
+              <div class="dropdown-item-body">
+                <div class="dropdown-item-title">{{ item.nav }}</div>
+                <div class="dropdown-item-desc">{{ item.short }}</div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 Resources Dropdown -->
+      <div class="nav-dropdown {% if current_key in ('about', 'docs') %}active-group{% endif %}" data-dropdown>
+        <button class="nav-link nav-dropdown-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="nav-link-icon">📚</span>
+          <span>Resources</span>
+          <span class="nav-chevron">▾</span>
+        </button>
+        <div class="dropdown-panel">
+          <div class="dropdown-header">
+            <span class="dropdown-eyebrow">Research & Developer API</span>
+            <p class="dropdown-sub">Academic framework and endpoints</p>
+          </div>
+          <div class="dropdown-grid">
+            {% for item in nav_groups.resources.pages %}
+            <a href="{{ item.path }}" class="dropdown-item {% if current_key == item.key %}active{% endif %}">
+              <span class="dropdown-item-icon">{{ item.icon }}</span>
+              <div class="dropdown-item-body">
+                <div class="dropdown-item-title">{{ item.nav }}</div>
+                <div class="dropdown-item-desc">{{ item.short }}</div>
+              </div>
+            </a>
+            {% endfor %}
+            <a href="{{ url_for('web.certificate', token='NIS-KZ-ALUMNI-2026') }}" class="dropdown-item">
+              <span class="dropdown-item-icon">📜</span>
+              <div class="dropdown-item-body">
+                <div class="dropdown-item-title">Verify Certificate</div>
+                <div class="dropdown-item-desc">Check official NIS CQ credentials</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Nav Actions (Search, Theme, User, Admin, Hamburger) -->
+    <div class="nav-actions">
+      <!-- Quick Search / Command Trigger -->
+      <button class="nav-search-trigger" id="openSearchBtn" title="Quick Search (Ctrl+K)" aria-label="Search modules and countries">
+        <span class="search-ico">🔍</span>
+        <span class="search-label">Search…</span>
+        <kbd class="nav-kbd">⌘K</kbd>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button class="icon-btn theme-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☾</button>
+
+      <!-- User Account State -->
+      {% if current_user %}
+      <div class="nav-user-dropdown" data-dropdown>
+        <button class="nav-user-pill" aria-haspopup="true" aria-expanded="false" title="Account profile">
+          <span class="user-avatar-dot">👤</span>
+          <span class="user-name-label">{{ (current_user.full_name or current_user.username)[:10] }}</span>
+          {% if current_user.streak_days and current_user.streak_days > 0 %}
+          <span class="user-streak-badge" title="{{ current_user.streak_days }} days streak">🔥{{ current_user.streak_days }}d</span>
+          {% endif %}
+          <span class="nav-chevron">▾</span>
+        </button>
+        <div class="dropdown-panel user-panel">
+          <div class="user-panel-info">
+            <div class="user-panel-name">{{ current_user.full_name or current_user.username }}</div>
+            <div class="user-panel-meta">@{{ current_user.username }} · {{ current_user.xp }} XP</div>
+          </div>
+          <a href="{{ url_for('web.learn') }}" class="dropdown-item">
+            <span class="dropdown-item-icon">🎓</span>
+            <div class="dropdown-item-body">
+              <div class="dropdown-item-title">My Learning Tracks</div>
+              <div class="dropdown-item-desc">5-stage curriculum & streak</div>
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item user-logout-action" id="navLogout">
+            <span class="dropdown-item-icon">🚪</span>
+            <div class="dropdown-item-body">
+              <div class="dropdown-item-title">Sign Out</div>
+            </div>
+          </button>
+        </div>
+      </div>
+      {% else %}
+      <a class="btn primary small nav-signin-btn" href="{{ url_for('web.auth') }}">
+        <span>Sign In</span>
+      </a>
       {% endif %}
-    </a>
-    <button class="icon-btn text-btn" id="navLogout" title="Log out" aria-label="Log out">🚪</button>
-    {% else %}
-    <a class="btn primary small nav-login-btn" href="{{ url_for('web.auth') }}">Sign In</a>
-    {% endif %}
-    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☾</button>
-    <a class="icon-btn" href="{{ url_for('admin.panel') }}" title="Admin panel" aria-label="Admin panel">⚙</a>
+
+      <!-- Admin Panel Gear -->
+      <a class="icon-btn admin-btn" href="{{ url_for('admin.panel') }}" title="Admin panel" aria-label="Admin panel">⚙</a>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="icon-btn mobile-toggle-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
+    </div>
   </div>
 </header>
+
+<!-- ============ MOBILE DRAWER ============ -->
+<div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
+<aside class="mobile-drawer" id="mobileDrawer" aria-label="Mobile Navigation" aria-hidden="true">
+  <div class="mobile-drawer-header">
+    <a href="{{ url_for('web.home') }}" class="logo">
+      <span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-badge">AI</small>
+    </a>
+    <button class="icon-btn mobile-close-btn" id="mobileCloseBtn" aria-label="Close menu">✕</button>
+  </div>
+
+  <div class="mobile-drawer-body">
+    <!-- User Banner on Mobile -->
+    {% if current_user %}
+    <div class="mobile-user-card">
+      <div class="mobile-user-avatar">👤</div>
+      <div class="mobile-user-details">
+        <strong>{{ current_user.full_name or current_user.username }}</strong>
+        <span>@{{ current_user.username }} · 🔥 {{ current_user.streak_days or 1 }}d streak</span>
+      </div>
+      <button class="btn ghost small mobile-logout-btn" id="mobileNavLogout">Exit</button>
+    </div>
+    {% else %}
+    <div class="mobile-auth-cta">
+      <p>Save your progress, earn certificates & build your CQ Passport.</p>
+      <a href="{{ url_for('web.auth') }}" class="btn primary small full-width">Sign In / Register →</a>
+    </div>
+    {% endif %}
+
+    <!-- Mobile Quick Search Trigger -->
+    <button class="mobile-search-btn" id="mobileOpenSearchBtn">
+      <span>🔍 Search modules & countries…</span>
+      <kbd>⌘K</kbd>
+    </button>
+
+    <!-- Mobile Navigation Groups -->
+    <div class="mobile-nav-group">
+      <div class="mobile-group-title">🎓 Guided Curriculum</div>
+      <a href="{{ url_for('web.learn') }}" class="mobile-nav-item featured {% if current_key == 'learn' %}active{% endif %}">
+        <span class="mobile-item-icon">🎓</span>
+        <div>
+          <div class="mobile-item-title">Systematic Tracks <span class="badge-new">Core</span></div>
+          <div class="mobile-item-desc">5-step structured country adaptation</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="mobile-nav-group">
+      <div class="mobile-group-title">🌍 Explore Cultures</div>
+      {% for item in nav_groups.explore.pages %}
+      <a href="{{ item.path }}" class="mobile-nav-item {% if current_key == item.key %}active{% endif %}">
+        <span class="mobile-item-icon">{{ item.icon }}</span>
+        <div>
+          <div class="mobile-item-title">{{ item.nav }}</div>
+          <div class="mobile-item-desc">{{ item.short }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="mobile-nav-group">
+      <div class="mobile-group-title">⚡ AI Simulators</div>
+      {% for item in nav_groups.tools.pages %}
+      <a href="{{ item.path }}" class="mobile-nav-item {% if current_key == item.key %}active{% endif %}">
+        <span class="mobile-item-icon">{{ item.icon }}</span>
+        <div>
+          <div class="mobile-item-title">{{ item.nav }}</div>
+          <div class="mobile-item-desc">{{ item.short }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="mobile-nav-group">
+      <div class="mobile-group-title">🎮 Practice & Community</div>
+      {% for item in nav_groups.practice.pages %}
+      <a href="{{ item.path }}" class="mobile-nav-item {% if current_key == item.key %}active{% endif %}">
+        <span class="mobile-item-icon">{{ item.icon }}</span>
+        <div>
+          <div class="mobile-item-title">{{ item.nav }}</div>
+          <div class="mobile-item-desc">{{ item.short }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="mobile-nav-group">
+      <div class="mobile-group-title">📚 Resources</div>
+      {% for item in nav_groups.resources.pages %}
+      <a href="{{ item.path }}" class="mobile-nav-item {% if current_key == item.key %}active{% endif %}">
+        <span class="mobile-item-icon">{{ item.icon }}</span>
+        <div>
+          <div class="mobile-item-title">{{ item.nav }}</div>
+          <div class="mobile-item-desc">{{ item.short }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="mobile-drawer-footer">
+    <a href="{{ url_for('admin.panel') }}" class="btn ghost small">⚙ Admin Panel</a>
+    <span class="muted text-xs">CultureBridge AI v2.4</span>
+  </div>
+</aside>
+
+<!-- ============ QUICK SEARCH MODAL ============ -->
+<div class="search-modal-backdrop" id="searchModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
+  <div class="search-modal-box">
+    <div class="search-modal-input-wrap">
+      <span class="search-modal-icon">🔍</span>
+      <input type="text" id="siteSearchInput" class="search-modal-input" placeholder="Search modules, tools, destination countries…" autocomplete="off" spellcheck="false" aria-label="Search input">
+      <kbd class="search-esc-hint" id="searchEscBtn">ESC</kbd>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-group-label">Quick Jump</div>
+      <div class="search-items-list" id="searchQuickList">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+    <div class="search-modal-footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> to navigate</span>
+      <span><kbd>↵</kbd> to open</span>
+      <span><kbd>ESC</kbd> to close</span>
+    </div>
+  </div>
+</div>

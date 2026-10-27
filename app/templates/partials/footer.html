@@ -3,29 +3,33 @@
   <div class="card reveal">
     <div class="footer-grid">
       <div class="footer-brand">
-        <span class="logo"><span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-ai">AI</small></span>
-        <p class="muted">Intercultural Intelligence Platform built on real NIS alumni survey data and published cross-cultural research.</p>
+        <a href="{{ url_for('web.home') }}" class="logo"><span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-badge">AI</small></a>
+        <p class="muted">Intercultural Intelligence Platform built on empirical NIS alumni survey data and classic cross-cultural research (Hall, Hofstede, Meyer).</p>
+        <div class="footer-auth-row">
+          <a href="{{ url_for('web.learn') }}" class="btn primary small">Start Country Track →</a>
+        </div>
       </div>
       <div class="footer-links">
         <h4>Explore</h4>
+        <a href="{{ url_for('web.learn') }}">Country Tracks</a>
         <a href="{{ url_for('web.atlas') }}">World Atlas</a>
-        <a href="{{ url_for('web.greetings') }}">Greetings</a>
-        <a href="{{ url_for('web.radar') }}">Gap Radar</a>
-        <a href="{{ url_for('web.decoder') }}">AI Decoder</a>
+        <a href="{{ url_for('web.greetings') }}">Greetings Hub</a>
+        <a href="{{ url_for('web.radar') }}">6D Gap Radar</a>
       </div>
       <div class="footer-links">
-        <h4>Train</h4>
+        <h4>AI Simulators</h4>
+        <a href="{{ url_for('web.decoder') }}">AI Pragmatic Decoder</a>
         <a href="{{ url_for('web.proxemics') }}">Proxemics Lab</a>
-        <a href="{{ url_for('web.roleplay') }}">Roleplay</a>
+        <a href="{{ url_for('web.roleplay') }}">Roleplay Simulation</a>
         <a href="{{ url_for('web.match') }}">Match Customs</a>
-        <a href="{{ url_for('web.quiz') }}">Awareness Quiz</a>
       </div>
       <div class="footer-links">
-        <h4>About</h4>
-        <a href="{{ url_for('web.stats') }}">Live Stats</a>
+        <h4>Practice &amp; Info</h4>
+        <a href="{{ url_for('web.quiz') }}">Awareness Quiz</a>
+        <a href="{{ url_for('web.stats') }}">Community Stats</a>
         <a href="{{ url_for('web.about') }}">Methodology</a>
-        <a href="{{ url_for('web.docs') }}">API Docs</a>
-        <a href="/api/health">API Status</a>
+        <a href="{{ url_for('web.docs') }}">REST API Docs</a>
+        <a href="{{ url_for('web.certificate', token='NIS-KZ-ALUMNI-2026') }}">Verify Certificate</a>
       </div>
     </div>
     <div class="footer-bottom">

@@ -23,7 +23,22 @@ def _database_url() -> str:
     # Render / Heroku still hand out the legacy scheme
     if url.startswith("postgres://"):
         url = url.replace("postgres://", "postgresql://", 1)
+    # Supabase (and most managed Postgres) only accept TLS connections
+    if url.startswith("postgresql") and "sslmode=" not in url and "localhost" not in url and "127.0.0.1" not in url:
+        url += ("&" if "?" in url else "?") + "sslmode=require"
     return url
+
+
+# Vercel runs each instance as a short-lived serverless function: keep no idle connections (Supabase's pooler does
+# the pooling) and do not run migrations / seeding on every cold start — do them once with `python seed.py`.
+SERVERLESS = bool(os.getenv("VERCEL"))
+
+
+def _engine_options() -> dict:
+    if SERVERLESS:
+        from sqlalchemy.pool import NullPool
+        return {"poolclass": NullPool}
+    return {"pool_pre_ping": True}
 
 
 def _secret_key() -> str:
@@ -60,7 +75,7 @@ class Config:
     APP_ENV = os.getenv("APP_ENV", "development").lower()            # development | production
     SECRET_KEY = _secret_key()
     SQLALCHEMY_DATABASE_URI = _database_url()
-    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
+    SQLALCHEMY_ENGINE_OPTIONS = _engine_options()
     JSON_SORT_KEYS = False
     MAX_CONTENT_LENGTH = 1 * 1024 * 1024
     JSON_AS_ASCII = False
@@ -86,6 +101,7 @@ class Config:
     # Rate limits (requests / minute / IP, in-memory per worker; 0 = unlimited)
     DECODE_RATE_LIMIT = int(os.getenv("DECODE_RATE_LIMIT", "20"))
     ROLEPLAY_RATE_LIMIT = int(os.getenv("ROLEPLAY_RATE_LIMIT", "30"))
+    SANDBOX_RATE_LIMIT = int(os.getenv("SANDBOX_RATE_LIMIT", "60"))    # 3D sandbox turns (words + gestures)
     SUBMIT_RATE_LIMIT = int(os.getenv("SUBMIT_RATE_LIMIT", "6"))      # community stories + trainer results
 
     # Community stories: show immediately (moderate later in /admin) or hold for review
@@ -95,17 +111,22 @@ class Config:
     ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 
     SEED_FILE = BASE_DIR / "seed_data" / "research_data.json"
-    AUTO_SEED = _bool("AUTO_SEED", "true")
+    AUTO_SEED = _bool("AUTO_SEED", "false" if SERVERLESS else "true")
+    AUTO_MIGRATE = _bool("AUTO_MIGRATE", "false" if SERVERLESS else "true")
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 
 
 class TestConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite://"
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
+    AUTO_SEED = True
+    AUTO_MIGRATE = True
     AI_PROVIDER = "none"
     ADMIN_PASSWORD = "test-admin"
     SECRET_KEY = "test"
     BASE_URL = "https://example.test"
     DECODE_RATE_LIMIT = 0
     ROLEPLAY_RATE_LIMIT = 0
+    SANDBOX_RATE_LIMIT = 0
     SUBMIT_RATE_LIMIT = 0

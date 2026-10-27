@@ -2,6 +2,7 @@
    CultureBridge AI — frontend (talks to the Flask REST API)
    Modules: theme · progress (CQ passport) · globe · atlas · greetings ·
    gap radar · AI decoder · proxemics lab · voice tester · roleplay ·
+   3D cultural sandbox ·
    match game · quiz
    ===================================================================== */
 (() => {
@@ -103,19 +104,232 @@ const revealObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.08 });
 $$(".reveal").forEach((el) => revealObs.observe(el));
 
-const navLinks = $$("#navLinks a");
-const navSections = $$("main section[id]");
-let navRaf = 0;
-function syncNav() {
-  if (!navSections.length) return;
-  navRaf = 0;
-  const line = innerHeight * 0.4;
-  let current = "";
-  navSections.forEach((s) => { if (s.getBoundingClientRect().top <= line) current = s.id; });
-  navLinks.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
+/* ---------------------------------------------------------------------
+   Navigation: Mega-Dropdowns, Mobile Drawer, Quick Search & Auth
+   --------------------------------------------------------------------- */
+function initNavigation() {
+  // 1. Dropdown interactions
+  const dropdowns = $$("[data-dropdown]");
+  dropdowns.forEach((dd) => {
+    const btn = dd.querySelector("button");
+    if (!btn) return;
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dd.classList.contains("is-open");
+      dropdowns.forEach((other) => {
+        if (other !== dd) {
+          other.classList.remove("is-open");
+          const b = other.querySelector("button");
+          if (b) b.setAttribute("aria-expanded", "false");
+        }
+      });
+      dd.classList.toggle("is-open", !isOpen);
+      btn.setAttribute("aria-expanded", !isOpen ? "true" : "false");
+    });
+  });
+
+  // Close dropdowns on outside click
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("[data-dropdown]")) {
+      dropdowns.forEach((dd) => {
+        dd.classList.remove("is-open");
+        const b = dd.querySelector("button");
+        if (b) b.setAttribute("aria-expanded", "false");
+      });
+    }
+  });
+
+  // 2. Mobile Drawer
+  const mobileMenuBtn = $("#mobileMenuBtn");
+  const mobileDrawer = $("#mobileDrawer");
+  const mobileBackdrop = $("#mobileDrawerBackdrop");
+  const mobileCloseBtn = $("#mobileCloseBtn");
+
+  function openMobileDrawer() {
+    if (!mobileDrawer) return;
+    mobileDrawer.classList.add("is-open");
+    if (mobileBackdrop) mobileBackdrop.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMobileDrawer() {
+    if (!mobileDrawer) return;
+    mobileDrawer.classList.remove("is-open");
+    if (mobileBackdrop) mobileBackdrop.classList.remove("is-open");
+    document.body.style.overflow = "";
+  }
+
+  if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", openMobileDrawer);
+  if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", closeMobileDrawer);
+  if (mobileBackdrop) mobileBackdrop.addEventListener("click", closeMobileDrawer);
+
+  if (mobileDrawer) {
+    mobileDrawer.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMobileDrawer);
+    });
+  }
+
+  // 3. Quick Search Modal (Command Palette)
+  const searchModal = $("#searchModal");
+  const searchInput = $("#siteSearchInput");
+  const searchList = $("#searchQuickList");
+  const openSearchBtn = $("#openSearchBtn");
+  const mobileOpenSearchBtn = $("#mobileOpenSearchBtn");
+  const searchEscBtn = $("#searchEscBtn");
+
+  const SEARCH_ITEMS = [
+    { title: "Guided Country Tracks", desc: "Systematic 5-stage intercultural preparation", icon: "🎓", url: "/learn", badge: "Core" },
+    { title: "World Atlas & NIS Alumni", desc: "Interactive 3D globe and student stories abroad", icon: "🌍", url: "/atlas", badge: "Explore" },
+    { title: "Greetings of the World", desc: "20 cultures with words, gestures and speech audio", icon: "👋", url: "/greetings", badge: "Explore" },
+    { title: "6D Cultural Gap Radar", desc: "Hofstede & Meyer cultural distance calculator", icon: "📡", url: "/radar", badge: "Explore" },
+    { title: "AI Pragmatic Subtext Decoder", desc: "How locals really hear your words + polite phrases", icon: "🧠", url: "/decoder", badge: "AI Tool" },
+    { title: "Proxemics & Voice Lab", desc: "3D personal space bubble & mic pitch tuner", icon: "📏", url: "/proxemics", badge: "AI Tool" },
+    { title: "Roleplay Simulation", desc: "Conversational dilemmas with real-time trust meter", icon: "🎭", url: "/roleplay", badge: "AI Tool" },
+    { title: "Match Cultural Customs", desc: "Drag & drop challenge: match customs to situations", icon: "🧩", url: "/match", badge: "Practice" },
+    { title: "Cultural Awareness Quiz", desc: "12 real-life case questions + CQ certificate", icon: "🏆", url: "/quiz", badge: "Practice" },
+    { title: "Live Community Stats", desc: "Global benchmark, mistakes & database stats", icon: "📊", url: "/stats", badge: "Practice" },
+    { title: "Methodology & Framework", desc: "Hofstede, Hall, Meyer & NIS survey science", icon: "📚", url: "/about", badge: "Resource" },
+    { title: "REST API Reference", desc: "Complete OpenAPI specification & endpoints", icon: "🔌", url: "/docs", badge: "Resource" },
+    // Countries
+    { title: "United States Track", desc: "Low-context, individualistic, egalitarian culture", icon: "🇺🇸", url: "/learn?country=US", badge: "Country" },
+    { title: "Germany Track", desc: "Direct feedback, task-based trust, linear-time", icon: "🇩🇪", url: "/learn?country=DE", badge: "Country" },
+    { title: "Italy Track", desc: "Expressive greetings, relationship-first trust", icon: "🇮🇹", url: "/learn?country=IT", badge: "Country" },
+    { title: "South Korea Track", desc: "High hierarchy, indirect communication, nunchi", icon: "🇰🇷", url: "/learn?country=KR", badge: "Country" },
+    { title: "Japan Track", desc: "Omotenashi, high context, consensus decision-making", icon: "🇯🇵", url: "/learn?country=JP", badge: "Country" },
+    { title: "United Kingdom Track", desc: "Understatement, polite hedging, indirect critique", icon: "🇬🇧", url: "/learn?country=GB", badge: "Country" },
+    { title: "China Track", desc: "Guanxi, face-saving, top-down hierarchy", icon: "🇨🇳", url: "/learn?country=CN", badge: "Country" },
+    { title: "Turkey Track", desc: "Warm hospitality, polychronic time, relational", icon: "🇹🇷", url: "/learn?country=TR", badge: "Country" },
+    { title: "Kazakhstan Benchmark", desc: "High hospitality, family collectivism, respect for elders", icon: "🇰🇿", url: "/learn?country=KZ", badge: "Country" },
+  ];
+
+  let selectedSearchIndex = 0;
+
+  function renderSearchResults(query = "") {
+    if (!searchList) return;
+    const q = query.trim().toLowerCase();
+    const filtered = q
+      ? SEARCH_ITEMS.filter((item) =>
+          item.title.toLowerCase().includes(q) ||
+          item.desc.toLowerCase().includes(q) ||
+          item.badge.toLowerCase().includes(q)
+        )
+      : SEARCH_ITEMS.slice(0, 8);
+
+    if (!filtered.length) {
+      searchList.innerHTML = `<div class="search-empty muted" style="padding: 16px; text-align: center;">No matching modules or countries found for "<b>${esc(query)}</b>"</div>`;
+      return;
+    }
+
+    selectedSearchIndex = Math.min(selectedSearchIndex, filtered.length - 1);
+    if (selectedSearchIndex < 0) selectedSearchIndex = 0;
+
+    searchList.innerHTML = filtered.map((item, idx) => `
+      <a href="${item.url}" class="search-item ${idx === selectedSearchIndex ? 'selected' : ''}" data-index="${idx}">
+        <span class="search-item-icon">${item.icon}</span>
+        <div class="search-item-info">
+          <div class="search-item-name">${item.title}</div>
+          <div class="search-item-desc">${item.desc}</div>
+        </div>
+        <span class="search-item-badge">${item.badge}</span>
+      </a>
+    `).join("");
+  }
+
+  function openSearchModal() {
+    if (!searchModal) return;
+    searchModal.classList.add("is-open");
+    closeMobileDrawer();
+    selectedSearchIndex = 0;
+    renderSearchResults("");
+    if (searchInput) {
+      searchInput.value = "";
+      setTimeout(() => searchInput.focus(), 60);
+    }
+  }
+
+  function closeSearchModal() {
+    if (!searchModal) return;
+    searchModal.classList.remove("is-open");
+  }
+
+  if (openSearchBtn) openSearchBtn.addEventListener("click", openSearchModal);
+  if (mobileOpenSearchBtn) mobileOpenSearchBtn.addEventListener("click", openSearchModal);
+  if (searchEscBtn) searchEscBtn.addEventListener("click", closeSearchModal);
+
+  if (searchModal) {
+    searchModal.addEventListener("click", (e) => {
+      if (e.target === searchModal) closeSearchModal();
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      selectedSearchIndex = 0;
+      renderSearchResults(e.target.value);
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      const items = $$(".search-item", searchList);
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (items.length) {
+          selectedSearchIndex = (selectedSearchIndex + 1) % items.length;
+          items.forEach((it, idx) => it.classList.toggle("selected", idx === selectedSearchIndex));
+          items[selectedSearchIndex].scrollIntoView({ block: "nearest" });
+        }
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (items.length) {
+          selectedSearchIndex = (selectedSearchIndex - 1 + items.length) % items.length;
+          items.forEach((it, idx) => it.classList.toggle("selected", idx === selectedSearchIndex));
+          items[selectedSearchIndex].scrollIntoView({ block: "nearest" });
+        }
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        const selected = $(".search-item.selected", searchList) || $(".search-item", searchList);
+        if (selected) {
+          const href = selected.getAttribute("href");
+          if (href) window.location.href = href;
+        }
+      } else if (e.key === "Escape") {
+        closeSearchModal();
+      }
+    });
+  }
+
+  // Global Keyboard Shortcuts (Cmd+K / Ctrl+K / Escape)
+  window.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      if (searchModal && searchModal.classList.contains("is-open")) {
+        closeSearchModal();
+      } else {
+        openSearchModal();
+      }
+    } else if (e.key === "Escape") {
+      closeSearchModal();
+      closeMobileDrawer();
+      dropdowns.forEach((dd) => dd.classList.remove("is-open"));
+    }
+  });
+
+  // 4. Logout Handlers
+  async function performLogout() {
+    try {
+      await api("/auth/logout", {});
+      toast("Successfully signed out");
+      setTimeout(() => window.location.reload(), 400);
+    } catch (err) {
+      window.location.href = "/auth";
+    }
+  }
+
+  const navLogoutBtn = $("#navLogout");
+  const mobileNavLogoutBtn = $("#mobileNavLogout");
+  if (navLogoutBtn) navLogoutBtn.addEventListener("click", performLogout);
+  if (mobileNavLogoutBtn) mobileNavLogoutBtn.addEventListener("click", performLogout);
 }
-window.addEventListener("scroll", () => { if (!navRaf) navRaf = requestAnimationFrame(syncNav); }, { passive: true });
-if (navSections.length) syncNav();
+initNavigation();
 
 function countUp(el, target) {
   const t0 = performance.now();
@@ -829,6 +1043,368 @@ function initRoleplay() {
 }
 
 /* ---------------------------------------------------------------------
+   06b · 3D AI Cultural Sandbox — any nation × any situation, embodied NPC
+   (3D engine: static/js/sandbox3d.js · brain: POST /api/roleplay/interact)
+   --------------------------------------------------------------------- */
+const ACTION_TEXT = {
+  bow: "🙇 bows", handshake: "🤝 offers a handshake", hug: "🫂 goes in for a hug", give_two_hands: "🤲 gives it with both hands",
+  give_one_hand: "✋ hands it over with one hand", give_clock: "🎁 gives a clock", accept_tea: "🍵 accepts the tea / food",
+  refuse_food_bluntly: "🙅 refuses the food", step_too_close: "🚶 steps very close", step_optimal: "📏 keeps a comfortable distance",
+  eye_contact_intense: "👀 holds direct eye contact", modest_gaze: "😌 lowers the gaze modestly"
+};
+const ANIM_TEXT = {
+  idle_breathing: "😮‍💨 idle · breathing", bow_respect: "🙇 bow of respect", handshake_reach: "🤝 reaches for a handshake",
+  two_hands_present: "🤲 presents with both hands", expressive_gestures: "🙌 expressive gestures",
+  step_back_uncomfortable: "🙅 steps back · arms crossed", warm_welcome_tea: "🍵 warm welcome · offers tea",
+  nod_approval: "👍 nods in approval", offended_look_away: "😤 offended · looks away"
+};
+
+async function initSandbox() {
+  const canvas = $("#sbCanvas"), chat = $("#sbChat"), loading = $("#sbLoading");
+  const distInput = $("#sbDist");
+
+  $("#rpModes").addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    $$("#rpModes .chip").forEach((c) => { c.classList.toggle("active", c === b); c.setAttribute("aria-selected", String(c === b)); });
+    $("#sandboxMode").hidden = b.dataset.mode !== "sandbox";
+    $("#classicMode").hidden = b.dataset.mode !== "classic";
+    if (b.dataset.mode !== "sandbox") stopSpeech();
+  });
+
+  let matrix;
+  try { matrix = await api("/roleplay/sandbox"); }
+  catch (e) { loading.textContent = "⚠️ " + e.message; return; }
+  const SIT = Object.fromEntries(matrix.situations.map((s) => [s.id, s]));
+  const qs = new URLSearchParams(location.search);
+  const S = {
+    code: CODES.includes((qs.get("country") || "").toUpperCase()) ? qs.get("country").toUpperCase() : (CODES.includes("JP") ? "JP" : CODES[0]),
+    situation: SIT[qs.get("situation")] ? qs.get("situation") : "academic_dispute",
+    custom: "", trust: 50, turn: 0, history: [], busy: false, run: 0, distance: 120,
+    retreated: false, lastClose: 0, persona: null, speakTimer: 0, subTimer: 0
+  };
+  $("#sbComboCount").textContent = CODES.length * matrix.situations.length;
+
+  let stage = null;
+  if (window.CBSandbox3D) {
+    try {
+      stage = new CBSandbox3D.Stage(canvas, {
+        onWheel: (d) => setDistance(S.distance + d, true),
+        onAnim: (n) => { $("#sbAnimTag").textContent = "🎬 " + (ANIM_TEXT[n] || n); }
+      });
+      loading.remove();
+    } catch (e) { loading.textContent = "WebGL is not available here — you can still talk to the character."; }
+  } else loading.textContent = "3D engine failed to load — you can still talk to the character.";
+
+  // ---- selectors -----------------------------------------------------
+  $("#sbNations").innerHTML = CODES.map((c) => `<button class="sb-nation" role="radio" data-code="${c}" title="${esc(COUNTRIES[c].name)}"><span>${COUNTRIES[c].flag}</span><small>${esc(COUNTRIES[c].name)}</small></button>`).join("");
+  $("#sbSituations").innerHTML = matrix.situations.map((s) => `<button class="sb-sit" role="radio" data-sit="${s.id}"><span class="sb-sit-icon">${s.icon}</span><b>${esc(s.title)}</b><small>${esc(s.role)}</small></button>`).join("");
+  $("#sbNations").addEventListener("click", (e) => { const b = e.target.closest(".sb-nation"); if (b && b.dataset.code !== S.code) { S.code = b.dataset.code; start(); } });
+  $("#sbSituations").addEventListener("click", (e) => { const b = e.target.closest(".sb-sit"); if (b && b.dataset.sit !== S.situation) { S.situation = b.dataset.sit; start(); } });
+  $("#sbCustomForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = $("#sbCustom").value.trim();
+    if (!v) { toast("Describe the situation in one line first"); return; }
+    S.custom = v; start();
+  });
+
+  function markSelection() {
+    $$("#sbNations .sb-nation").forEach((b) => { const on = b.dataset.code === S.code; b.classList.toggle("active", on); b.setAttribute("aria-checked", String(on)); });
+    $$("#sbSituations .sb-sit").forEach((b) => { const on = b.dataset.sit === S.situation; b.classList.toggle("active", on); b.setAttribute("aria-checked", String(on)); });
+    $("#sbCustomForm").hidden = S.situation !== "custom_sandbox";
+  }
+
+  // ---- UI helpers ----------------------------------------------------
+  function add(cls, html) {
+    const d = document.createElement("div");
+    d.className = "msg " + cls; d.innerHTML = html;
+    chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
+    return d;
+  }
+  function setTrust(v, mood) {
+    S.trust = clamp(v, 0, 100);
+    const fill = $("#sbTrust");
+    fill.style.width = S.trust + "%";
+    fill.style.background = `linear-gradient(90deg, hsl(${S.trust * 1.2 - 20},80%,55%), hsl(${S.trust * 1.2},75%,50%))`;
+    $("#sbTrustVal").textContent = Math.round(S.trust) + "%";
+    if (mood && MOODS[mood]) {
+      const m = $("#sbMood");
+      m.textContent = MOODS[mood].emoji; m.title = MOODS[mood].label;
+      m.classList.remove("bump"); void m.offsetWidth; m.classList.add("bump");
+    }
+  }
+  function setBusy(on) {
+    S.busy = on;
+    $("#sbSend").disabled = on;
+    $("#sbGestures").classList.toggle("busy", on);
+  }
+  function subtitle(text) {
+    const el = $("#sbSubtitle");
+    el.textContent = text; el.classList.toggle("show", !!text);
+    clearTimeout(S.subTimer);
+    if (text) S.subTimer = setTimeout(() => el.classList.remove("show"), clamp(text.length * 70, 3500, 12000));
+  }
+
+  function renderProfile() {
+    const c = COUNTRIES[S.code];
+    $("#sbProfileName").textContent = `${c.flag} ${c.name}`;
+    $("#sbDims").innerHTML = DIMENSIONS.map((d) => {
+      const v = c.dims[d.key];
+      return `<div class="sb-dim"><span title="${esc(d.low)} ↔ ${esc(d.high)}">${esc(d.label)}</span><div><i style="width:${v}%"></i></div><b>${v}</b></div>`;
+    }).join("");
+    $("#sbFacts").innerHTML = `<span>🧭 ${esc(c.context)}</span><span>📏 ${c.proxemics} cm comfort</span>` +
+      `<span>🔊 voice ${c.voice[0]}–${c.voice[1]}</span><span>🍲 hospitality ×${c.hospitality != null ? c.hospitality : "—"}</span>` +
+      `<p class="muted">${esc(c.mentality)}</p>`;
+  }
+
+  // Hall's zones as a top-down radar in the HUD (character in the centre, you below it)
+  function renderRadar() {
+    const c = COUNTRIES[S.code], k = 85 / 300, comfort = c.proxemics, thr = comfort * 0.75;
+    const ring = (cm, cls) => `<circle r="${Math.min(cm, 300) * k}" class="${cls}"/>`;
+    const y = Math.min(S.distance, 300) * k;
+    const inside = S.distance < thr;
+    $("#sbRadar").innerHTML = `<circle r="${thr * k}" class="rz-danger ${inside ? "on" : ""}"/>` + ring(45, "rz-int") + ring(120, "rz-pers") +
+      ring(300, "rz-soc") + ring(comfort, "rz-comfort") + `<circle r="5" class="rz-npc"/>` +
+      `<circle cy="${y}" r="6" class="rz-me ${inside ? "bad" : ""}"/><text y="-88" class="rz-txt">Hall zones</text>`;
+    $("#sbDistVal").textContent = Math.round(S.distance) + " cm";
+    $("#sbZone").textContent = S.distance < 45 ? "intimate" : S.distance < 120 ? "personal" : S.distance < 360 ? "social" : "public";
+    $("#sbZone").classList.toggle("bad", inside);
+  }
+
+  // ---- distance & proxemics -----------------------------------------
+  function setDistance(v, user) {
+    S.distance = clamp(Math.round(v), 30, 300);
+    distInput.value = S.distance;
+    if (stage) stage.setDistance(S.distance);
+    renderRadar();
+    if (!user) return;
+    const c = COUNTRIES[S.code], thr = c.proxemics * 0.75;
+    if (S.distance < thr) {
+      // instant body reaction, then ask the AI for the words (throttled)
+      const before = S.distance;
+      if (stage && stage.anim.name !== "step_back_uncomfortable") {
+        stage.play("step_back_uncomfortable"); stage.setEmotion("annoyed");
+        const moved = stage.stepBack(c.proxemics - before + 10);
+        S.retreated = true;
+        S.distance = clamp(S.distance + moved, 30, 300); distInput.value = S.distance; stage.setDistance(S.distance); renderRadar();
+      }
+      if (!S.busy && Date.now() - S.lastClose > 2500 && S.history.length) {
+        S.lastClose = Date.now();
+        send({ action: "step_too_close", distance: before });
+      }
+    } else if (stage && stage.anim.name === "step_back_uncomfortable" && S.distance >= c.proxemics && !S.busy) {
+      stage.play("idle_breathing"); stage.setEmotion("neutral");
+    }
+  }
+  distInput.addEventListener("input", () => setDistance(+distInput.value, true));
+  $("#sbBack").addEventListener("click", () => setDistance(S.distance + 15, true));
+  $("#sbCloser").addEventListener("click", () => setDistance(S.distance - 15, true));
+  document.addEventListener("keydown", (e) => {
+    if ($("#sandboxMode").hidden || e.target.closest("input, textarea, select") || e.ctrlKey || e.metaKey) return;
+    const k = e.key.toLowerCase();
+    if (k === "w") setDistance(S.distance - 10, true);
+    if (k === "s") setDistance(S.distance + 10, true);
+  });
+
+  // ---- voice: speech synthesis with the nation's accent + lip-sync ---
+  let voices = [];
+  const loadVoices = () => { voices = "speechSynthesis" in window ? speechSynthesis.getVoices() : []; };
+  loadVoices();
+  if ("speechSynthesis" in window) speechSynthesis.addEventListener("voiceschanged", loadVoices);
+  function pickVoice(lang) {
+    const norm = (l) => String(l).replace("_", "-").toLowerCase();
+    return voices.find((v) => norm(v.lang) === norm(lang)) || voices.find((v) => norm(v.lang).startsWith(norm(lang).split("-")[0])) || null;
+  }
+  function fakeTalk(text) {
+    if (!stage) return;
+    stage.setSpeaking(true);
+    clearTimeout(S.speakTimer);
+    S.speakTimer = setTimeout(() => stage.setSpeaking(false), clamp(text.length * 55, 800, 9000));
+  }
+  function stopSpeech() {
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    clearTimeout(S.speakTimer);
+    if (stage) stage.setSpeaking(false);
+  }
+  function speak(text, voice) {
+    const said = text.replace(/\*[^*]*\*/g, " ").replace(/\s+/g, " ").trim();   // stage directions are acted, not spoken
+    if (!said) return;
+    const mode = $("#sbVoice").value;
+    if (mode === "off" || !("speechSynthesis" in window)) { fakeTalk(said); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(said);
+    const lang = mode === "local" ? voice.lang : "en-US";
+    u.lang = lang;
+    const v = pickVoice(lang); if (v) u.voice = v;
+    const p = S.persona || {};
+    u.rate = voice.rate || 1;
+    u.volume = clamp((voice.volume || 0.7) + 0.25, 0.4, 1);
+    u.pitch = (p.gender === "f" ? 1.15 : 0.85) - (p.age === "elder" ? 0.1 : 0);
+    let started = false;
+    u.onstart = () => { started = true; if (stage) stage.setSpeaking(true); };
+    u.onboundary = () => { if (stage) stage.pulseMouth(); };
+    u.onend = u.onerror = () => { clearTimeout(S.speakTimer); if (stage) stage.setSpeaking(false); };
+    speechSynthesis.speak(u);
+    setTimeout(() => { if (!started) fakeTalk(said); }, 800);   // no voices installed → still animate the mouth
+  }
+  $("#sbVoice").addEventListener("change", () => { if ($("#sbVoice").value === "off") stopSpeech(); });
+
+  // ---- microphone: speech recognition → user message ----------------
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const mic = $("#sbMic");
+  if (!SR) { mic.disabled = true; mic.title = "Speech recognition is not supported in this browser"; }
+  else {
+    let rec = null;
+    mic.addEventListener("click", () => {
+      if (rec) { rec.stop(); return; }
+      rec = new SR();
+      rec.lang = "en-US"; rec.interimResults = true; rec.maxAlternatives = 1;
+      mic.classList.add("live");
+      rec.onresult = (ev) => {
+        const r = ev.results[ev.results.length - 1];
+        $("#sbInput").value = r[0].transcript;
+        if (r.isFinal) { const text = r[0].transcript.trim(); $("#sbInput").value = ""; if (text) send({ message: text }); }
+      };
+      rec.onerror = (ev) => { if (ev.error === "not-allowed") toast("Microphone access was denied."); };
+      rec.onend = () => { rec = null; mic.classList.remove("live"); };
+      rec.start();
+    });
+  }
+
+  // ---- the conversation loop ----------------------------------------
+  function personaFor() {
+    const sit = SIT[S.situation];
+    const p = (matrix.personas[S.code] || {})[sit.kind] || { name: "Local", gender: "m", age: "adult" };
+    return Object.assign({}, p, { kind: sit.kind, role: sit.role, flag: COUNTRIES[S.code].flag });
+  }
+  function poster(c) {
+    const g = GREETINGS.find((x) => x.code === c.lang);
+    return { flag: c.flag, word: g ? g.word : "Welcome", roman: g ? g.roman : "", title: c.name };
+  }
+
+  function start() {
+    S.run++;
+    stopSpeech();
+    markSelection();
+    const c = COUNTRIES[S.code], sit = SIT[S.situation];
+    S.trust = 50; S.turn = 0; S.history = []; S.retreated = false; setBusy(false);
+    S.persona = personaFor();
+    $("#sbFlag").textContent = c.flag;
+    $("#sbName").textContent = S.persona.name;
+    $("#sbRole").textContent = `${sit.role} · ${c.name}`;
+    $("#sbSitTitle").textContent = `${sit.icon} ${sit.title}`;
+    $("#sbSitBrief").textContent = S.situation === "custom_sandbox" && S.custom ? `“${S.custom}” — ${sit.brief}` : sit.brief;
+    $("#sbHints").innerHTML = "";
+    chat.innerHTML = ""; subtitle("");
+    setTrust(50, "neutral");
+    renderProfile();
+    if (stage) {
+      stage.setScene({ code: S.code, persona: S.persona, situation: S.situation, comfortCm: c.proxemics, poster: poster(c) });
+      stage.gestureAmp = c.dims.express / 100; stage.gestureFreq = 0.6 + c.dims.express / 100 * 1.8;
+      stage.yaw = 0;
+    }
+    setDistance(clamp(Math.round(c.proxemics * 1.25 / 5) * 5, 70, 300), false);
+    try { history.replaceState(null, "", `?country=${S.code}&situation=${S.situation}`); } catch (e) { /* file:// or sandboxed */ }
+    if (S.situation === "custom_sandbox" && !S.custom) {
+      add("sys", "✨ Describe your own situation above (one line) and press <b>Play it</b>.");
+      $("#sbCustom").focus();
+      return;
+    }
+    add("sys", `🎬 ${esc(sit.title)} · ${c.flag} ${esc(c.name)} — ${esc(S.persona.name)}, ${esc(sit.role.toLowerCase())}`);
+    send({ opening: true });
+  }
+
+  async function send({ message = "", action = "none", opening = false, distance = null } = {}) {
+    if (S.busy && !opening) { toast("Wait for the character to answer…"); return; }
+    if (S.situation === "custom_sandbox" && !S.custom) { toast("Describe your custom situation first"); return; }
+    const run = S.run;
+    setBusy(true);
+    const did = action !== "none" ? ACTION_TEXT[action] : "";
+    if (!opening) add("me", [message ? esc(message) : "", did ? `<i class="sb-act">${esc(did)}</i>` : ""].filter(Boolean).join(" "));
+    const typing = add("npc typing", "…");
+    const body = {
+      country: S.code, situation: S.situation, custom_context: S.situation === "custom_sandbox" ? S.custom : null,
+      user_message: message, user_action: action, distance_cm: Math.round(clamp(distance != null ? distance : S.distance, 20, 400)),
+      trust: Math.round(S.trust), turn: opening ? 0 : S.turn + 1, history: S.history.slice(-10)
+    };
+    let r;
+    try { r = await api("/roleplay/interact", body); }
+    catch (e) {
+      if (run !== S.run) return;
+      typing.remove(); add("sys", "⚠️ " + esc(e.message)); setBusy(false); S.retreated = false;
+      return;
+    }
+    if (run !== S.run) return;   // nation / situation switched meanwhile
+    typing.remove();
+    if (!opening) {
+      S.turn++;
+      S.history.push({ role: "user", text: [message, did ? `(${did})` : ""].filter(Boolean).join(" ").slice(0, 500) });
+    }
+    S.history.push({ role: "npc", text: r.npc_reply.slice(0, 500) });
+    S.history = S.history.slice(-12);
+    react(r, opening);
+    setBusy(false);
+  }
+
+  function react(r, opening) {
+    setTrust(r.trust_score, r.mood);
+    add("npc", `<b>${esc(r.npc.name)}:</b> ${esc(r.npc_reply)}`);
+    if (opening) {
+      $("#sbHints").innerHTML = (r.hints || []).map((h) => `<li>${esc(h)}</li>`).join("");
+    } else {
+      const d = r.delta;
+      const sig = (r.signals || []).map((s) => `<span class="ftag ${s.effect >= 0 ? "soft" : ""}">${s.effect >= 0 ? "+" : ""}${s.effect} ${esc(s.label)}</span>`).join("");
+      add("fb " + (d >= 0 ? "plus" : "minus"), `<b style="color:${d >= 0 ? "var(--good)" : "var(--bad)"}">${d >= 0 ? "+" : ""}${d}%</b>${esc(r.feedback)}<div class="sb-signals">${sig}</div>`);
+    }
+    if (stage) {
+      stage.gestureAmp = r.body.gesture_amp; stage.gestureFreq = r.body.gesture_freq;
+      stage.setEmotion(r.emotion); stage.setGaze(r.gaze);
+      if (r.animation === "step_back_uncomfortable" && !S.retreated) {
+        const moved = stage.stepBack(r.body.step_back_cm || 25);
+        setDistance(S.distance + moved, false);
+      }
+      S.retreated = false;
+      stage.play(r.animation, r.body);
+    }
+    subtitle(r.npc_reply);
+    speak(r.npc_reply, r.voice);
+    const src = r.source === "live" ? `⚡ live AI · ${esc(r.provider)} ${esc(r.model)}` : "🧠 offline culture engine";
+    $("#sbSource").innerHTML = src;
+    if (S.trust < 35 && !opening) add("sys", "💔 Trust is critically low — the character is withdrawing. Try an apology or a culturally fitting gesture.");
+  }
+
+  $("#sbSay").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = $("#sbInput").value.trim();
+    if (!text) return;
+    $("#sbInput").value = "";
+    send({ message: text });
+  });
+  $("#sbGestures").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-action]"); if (!b) return;
+    send({ action: b.dataset.action, message: $("#sbInput").value.trim() });
+    $("#sbInput").value = "";
+  });
+  $('.sb-distance [data-action="step_optimal"]').addEventListener("click", () => {
+    setDistance(COUNTRIES[S.code].proxemics, false);
+    if (stage) stage.resetPosition();
+    send({ action: "step_optimal" });
+  });
+  $("#sbRestart").addEventListener("click", start);
+  $("#sbFinish").addEventListener("click", async () => {
+    if (!S.turn) { toast("Talk to the character first"); return; }
+    const t = Math.round(S.trust), key = `${S.code}:${S.situation}`;
+    const sandbox = Object.assign({}, progress.sandbox || {});
+    sandbox[key] = Math.max(sandbox[key] || 0, t);
+    saveProgress({ sandbox });
+    api("/roleplay/sandbox/result", { country: S.code, situation: S.situation, trust: t, turns: S.turn }).catch(() => {});
+    const r = t >= 80 ? ["🤝", "Trusted friend"] : t >= 60 ? ["🙂", "Good relationship"] : t >= 40 ? ["😐", "Neutral acquaintance"] : ["💔", "Trust broken"];
+    add("sys", `<div class="rp-end"><div class="big">${r[0]}</div><h3>${r[1]} · ${t}% trust</h3><p class="muted">${S.turn} turns with ${esc(S.persona.name)} (${COUNTRIES[S.code].flag}). Try the same situation with another nation to feel the cultural gap.</p></div>`);
+  });
+
+  start();
+}
+
+/* ---------------------------------------------------------------------
    07 · Match the Cultural Customs (drag & drop + tap, checked on server)
    --------------------------------------------------------------------- */
 function initMatch() {
@@ -1411,6 +1987,7 @@ async function boot() {
   if ($("#decInput")) initDecoder(data.presets, data.ai);
   if ($("#proxSvg")) { initProxemics(initVoice()); initProxBars(); }
   if ($("#rpChat")) initRoleplay();
+  if ($("#sbCanvas")) initSandbox();
   if ($("#matchPool")) initMatch();
   if ($("#quizCard")) initQuiz();
   if ($("#passportBars")) renderPassport();

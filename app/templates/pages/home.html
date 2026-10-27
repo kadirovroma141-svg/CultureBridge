@@ -25,14 +25,27 @@
     <!-- ============ HERO ============ -->
     <section class="hero bento">
       <div class="card hero-main reveal">
-        <span class="pill"><span class="dot"></span> Intercultural Intelligence Platform · <span id="aiPill">AI</span></span>
+        <span class="pill"><span class="dot"></span> Intercultural Intelligence Platform · <span class="hero-version-pill">v2.4 AI</span></span>
         <h1>Cross the <span class="grad">cultural barrier</span> before you cross the border.</h1>
-        <p class="lead">CultureBridge AI turns a survey of NIS alumni studying abroad and classic intercultural models
-          (Hall, Hofstede, Meyer, Brown &amp; Levinson) into interactive simulators: a server-side AI cultural decoder,
-          a 6D gap radar, a proxemics lab and roleplay with a live trust meter.</p>
+        <p class="lead">CultureBridge AI turns real empirical data from NIS alumni studying abroad and classic intercultural models
+          (Hall, Hofstede, Meyer, Brown &amp; Levinson) into interactive simulators: a 5-stage country curriculum,
+          server-side AI pragmatic decoder, 6D gap radar, 3D proxemics bubble and roleplay with a live trust meter.</p>
         <div class="hero-cta">
-          <a href="{{ url_for('web.radar') }}" class="btn primary">Measure my culture gap →</a>
-          <a href="{{ url_for('web.decoder') }}" class="btn ghost">Try the AI Decoder</a>
+          <a href="{{ url_for('web.learn') }}" class="btn primary">🎓 Start 5-Stage Country Track →</a>
+          <a href="{{ url_for('web.radar') }}" class="btn ghost">📡 Compare Gap Radar</a>
+          <a href="{{ url_for('web.decoder') }}" class="btn ghost">🧠 AI Decoder</a>
+        </div>
+        <div class="hero-quick-countries">
+          <span class="hqc-label">Popular Destinations:</span>
+          <div class="hqc-list">
+            <a href="{{ url_for('web.learn') }}?country=US" class="hqc-pill">🇺🇸 USA</a>
+            <a href="{{ url_for('web.learn') }}?country=DE" class="hqc-pill">🇩🇪 Germany</a>
+            <a href="{{ url_for('web.learn') }}?country=IT" class="hqc-pill">🇮🇹 Italy</a>
+            <a href="{{ url_for('web.learn') }}?country=KR" class="hqc-pill">🇰🇷 South Korea</a>
+            <a href="{{ url_for('web.learn') }}?country=JP" class="hqc-pill">🇯🇵 Japan</a>
+            <a href="{{ url_for('web.learn') }}?country=GB" class="hqc-pill">🇬🇧 UK</a>
+            <a href="{{ url_for('web.learn') }}?country=CN" class="hqc-pill">🇨🇳 China</a>
+          </div>
         </div>
       </div>
       <div class="card hero-globe reveal">
@@ -49,22 +62,105 @@
       </div>
     </section>
 
-    <!-- ============ MODULE CARDS ============ -->
+    <!-- ============ FEATURED TRACK PROMO ============ -->
+    <section class="section featured-track-banner reveal">
+      <div class="card track-promo-card">
+        <div class="track-promo-content">
+          <span class="eyebrow">Systematic Learning Engine</span>
+          <h2>Ready for your study abroad destination?</h2>
+          <p class="lead">Complete our 5-stage personalized country curriculum: First Contact greetings, Hofstede 6D Gap Discovery, Pragmatic Subtext Decoder, Real-time Dilemma Roleplay and the Certification Exam.</p>
+          <div class="track-promo-pills">
+            <span class="t-pill">⚡ Step 1: First Contact</span>
+            <span class="t-pill">📡 Step 2: Gap Radar</span>
+            <span class="t-pill">🧠 Step 3: AI Decoder</span>
+            <span class="t-pill">🎭 Step 4: Roleplay Dilemma</span>
+            <span class="t-pill">📜 Step 5: Official NIS Certificate</span>
+          </div>
+        </div>
+        <div class="track-promo-action">
+          <a href="{{ url_for('web.learn') }}" class="btn primary large">Explore Country Tracks →</a>
+          <span class="muted text-xs">Tracks available for 10+ destination countries</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CATEGORIZED MODULE GRID ============ -->
     <section class="section">
       <div class="section-head reveal">
-        <span class="eyebrow">Explore & Train</span>
-        <h2>Choose your <span class="grad">learning path</span></h2>
-        <p class="lead">Eight interactive modules to build your intercultural intelligence — from knowledge and awareness to empathy and communication skills.</p>
+        <span class="eyebrow">Comprehensive Toolkit</span>
+        <h2>Choose your <span class="grad">learning module</span></h2>
+        <p class="lead">All tools are interconnected to build your Cultural Quotient (CQ) — from foundational cross-cultural knowledge to real-time communicative intuition.</p>
       </div>
-      <div class="modules-grid reveal">
-        {% for p in pages if p.key not in ('home','stats','about','docs') %}
-        <a href="{{ p.path }}" class="module-card card" id="module-{{ p.key }}">
-          <span class="module-icon">{{ p.icon }}</span>
-          <h3>{{ p.nav }}</h3>
-          <p class="muted">{{ p.desc[:100] }}…</p>
-          <span class="module-arrow">→</span>
-        </a>
-        {% endfor %}
+
+      <div class="module-categories-container">
+        <!-- Category: Explore -->
+        <div class="category-block reveal">
+          <div class="category-block-header">
+            <div class="category-title"><span class="cat-icon">🌍</span> Cultural Foundations</div>
+            <p class="cat-desc">Atlas, greetings & Hofstede 6-dimensional distance radar</p>
+          </div>
+          <div class="modules-grid">
+            {% for p in nav_groups.explore.pages %}
+            <a href="{{ p.path }}" class="module-card card" id="module-{{ p.key }}">
+              <div class="module-card-top">
+                <span class="module-icon">{{ p.icon }}</span>
+                <span class="module-category-tag">Explore</span>
+              </div>
+              <h3>{{ p.nav }}</h3>
+              <p class="muted">{{ p.short }}</p>
+              <div class="module-card-footer">
+                <span class="module-action-link">Open tool →</span>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Category: AI Tools -->
+        <div class="category-block reveal">
+          <div class="category-block-header">
+            <div class="category-title"><span class="cat-icon">⚡</span> AI Simulators & Labs</div>
+            <p class="cat-desc">Pragmatics, 3D non-verbal space and conversational trust simulations</p>
+          </div>
+          <div class="modules-grid">
+            {% for p in nav_groups.tools.pages %}
+            <a href="{{ p.path }}" class="module-card card" id="module-{{ p.key }}">
+              <div class="module-card-top">
+                <span class="module-icon">{{ p.icon }}</span>
+                <span class="module-category-tag ai-tag">AI Powered</span>
+              </div>
+              <h3>{{ p.nav }}</h3>
+              <p class="muted">{{ p.short }}</p>
+              <div class="module-card-footer">
+                <span class="module-action-link">Launch simulator →</span>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Category: Practice & Community -->
+        <div class="category-block reveal">
+          <div class="category-block-header">
+            <div class="category-title"><span class="cat-icon">🎮</span> Practice & Verification</div>
+            <p class="cat-desc">Interactive challenges, verified certificates & global statistics</p>
+          </div>
+          <div class="modules-grid">
+            {% for p in nav_groups.practice.pages %}
+            <a href="{{ p.path }}" class="module-card card" id="module-{{ p.key }}">
+              <div class="module-card-top">
+                <span class="module-icon">{{ p.icon }}</span>
+                <span class="module-category-tag practice-tag">Practice</span>
+              </div>
+              <h3>{{ p.nav }}</h3>
+              <p class="muted">{{ p.short }}</p>
+              <div class="module-card-footer">
+                <span class="module-action-link">Play & assess →</span>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </section>
 

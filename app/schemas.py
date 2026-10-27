@@ -86,6 +86,56 @@ class RoleplayTurnIn(BaseModel):
         return [h[:400] for h in v]
 
 
+Situation = Literal["academic_dispute", "team_criticism", "home_hospitality", "gift_ceremony", "first_contact",
+                    "lateness_crisis", "public_etiquette", "custom_sandbox"]
+UserAction = Literal["none", "bow", "handshake", "hug", "give_two_hands", "give_one_hand", "give_clock", "accept_tea",
+                     "refuse_food_bluntly", "step_too_close", "step_optimal", "eye_contact_intense", "modest_gaze"]
+
+
+class SandboxLine(BaseModel):
+    role: Literal["user", "npc"]
+    text: str = Field(max_length=500)
+
+
+class RoleplayInteractIn(BaseModel):
+    """POST /api/roleplay/interact — one turn in the 3D Nation × Situation sandbox (words and/or a physical action)."""
+    country: str = CountryCode
+    situation: Situation
+    custom_context: str | None = Field(default=None, max_length=300)
+    user_message: str = Field(default="", max_length=500)
+    user_action: UserAction = "none"
+    distance_cm: int = Field(default=120, ge=20, le=400)
+    trust: float = Field(default=50, ge=0, le=100)
+    turn: int = Field(default=1, ge=0, le=60)
+    history: list[SandboxLine] = Field(default_factory=list, max_length=12)
+
+    @field_validator("user_message")
+    @classmethod
+    def strip(cls, v: str) -> str:
+        return v.strip()
+
+    @field_validator("custom_context")
+    @classmethod
+    def tidy_context(cls, v):
+        return _clean(v)
+
+    @model_validator(mode="after")
+    def check(self):
+        if self.situation == "custom_sandbox" and not self.custom_context:
+            raise ValueError("custom_context is required for the custom_sandbox situation")
+        if self.turn > 0 and not self.user_message and self.user_action == "none":
+            raise ValueError("say something or perform an action")
+        return self
+
+
+class SandboxResultIn(BaseModel):
+    country: str = CountryCode
+    situation: Situation
+    trust: float = Field(ge=0, le=100)
+    turns: int = Field(default=0, ge=0, le=200)
+    session_id: str | None = SessionId
+
+
 class LearnerIn(BaseModel):
     """Identity block shared by the trainer submissions (all optional — anonymous by default)."""
     session_id: str | None = SessionId

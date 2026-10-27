@@ -23,6 +23,29 @@
   {% include "partials/nav.html" %}
 
   <main id="top">
+    <!-- Contextual Breadcrumb & Sibling Module Switcher -->
+    <nav class="context-bar reveal" aria-label="Breadcrumb and module navigation">
+      <div class="context-breadcrumb">
+        <a href="{{ url_for('web.home') }}" class="cb-crumb cb-home">Home</a>
+        <span class="cb-sep">/</span>
+        {% if group_meta %}
+        <span class="cb-crumb cb-group">{{ group_meta.icon }} {{ group_meta.label }}</span>
+        <span class="cb-sep">/</span>
+        {% endif %}
+        <span class="cb-crumb cb-current" aria-current="page">{{ page.icon }} {{ page.nav }}</span>
+      </div>
+      {% if sibling_pages and sibling_pages|length > 1 %}
+      <div class="sibling-pills" aria-label="Sibling modules">
+        {% for sib in sibling_pages %}
+        <a href="{{ sib.path }}" class="sibling-pill {% if sib.key == current_key %}active{% endif %}" title="{{ sib.desc }}">
+          <span class="sibling-icon">{{ sib.icon }}</span>
+          <span class="sibling-name">{{ sib.nav }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </nav>
+
     {% block page_hero %}
     <section class="page-header section">
       <div class="section-head reveal">

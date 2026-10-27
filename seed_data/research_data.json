@@ -483,6 +483,49 @@
    "hospitality": 0.8,
    "universities": [],
    "alumni_voices": []
+  },
+  {
+   "code": "TR",
+   "name": "Turkey",
+   "flag": "🇹🇷",
+   "iso": "792",
+   "lang": "tr-TR",
+   "context": "High-context",
+   "lon": 32.86,
+   "lat": 39.93,
+   "mentality": "Warm, family-centred hospitality (misafirperverlik) and respect for elders. Relationships come before business, and time is flexible among friends.",
+   "etiquette": [
+    {
+     "title": "Tea is an invitation",
+     "text": "A glass of çay is offered constantly — accepting at least one glass is a sign of respect for the host."
+    },
+    {
+     "title": "Respect for elders",
+     "text": "Stand up when an elder enters, greet them first; younger people may kiss an elder's hand and touch it to the forehead."
+    },
+    {
+     "title": "Shoes off at home",
+     "text": "Take off your shoes at the door; hosts will usually offer slippers (terlik)."
+    },
+    {
+     "title": "Refusing food",
+     "text": "Hosts insist several times — decline softly with a compliment and accept a small portion instead of a flat “no”."
+    }
+   ],
+   "dims": {
+    "direct": 35,
+    "express": 70,
+    "contact": 65,
+    "time": 40,
+    "hierarchy": 70,
+    "smalltalk": 65
+   },
+   "proxemics": 60,
+   "voice_min": 50,
+   "voice_max": 75,
+   "hospitality": 1.55,
+   "universities": [],
+   "alumni_voices": []
   }
  ],
  "dimensions": [
@@ -1267,7 +1310,8 @@
    "JP": "Thank you very much for this idea — I can see how much thought went into it. It might be a little difficult in our situation… perhaps we could also consider one more option?",
    "KR": "Thank you for sharing this. I think it is a very good effort. Maybe, if it is okay, we could review one more option together?",
    "GB": "That’s an interesting idea. I’m just slightly concerned it might not quite work — perhaps we could consider an alternative?",
-   "DE": "I think this solution will not work, because of [reason]. I suggest we evaluate alternative B instead. What do you think?"
+   "DE": "I think this solution will not work, because of [reason]. I suggest we evaluate alternative B instead. What do you think?",
+   "TR": "Thank you, I can see you put real effort into this idea. Maybe we could also think about one more option together — what do you think?"
   },
   "food": {
    "KZ": "Рахмет! Everything looks delicious. I’ll gladly have some tea and just a little taste — I had a big meal earlier.",
@@ -1279,7 +1323,8 @@
    "JP": "Itadakimasu — thank you very much. It looks wonderful. I’m afraid I can only manage a little, but I’ll gratefully try it.",
    "KR": "Thank you so much, it looks delicious! I’m quite full, but I’ll gladly try a little. (Receive the plate with both hands.)",
    "GB": "That’s very kind of you, thank you. I’m actually rather full, but I’ll have a little taste.",
-   "DE": "Thank you, that looks good. I’m honestly full, so I’ll just try a small portion. (A clear, polite no is also acceptable.)"
+   "DE": "Thank you, that looks good. I’m honestly full, so I’ll just try a small portion. (A clear, polite no is also acceptable.)",
+   "TR": "Elinize sağlık — it looks wonderful! I have already eaten a lot, but I would love to try a little."
   },
   "time": {
    "KZ": "I know everyone is busy. Next time, could we try to keep the agreed time? It would really help us finish on schedule.",
@@ -1291,7 +1336,8 @@
    "JP": "Thank you for coming. I’m sorry to mention it, but our schedule is a little tight… it would help us all if we could start on time.",
    "KR": "Thanks for coming! Our schedule is a bit tight, so it would be really helpful if we could all start on time next time.",
    "GB": "Not to worry — though it might be helpful if we could all try to be on time next time, just so we finish on schedule.",
-   "DE": "You were 15 minutes late. Please let us know in advance next time, because we need to start at the agreed time."
+   "DE": "You were 15 minutes late. Please let us know in advance next time, because we need to start at the agreed time.",
+   "TR": "No problem at all! Next time, could we perhaps agree on the time in advance, so we can all finish on schedule?"
   },
   "request": {
    "KZ": "Excuse me, Professor, I am sorry to disturb you. If it is possible for you, could you please look at my essay? I would be very grateful.",
@@ -1303,7 +1349,8 @@
    "JP": "Sensei, I am very sorry to trouble you when you are busy. If it is not too much trouble, could you possibly look at my essay?",
    "KR": "Professor-nim, I’m sorry to bother you. If you have time, could you please look at my essay? Thank you very much.",
    "GB": "Hello Professor, sorry to bother you — I was wondering if you might have a moment to look over my essay? No rush at all.",
-   "DE": "Guten Tag, Professor Müller. Could you please review my essay by Friday? I would like to submit it next week. Thank you."
+   "DE": "Guten Tag, Professor Müller. Could you please review my essay by Friday? I would like to submit it next week. Thank you.",
+   "TR": "Hocam, I am sorry to disturb you. If it is possible for you, could you please look at my essay? I would be very grateful."
   },
   "decline": {
    "KZ": "Thank you so much for inviting me, it means a lot! Unfortunately, I already promised to help my family that day. Let’s definitely meet soon!",
@@ -1315,7 +1362,8 @@
    "JP": "Thank you very much for the kind invitation. That day is a little… difficult for me. I am really sorry. Please invite me again.",
    "KR": "Thank you so much for the invitation! I’m really sorry, I have a prior appointment that day. Let’s meet next time for sure!",
    "GB": "Oh, that’s really kind of you! I’m afraid I can’t make it that day — such a shame. Do have a lovely time.",
-   "DE": "Thank you for the invitation, but I can’t come on Saturday because I have an exam on Monday. Have fun!"
+   "DE": "Thank you for the invitation, but I can’t come on Saturday because I have an exam on Monday. Have fun!",
+   "TR": "Thank you so much for the invitation, it means a lot! Unfortunately I have a family commitment that day — let’s have tea together very soon."
   },
   "ask": {
    "KZ": "Hi! Sorry to bother you — could you please share {obj}? I’d be really grateful. Рахмет!",
@@ -1327,7 +1375,8 @@
    "JP": "I’m sorry to trouble you… if it’s not inconvenient, could I possibly borrow {obj}? Thank you very much.",
    "KR": "Excuse me, sorry to bother you — could you share {obj}, if that’s okay? Thank you!",
    "GB": "Sorry to be a pain — would you mind awfully sharing {obj}? Cheers!",
-   "DE": "Could you please send me {obj}? I need it to prepare for the next session. Thanks!"
+   "DE": "Could you please send me {obj}? I need it to prepare for the next session. Thanks!",
+   "TR": "Kolay gelsin! Sorry to bother you — could you share {obj} with me? Çok teşekkürler!"
   },
   "neutral": {
    "KZ": "With respect: {text}",
@@ -1339,7 +1388,8 @@
    "JP": "If it is not too much trouble, {text}",
    "KR": "If it’s okay, {text}",
    "GB": "Sorry, I was just wondering — {text}",
-   "DE": "{text}"
+   "DE": "{text}",
+   "TR": "If you don't mind, {text}"
   }
  },
  "pragma_hearing": {
@@ -1392,6 +1442,11 @@
    "Clear and efficient — Germans appreciate this.",
    "Fine. Germans prefer clarity; just add a reason or suggestion.",
    "Even by German standards this is personal, not factual. Criticise the task, not the person."
+  ],
+  "TR": [
+   "Warm and respectful — this fits Turkish expectations of courtesy (nezaket).",
+   "Understandable, but a little cold. Add warmth and a polite cushion, especially with elders.",
+   "Very direct by Turkish standards — it can feel disrespectful and hurt the relationship (and the host's honour)."
   ]
  },
  "roleplays": [

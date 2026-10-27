@@ -10,11 +10,12 @@ from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
 from werkzeug.exceptions import HTTPException
 
-from . import ai, roleplay, services, tracks
+from . import ai, roleplay, sandbox, services, tracks
 from .extensions import db
 from .models import AlumniVoice, Country, Greeting, MatchItem, QuizQuestion, Scenario, TrackProgress, User
 from .schemas import (AlumniAddIn, DecodeIn, LoginIn, MatchCheckIn, MatchSubmitIn, QuizAnswerIn, QuizFinishIn,
-                      QuizSubmitIn, RegisterIn, RoleplayResultIn, RoleplayTurnIn, SubtextIn, TrackStepCompleteIn)
+                      QuizSubmitIn, RegisterIn, RoleplayInteractIn, RoleplayResultIn, RoleplayTurnIn,
+                      SandboxResultIn, SubtextIn, TrackStepCompleteIn)
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -260,6 +261,37 @@ def ai_roleplay():
     except LookupError as e:
         raise ApiError(str(e), 404)
     return jsonify(result)
+
+
+# ---------------------------------------------------------------- 3D cultural sandbox (nation × situation)
+@bp.get("/roleplay/sandbox")
+def sandbox_matrix():
+    """The Nation × Situation matrix: 8 situations, a persona per nation and relationship, the gesture vocabulary."""
+    return jsonify(sandbox.situations_payload())
+
+
+@bp.post("/roleplay/interact")
+def roleplay_interact():
+    """One live turn with the embodied 3D character: words + gesture + distance → reply, animation, emotion, trust."""
+    body = parse(RoleplayInteractIn)
+    if rate_limited("sandbox", "SANDBOX_RATE_LIMIT"):
+        raise ApiError("Too many requests — please wait a minute.", 429)
+    try:
+        return jsonify(sandbox.interact(body))
+    except LookupError as e:
+        raise ApiError(str(e), 404)
+
+
+@bp.post("/roleplay/sandbox/result")
+def sandbox_result():
+    body = parse(SandboxResultIn)
+    if not services.get_country(body.country):
+        raise ApiError("Unknown country", 404)
+    a = services.log_attempt("roleplay_ai", ref=f"sandbox:{body.country}:{body.situation}", score=body.trust,
+                             max_score=100, detail={"turns": body.turns})
+    a.session_id = services.clean_session(body.session_id)
+    db.session.commit()
+    return jsonify(ok=True)
 
 
 # ---------------------------------------------------------------- quiz

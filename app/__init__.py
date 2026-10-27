@@ -22,7 +22,7 @@ CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' 
 
 def _asset_version(static_dir: Path) -> str:
     """Cache-busting token: git commit from the platform, else the newest static file mtime."""
-    for var in ("RENDER_GIT_COMMIT", "RAILWAY_GIT_COMMIT_SHA", "SOURCE_VERSION", "GIT_COMMIT"):
+    for var in ("VERCEL_GIT_COMMIT_SHA", "RENDER_GIT_COMMIT", "RAILWAY_GIT_COMMIT_SHA", "SOURCE_VERSION", "GIT_COMMIT"):
         if os.getenv(var):
             return os.getenv(var)[:8]
     try:
@@ -34,7 +34,7 @@ def _asset_version(static_dir: Path) -> str:
 def create_app(config_object=Config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config_object)
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)  # behind Render / Railway / nginx
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)  # behind Vercel / Render / nginx
     logging.basicConfig(level=getattr(logging, app.config["LOG_LEVEL"], logging.INFO),
                         format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     production = app.config["APP_ENV"] == "production"
@@ -96,10 +96,16 @@ def create_app(config_object=Config) -> Flask:
         print(import_alumni(path))
 
     with app.app_context():
-        ensure_schema()
+        if app.config["AUTO_MIGRATE"]:
+            ensure_schema()
         from . import models as m
         if app.config["AUTO_SEED"] and not db.session.scalar(select(func.count(m.Country.id))):
             app.logger.info("Empty database — seeding research data…")
             seed()
+        elif app.config["AUTO_SEED"]:
+            from .seeding import add_new_countries
+            added = add_new_countries()
+            if added:
+                app.logger.info("Added new countries from research data: %s", ", ".join(added))
 
     return app

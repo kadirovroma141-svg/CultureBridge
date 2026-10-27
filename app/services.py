@@ -48,6 +48,7 @@ def country_dict(c: Country) -> dict:
         "dims": c.dims(),
         "proxemics": c.proxemics_cm,
         "voice": [c.voice_min, c.voice_max],
+        "hospitality": c.hospitality,
         "alumni": {
             "universities": [u.name for u in c.universities],
             "voices": [voice_dict(v) for v in voices],

@@ -52,6 +52,11 @@ def ensure_schema() -> list[str]:
                 elif column.index:
                     conn.execute(text(f"CREATE INDEX IF NOT EXISTS ix_{table.name}_{column.name} "
                                       f"ON {table.name} ({column.name})"))
+        # Supabase exposes every public table through its REST API; RLS with no policies closes that door,
+        # while the app itself connects as the table owner and is not affected.
+        if dialect.name == "postgresql":
+            for table in db.metadata.sorted_tables:
+                conn.execute(text(f"ALTER TABLE {table.name} ENABLE ROW LEVEL SECURITY"))
     if changes:
         log.info("Schema migrated, added columns: %s", ", ".join(changes))
     return changes

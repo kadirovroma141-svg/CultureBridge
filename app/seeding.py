@@ -17,11 +17,62 @@ def load_data() -> dict:
         return json.load(f)
 
 
+def _country(c: dict, dims: dict) -> Country:
+    return Country(
+        code=c["code"], name=c["name"], flag=c["flag"], iso_numeric=c["iso"], lang=c["lang"], context=c["context"],
+        lat=c["lat"], lon=c["lon"], mentality=c["mentality"], proxemics_cm=c["proxemics"],
+        voice_min=c["voice_min"], voice_max=c["voice_max"], hospitality=c["hospitality"],
+        etiquette=[EtiquetteRule(title=e["title"], text=e["text"], position=i) for i, e in enumerate(c["etiquette"])],
+        universities=[University(name=u) for u in c["universities"]],
+        voices=[AlumniVoice(university=v["university"], text=v["text"], student_name=v.get("student_name"),
+                            nis_branch=v.get("nis_branch"), program_duration=v.get("program_duration"),
+                            advice=v.get("advice"), is_verified=v.get("is_verified", True), source="survey")
+                for v in c["alumni_voices"]],
+        scores=[CountryDimension(dimension=dims[k], value=v) for k, v in c["dims"].items()],
+    )
+
+
+def add_new_countries() -> list[str]:
+    """Add countries that appeared in research_data.json after the DB was seeded (e.g. TR), without a --reset:
+    the country itself, its lexicon entries (adapt / hearing) and its expert-cache rows. Existing data is untouched."""
+    data = load_data()
+    have = set(db.session.scalars(select(Country.code)))
+    new = [c for c in data["countries"] if c["code"] not in have]
+    if not new:
+        return []
+    dims = {d.key: d for d in db.session.scalars(select(Dimension))}
+    setting = db.session.get(Setting, "pragma")
+    lexicon = {**setting.value, "adapt": {k: dict(v) for k, v in setting.value["adapt"].items()},
+               "hearing": dict(setting.value["hearing"])}
+    for c in new:
+        country = _country(c, dims)
+        db.session.add(country)
+        for cat, by_code in data["pragma_adapt"].items():
+            if c["code"] in by_code:
+                lexicon["adapt"].setdefault(cat, {})[c["code"]] = by_code[c["code"]]
+        lexicon["hearing"][c["code"]] = data["pragma_hearing"][c["code"]]
+        db.session.flush()
+        cached = set(db.session.scalars(select(TranslationCache.phrase_hash).where(
+            TranslationCache.country_code == c["code"], TranslationCache.provider == "expert")))
+        for phrase in data["translator_presets"]:
+            if phrase_hash(phrase) in cached:
+                continue
+            db.session.add(TranslationCache(phrase_hash=phrase_hash(phrase), phrase=phrase, country_code=c["code"],
+                                            provider="expert", model="pragma-rules-v1",
+                                            result=pragma.analyze(phrase, country, lexicon)))
+    setting.value = lexicon  # reassign so the JSON column is flagged dirty
+    db.session.commit()
+    return [c["code"] for c in new]
+
+
 def seed(reset: bool = False) -> str:
     if reset:
         db.drop_all()
     db.create_all()
     if db.session.scalar(select(func.count(Country.id))):
+        added = add_new_countries()
+        if added:
+            return f"Database already seeded — added new countries: {', '.join(added)}."
         return "Database already seeded — nothing to do (use --reset to rebuild)."
 
     data = load_data()
@@ -38,19 +89,7 @@ def seed(reset: bool = False) -> str:
     # countries, etiquette, alumni survey
     countries = {}
     for c in data["countries"]:
-        country = Country(
-            code=c["code"], name=c["name"], flag=c["flag"], iso_numeric=c["iso"], lang=c["lang"], context=c["context"],
-            lat=c["lat"], lon=c["lon"], mentality=c["mentality"], proxemics_cm=c["proxemics"],
-            voice_min=c["voice_min"], voice_max=c["voice_max"], hospitality=c["hospitality"],
-            etiquette=[EtiquetteRule(title=e["title"], text=e["text"], position=i) for i, e in enumerate(c["etiquette"])],
-            universities=[University(name=u) for u in c["universities"]],
-            voices=[AlumniVoice(university=v["university"], text=v["text"], student_name=v.get("student_name"),
-                                nis_branch=v.get("nis_branch"), program_duration=v.get("program_duration"),
-                                advice=v.get("advice"), is_verified=v.get("is_verified", True), source="survey")
-                    for v in c["alumni_voices"]],
-            scores=[CountryDimension(dimension=dims[k], value=v) for k, v in c["dims"].items()],
-        )
-        countries[c["code"]] = country
+        countries[c["code"]] = country = _country(c, dims)
         db.session.add(country)
 
     db.session.add_all(Greeting(word=g["word"], roman=g["roman"], language=g["lang"], lang_code=g["code"],

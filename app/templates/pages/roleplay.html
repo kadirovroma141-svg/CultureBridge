@@ -1,19 +1,132 @@
 {% extends "page_shell.html" %}
-{% block page_title %}Earn the <span class="grad">trust</span> of a local{% endblock %}
-{% block page_lead %}Each reply changes the Empathy &amp; Trust Score in real time, with an explanation of every mistake. Choose a scenario and talk to a virtual character.{% endblock %}
+{% block page_title %}3D AI <span class="grad">Cultural Sandbox</span>{% endblock %}
+{% block page_lead %}Combine any of 11 nations with any life situation. A 3D local, driven by AI in the first person, talks to you, moves in space and reacts to your words, gestures and distance — exactly as a person from that culture would.{% endblock %}
 {% block page_content %}
 <section class="section">
-  <div class="chip-row tabs reveal" id="rpTabs"></div>
-  <div class="card rp-card reveal">
-    <div class="rp-top">
-      <div class="rp-npc"><span class="rp-avatar" id="rpAvatar"></span><div><b id="rpName"></b><small id="rpRole"></small></div><span class="rp-mood" id="rpMood"></span></div>
-      <div class="trust">
-        <div class="trust-label"><span>Empathy &amp; Trust</span><b id="rpTrustVal">50%</b></div>
-        <div class="trust-track"><div class="trust-fill" id="rpTrust"></div></div>
+  <div class="chip-row tabs reveal" id="rpModes" role="tablist">
+    <button class="chip active" data-mode="sandbox" role="tab" aria-selected="true">🧊 3D Sandbox · Nation × Situation</button>
+    <button class="chip" data-mode="classic" role="tab" aria-selected="false">📜 Classic scenarios</button>
+  </div>
+
+  <!-- ============ 3D sandbox ============ -->
+  <div id="sandboxMode">
+    <div class="card sb-builder reveal">
+      <div class="sb-builder-head">
+        <div>
+          <span class="sb-step">1</span><b>Target nation</b>
+          <small class="muted">the person you will talk to</small>
+        </div>
+        <div class="sb-matrix-count"><b id="sbComboCount">88</b> combinations</div>
       </div>
+      <div class="sb-nations" id="sbNations" role="radiogroup" aria-label="Target nation"></div>
+
+      <div class="sb-builder-head">
+        <div><span class="sb-step">2</span><b>Life situation</b> <small class="muted">works with every nation</small></div>
+      </div>
+      <div class="sb-situations" id="sbSituations" role="radiogroup" aria-label="Situation"></div>
+      <form class="sb-custom" id="sbCustomForm" hidden>
+        <input id="sbCustom" maxlength="300" placeholder="Describe your situation in one line, e.g. “Asking a landlord to fix the heating”" aria-label="Custom situation">
+        <button class="btn primary" type="submit">Play it ▶</button>
+      </form>
     </div>
-    <div class="rp-chat" id="rpChat"></div>
-    <div class="rp-options" id="rpOptions"></div>
+
+    <div class="sb-layout">
+      <div class="card sb-stage-card reveal">
+        <div class="sb-stage" id="sbStage">
+          <canvas id="sbCanvas" aria-label="3D scene with the virtual local"></canvas>
+          <div class="sb-loading" id="sbLoading">Building the 3D scene…</div>
+          <div class="sb-hud-top">
+            <div class="sb-badge">
+              <span class="sb-flag" id="sbFlag"></span>
+              <div><b id="sbName">—</b><small id="sbRole"></small></div>
+              <span class="sb-mood" id="sbMood" title="Mood"></span>
+            </div>
+            <div class="sb-trust">
+              <div class="trust-label"><span>Trust</span><b id="sbTrustVal">50%</b></div>
+              <div class="trust-track"><div class="trust-fill" id="sbTrust"></div></div>
+            </div>
+          </div>
+          <svg class="sb-radar" id="sbRadar" viewBox="-100 -100 200 200" aria-label="Hall proxemic zones radar"></svg>
+          <div class="sb-subtitle" id="sbSubtitle" aria-live="polite"></div>
+          <div class="sb-anim-tag" id="sbAnimTag"></div>
+        </div>
+
+        <!-- Player physical action bar -->
+        <div class="sb-actions">
+          <div class="sb-distance">
+            <button class="btn ghost sm" id="sbBack" title="Step back (S key, or Shift + mouse wheel over the scene)">◀ Step back</button>
+            <label class="sb-dist-slider">
+              <span>Distance <b id="sbDistVal">120 cm</b> · <em id="sbZone">personal</em></span>
+              <input type="range" id="sbDist" min="30" max="300" step="5" value="120" aria-label="Distance to the character in centimetres">
+            </label>
+            <button class="btn ghost sm" id="sbCloser" title="Approach (W key, or Shift + mouse wheel over the scene)">Approach ▶</button>
+            <button class="btn ghost sm" data-action="step_optimal" title="Move to the local comfort distance">📏 Comfort zone</button>
+          </div>
+          <div class="sb-gestures" id="sbGestures">
+            <button class="sb-gesture" data-action="bow">🙇 Bow</button>
+            <button class="sb-gesture" data-action="handshake">🤝 Handshake</button>
+            <button class="sb-gesture" data-action="hug">🫂 Hug</button>
+            <button class="sb-gesture" data-action="give_two_hands">🤲 Give with 2 hands</button>
+            <button class="sb-gesture" data-action="give_one_hand">✋ Give with 1 hand</button>
+            <button class="sb-gesture" data-action="accept_tea">🍵 Accept tea / food</button>
+            <button class="sb-gesture" data-action="refuse_food_bluntly">🙅 Refuse food</button>
+            <button class="sb-gesture" data-action="give_clock">🎁 Give a clock</button>
+            <button class="sb-gesture" data-action="eye_contact_intense">👀 Direct eye contact</button>
+            <button class="sb-gesture" data-action="modest_gaze">😌 Modest gaze</button>
+          </div>
+          <form class="sb-say" id="sbSay">
+            <button type="button" class="btn ghost sm sb-mic" id="sbMic" title="Speak (English)">🎤</button>
+            <input id="sbInput" maxlength="500" autocomplete="off" placeholder="Say something to the character…" aria-label="Your reply">
+            <button class="btn primary" type="submit" id="sbSend">Say</button>
+          </form>
+          <div class="sb-tools">
+            <label>Voice
+              <select id="sbVoice">
+                <option value="local">Local accent</option>
+                <option value="en">Neutral English</option>
+                <option value="off">Muted (subtitles)</option>
+              </select>
+            </label>
+            <button class="btn ghost sm" id="sbRestart">↺ Restart</button>
+            <button class="btn ghost sm" id="sbFinish">🏁 Finish &amp; save</button>
+            <span class="sb-source" id="sbSource"></span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="sb-side">
+        <div class="card sb-brief reveal">
+          <h3 id="sbSitTitle">Situation</h3>
+          <p class="muted" id="sbSitBrief"></p>
+          <ul class="sb-hints" id="sbHints"></ul>
+        </div>
+        <div class="card sb-log-card reveal">
+          <h3>Conversation</h3>
+          <div class="rp-chat sb-chat" id="sbChat"></div>
+        </div>
+        <div class="card sb-profile reveal">
+          <h3>Cultural profile <small class="muted" id="sbProfileName"></small></h3>
+          <div class="sb-dims" id="sbDims"></div>
+          <div class="sb-facts" id="sbFacts"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ============ classic scripted scenarios ============ -->
+  <div id="classicMode" hidden>
+    <div class="chip-row tabs" id="rpTabs"></div>
+    <div class="card rp-card">
+      <div class="rp-top">
+        <div class="rp-npc"><span class="rp-avatar" id="rpAvatar"></span><div><b id="rpName"></b><small id="rpRole"></small></div><span class="rp-mood" id="rpMood"></span></div>
+        <div class="trust">
+          <div class="trust-label"><span>Empathy &amp; Trust</span><b id="rpTrustVal">50%</b></div>
+          <div class="trust-track"><div class="trust-fill" id="rpTrust"></div></div>
+        </div>
+      </div>
+      <div class="rp-chat" id="rpChat"></div>
+      <div class="rp-options" id="rpOptions"></div>
+    </div>
   </div>
 
   <!-- Scenario guide -->
@@ -24,23 +137,27 @@
         <span class="guide-icon good-icon">✅</span>
         <h4>Earns Trust</h4>
         <ul class="muted">
-          <li>Using appropriate formality level</li>
-          <li>Acknowledging the character's culture</li>
+          <li>Using appropriate formality level and titles</li>
+          <li>Keeping the local comfort distance (Hall's proxemics)</li>
+          <li>Gestures that fit: a bow in Japan, two hands in Korea, tea in Kazakhstan</li>
           <li>Showing interest before making requests</li>
-          <li>Adapting to the local etiquette rules</li>
         </ul>
       </div>
       <div class="guide-card">
         <span class="guide-icon bad-icon">❌</span>
         <h4>Loses Trust</h4>
         <ul class="muted">
-          <li>Being too direct or blunt</li>
-          <li>Ignoring hierarchy (using first name with professors)</li>
-          <li>Refusing hospitality without explanation</li>
-          <li>Skipping small talk in relationship-first cultures</li>
+          <li>Being too direct or blunt in high-context cultures</li>
+          <li>Stepping too close or hugging in low-contact cultures</li>
+          <li>Refusing hospitality without a reason; a clock as a gift in China</li>
+          <li>Skipping apology and reason when late in monochronic cultures</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
+{% endblock %}
+{% block page_vendor %}
+<script src="{{ url_for('static', filename='vendor/three.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sandbox3d.js') }}?v={{ asset_v }}"></script>
 {% endblock %}

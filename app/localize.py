@@ -11,6 +11,7 @@ LANGUAGE_NAMES = {
     "kk-KZ": "Kazakh · Қазақша", "it-IT": "Italian · Italiano", "hu-HU": "Hungarian · Magyar",
     "zh-CN": "Chinese · 中文", "ja-JP": "Japanese · 日本語", "ko-KR": "Korean · 한국어", "de-DE": "German · Deutsch",
     "en-GB": "British English", "en-US": "American English", "en-CA": "Canadian English",
+    "tr-TR": "Turkish · Türkçe",
 }
 
 # (formal, friendly) English variants; the one that differs from the engine's main answer is shown as the second option
@@ -121,6 +122,15 @@ PHRASEBOOK = {
         "ask": "Hi! Sorry to ask, but could you share yesterday's lecture notes with me? Thanks a lot!",
         "decline": "Thank you so much for inviting me! Sorry, I can't make it this time, but I'd love to join the next one.",
         "neutral": "Thanks for understanding, I really appreciate it.",
+    },
+    "tr-TR": {
+        "criticism": "Fikriniz çok ilginç, ama birlikte başka bir çözüme de bakabilir miyiz?",
+        "food": "Elinize sağlık, çok güzel görünüyor! Sadece biraz tadına bakabilir miyim?",
+        "time": "Kusura bakmayın, bir dahaki sefere saati önceden kararlaştırırsak hepimiz için daha kolay olur.",
+        "request": "Sayın Hocam, eğer mümkünse makaleme yarına kadar göz atabilir misiniz? Şimdiden çok teşekkür ederim.",
+        "ask": "Kolay gelsin! Mümkünse dünkü dersin notlarını benimle paylaşabilir misin? Çok teşekkürler!",
+        "decline": "Davetiniz için çok teşekkür ederim! Maalesef gelemiyorum, ama bir dahaki sefere mutlaka katılırım.",
+        "neutral": "Anlayışınız için teşekkür ederim.",
     },
 }
 

@@ -1,241 +1,270 @@
 {% extends "base.html" %}
-{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">{% endblock %}
 {% block body %}
-  <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
-  <div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="bg-grid" aria-hidden="true"></div>
 
-  <!-- ============ NAV ============ -->
-  <header class="nav">
-    <a href="#top" class="logo"><span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-ai">AI</small></a>
-    <nav class="nav-links" id="navLinks">
-      <a href="#atlas">Atlas</a>
-      <a href="#greetings">Greetings</a>
-      <a href="#radar">Gap Radar</a>
-      <a href="#decoder">AI Decoder</a>
-      <a href="#proxemics">Proxemics</a>
-      <a href="#roleplay">Roleplay</a>
-      <a href="#match">Match</a>
-      <a href="#quiz">Quiz</a>
-    </nav>
-    <div class="nav-actions">
-      <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☾</button>
-      <a class="icon-btn" href="{{ url_for('admin.panel') }}" title="Admin panel" aria-label="Admin panel">⚙</a>
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <a href="#top" class="logo"><span class="logo-mark">◐</span> Culture<b>Bridge</b> <small
+      class="logo-ai">AI</small></a>
+  <nav class="nav-links" id="navLinks">
+    <a href="#atlas">Atlas</a>
+    <a href="#greetings">Greetings</a>
+    <a href="#radar">Gap Radar</a>
+    <a href="#decoder">AI Decoder</a>
+    <a href="#proxemics">Proxemics</a>
+    <a href="#roleplay">Roleplay</a>
+    <a href="#match">Match</a>
+    <a href="#quiz">Quiz</a>
+  </nav>
+  <div class="nav-actions">
+    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☾</button>
+    <a class="icon-btn" href="{{ url_for('admin.panel') }}" title="Admin panel" aria-label="Admin panel">⚙</a>
+  </div>
+</header>
+
+<div class="loader" id="loader"><span class="spinner"></span> Loading research data…</div>
+
+<main id="top">
+  <!-- ============ HERO ============ -->
+  <section class="hero bento">
+    <div class="card hero-main reveal">
+      <span class="pill"><span class="dot"></span> Intercultural Intelligence Platform · <span
+          id="aiPill">AI</span></span>
+      <h1>Cross the <span class="grad">cultural barrier</span> before you cross the border.</h1>
+      <p class="lead">CultureBridge AI turns a survey of NIS alumni studying abroad and classic intercultural models
+        (Hall, Hofstede, Meyer, Brown &amp; Levinson) into interactive simulators: a server-side AI cultural decoder,
+        a 6D gap radar, a proxemics lab and roleplay with a live trust meter.</p>
+      <div class="hero-cta">
+        <a href="#radar" class="btn primary">Measure my culture gap →</a>
+        <a href="#decoder" class="btn ghost">Try the AI Decoder</a>
+      </div>
     </div>
-  </header>
+    <div class="card hero-globe reveal">
+      <canvas id="globe" aria-label="Rotating globe with routes from Kazakhstan to study destinations"></canvas>
+      <div class="globe-caption"><span class="dot"></span> Routes of NIS alumni from Astana</div>
+    </div>
+    <div class="card stat reveal"><b data-count="countries">0</b><span>cultures modelled</span></div>
+    <div class="card stat reveal"><b data-count="universities">0</b><span>alumni universities</span></div>
+    <div class="card stat reveal"><b data-count="attempts">0</b><span>trainings completed</span></div>
+    <div class="card passport reveal" id="passport">
+      <div class="passport-head"><span>🛂 My CQ Passport</span><b id="cqScore">0</b></div>
+      <div class="passport-bars" id="passportBars"></div>
+      <small class="muted">Cultural Intelligence grows as you complete modules (saved in this browser).</small>
+    </div>
+  </section>
 
-  <div class="loader" id="loader"><span class="spinner"></span> Loading research data…</div>
-
-  <main id="top">
-    <!-- ============ HERO ============ -->
-    <section class="hero bento">
-      <div class="card hero-main reveal">
-        <span class="pill"><span class="dot"></span> Intercultural Intelligence Platform · <span id="aiPill">AI</span></span>
-        <h1>Cross the <span class="grad">cultural barrier</span> before you cross the border.</h1>
-        <p class="lead">CultureBridge AI turns a survey of NIS alumni studying abroad and classic intercultural models
-          (Hall, Hofstede, Meyer, Brown &amp; Levinson) into interactive simulators: a server-side AI cultural decoder,
-          a 6D gap radar, a proxemics lab and roleplay with a live trust meter.</p>
-        <div class="hero-cta">
-          <a href="#radar" class="btn primary">Measure my culture gap →</a>
-          <a href="#decoder" class="btn ghost">Try the AI Decoder</a>
+  <!-- ============ 01 ATLAS ============ -->
+  <section id="atlas" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">01 · Interactive atlas</span>
+      <h2>World Map &amp; Voices of NIS Alumni</h2>
+      <p class="lead">Click a highlighted country to see its mentality, etiquette and first-hand experience from our
+        survey of NIS graduates.</p>
+    </div>
+    <div class="atlas-grid">
+      <div class="card map-card reveal">
+        <div class="map-wrap" id="mapWrap">
+          <svg id="worldMap" role="img" aria-label="World map"></svg>
+          <div class="map-tip" id="mapTip"></div>
         </div>
+        <div class="chip-row" id="countryChips"></div>
+        <div class="map-legend"><span><i class="lg lg-alumni"></i> Alumni survey data</span><span><i
+              class="lg lg-base"></i> Exercise base</span></div>
       </div>
-      <div class="card hero-globe reveal">
-        <canvas id="globe" aria-label="Rotating globe with routes from Kazakhstan to study destinations"></canvas>
-        <div class="globe-caption"><span class="dot"></span> Routes of NIS alumni from Astana</div>
-      </div>
-      <div class="card stat reveal"><b data-count="countries">0</b><span>cultures modelled</span></div>
-      <div class="card stat reveal"><b data-count="universities">0</b><span>alumni universities</span></div>
-      <div class="card stat reveal"><b data-count="attempts">0</b><span>trainings completed</span></div>
-      <div class="card passport reveal" id="passport">
-        <div class="passport-head"><span>🛂 My CQ Passport</span><b id="cqScore">0</b></div>
-        <div class="passport-bars" id="passportBars"></div>
-        <small class="muted">Cultural Intelligence grows as you complete modules (saved in this browser).</small>
-      </div>
-    </section>
+      <div class="card country-card reveal" id="countryCard"></div>
+    </div>
+  </section>
 
-    <!-- ============ 01 ATLAS ============ -->
-    <section id="atlas" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">01 · Interactive atlas</span>
-        <h2>World Map &amp; Voices of NIS Alumni</h2>
-        <p class="lead">Click a highlighted country to see its mentality, etiquette and first-hand experience from our survey of NIS graduates.</p>
-      </div>
-      <div class="atlas-grid">
-        <div class="card map-card reveal">
-          <div class="map-wrap" id="mapWrap">
-            <svg id="worldMap" role="img" aria-label="World map"></svg>
-            <div class="map-tip" id="mapTip"></div>
-          </div>
-          <div class="chip-row" id="countryChips"></div>
-          <div class="map-legend"><span><i class="lg lg-alumni"></i> Alumni survey data</span><span><i class="lg lg-base"></i> Exercise base</span></div>
-        </div>
-        <div class="card country-card reveal" id="countryCard"></div>
-      </div>
-    </section>
+  <!-- ============ 02 GREETINGS ============ -->
+  <section id="greetings" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">02 · Greetings of the World</span>
+      <h2>Say hello in <span id="greetCount">20</span> cultures</h2>
+      <p class="lead">Hover or tap a card to flip it and see the gesture. Press 🔊 to hear the pronunciation (Web Speech
+        API).</p>
+    </div>
+    <div class="marquee reveal">
+      <div class="marquee-track" id="marquee1"></div>
+    </div>
+    <div class="marquee reverse reveal">
+      <div class="marquee-track" id="marquee2"></div>
+    </div>
+  </section>
 
-    <!-- ============ 02 GREETINGS ============ -->
-    <section id="greetings" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">02 · Greetings of the World</span>
-        <h2>Say hello in <span id="greetCount">20</span> cultures</h2>
-        <p class="lead">Hover or tap a card to flip it and see the gesture. Press 🔊 to hear the pronunciation (Web Speech API).</p>
-      </div>
-      <div class="marquee reveal"><div class="marquee-track" id="marquee1"></div></div>
-      <div class="marquee reverse reveal"><div class="marquee-track" id="marquee2"></div></div>
-    </section>
-
-    <!-- ============ 03 RADAR ============ -->
-    <section id="radar" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">03 · 6D Cultural Gap Radar</span>
-        <h2>How far is your destination — culturally?</h2>
-        <p class="lead">Based on Hofstede’s dimensions and Erin Meyer’s Culture Map. The server computes a Cultural Distance Index, finds the largest gaps and builds a personal adaptation checklist.</p>
-      </div>
-      <div class="radar-grid">
-        <div class="card reveal">
-          <div class="field-row">
-            <label class="field"><span>I am from</span><select id="radarFrom"></select></label>
-            <button class="icon-btn swap" id="radarSwap" title="Swap" aria-label="Swap countries">⇄</button>
-            <label class="field"><span>I am going to</span><select id="radarTo"></select></label>
-          </div>
-          <div class="radar-wrap"><canvas id="radarChart" aria-label="Radar chart of six cultural dimensions"></canvas></div>
-        </div>
-        <div class="card shock reveal" id="shockPanel"></div>
-      </div>
-    </section>
-
-    <!-- ============ 04 DECODER ============ -->
-    <section id="decoder" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">04 · AI Pragmatic Translator</span>
-        <h2>Cultural Decoder: translate the subtext, not the words</h2>
-        <p class="lead">High-context vs low-context communication (Hall) + politeness &amp; face theory (Brown &amp; Levinson). Type a phrase, choose who will hear it.</p>
-      </div>
-      <div class="decoder-grid">
-        <div class="card reveal">
-          <label class="field"><span>Your phrase (English)</span>
-            <textarea id="decInput" rows="3" maxlength="500" placeholder="e.g. Your idea won't work, we need another solution."></textarea>
-          </label>
-          <div class="chip-row small" id="decPresets"></div>
-          <div class="field-row">
-            <label class="field"><span>Listener’s culture</span><select id="decCountry"></select></label>
-            <button class="btn primary" id="decRun">Decode ✦</button>
-          </div>
-          <div class="engine-badge" id="engineBadge"></div>
-        </div>
-        <div class="card dec-out reveal" id="decOut">
-          <div class="empty">Type a phrase and press <b>Decode</b> to see how it lands.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 05 PROXEMICS ============ -->
-    <section id="proxemics" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">05 · Proxemics &amp; Body Language Lab</span>
-        <h2>How close is too close?</h2>
-        <p class="lead">Edward T. Hall’s proxemics: every culture has an invisible bubble. Move the slider and watch your partner react.</p>
-      </div>
-      <div class="prox-grid">
-        <div class="card prox-stage reveal">
-          <div class="field-row">
-            <label class="field"><span>Conversation partner from</span><select id="proxCountry"></select></label>
-            <div class="prox-readout"><b id="proxCm">80</b><span>cm</span></div>
-          </div>
-          <svg id="proxSvg" viewBox="0 0 600 260" role="img" aria-label="Two avatars at a distance"></svg>
-          <input type="range" id="proxRange" min="20" max="150" value="80" aria-label="Distance in centimetres">
-          <div class="zone-bar"><span style="flex:25">Intimate &lt;45</span><span style="flex:75">Personal 45–120</span><span style="flex:30">Social 120+</span></div>
-          <div class="prox-verdict" id="proxVerdict"></div>
-        </div>
-        <div class="card voice reveal">
-          <h3>🎙 Voice Tone Tester</h3>
-          <p class="muted">Speak a sentence. We measure loudness and pace and compare them with the typical norm of the selected culture.</p>
-          <canvas id="voiceCanvas" height="120"></canvas>
-          <div class="meter-label"><span>Loudness</span><b id="voiceLevel">—</b></div>
-          <div class="v-meter"><div class="v-band" id="voiceBand"></div><div class="v-fill" id="voiceFill"></div></div>
-          <div class="meter-label"><span>Pace (syllable peaks / s)</span><b id="voicePace">—</b></div>
-          <div class="voice-actions">
-            <button class="btn primary" id="voiceBtn">Start microphone</button>
-          </div>
-          <div class="prox-verdict" id="voiceVerdict">Microphone audio is analysed locally in your browser and never sent to the server.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 06 ROLEPLAY ============ -->
-    <section id="roleplay" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">06 · Interactive Roleplay Simulator</span>
-        <h2>Earn the trust of a local</h2>
-        <p class="lead">Each reply changes the <b>Empathy &amp; Trust Score</b> in real time, with an explanation of every mistake.</p>
-      </div>
-      <div class="chip-row tabs reveal" id="rpTabs"></div>
-      <div class="card rp-card reveal">
-        <div class="rp-top">
-          <div class="rp-npc"><span class="rp-avatar" id="rpAvatar"></span><div><b id="rpName"></b><small id="rpRole"></small></div><span class="rp-mood" id="rpMood"></span></div>
-          <div class="trust">
-            <div class="trust-label"><span>Empathy &amp; Trust</span><b id="rpTrustVal">50%</b></div>
-            <div class="trust-track"><div class="trust-fill" id="rpTrust"></div></div>
-          </div>
-        </div>
-        <div class="rp-chat" id="rpChat"></div>
-        <div class="rp-options" id="rpOptions"></div>
-      </div>
-    </section>
-
-    <!-- ============ 07 MATCH ============ -->
-    <section id="match" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">07 · Drag-and-drop trainer</span>
-        <h2>Match the Cultural Customs</h2>
-        <p class="lead">Drag each custom onto the situation where it belongs (on a phone: tap a custom, then tap a situation). Answers are checked on the server.</p>
-      </div>
-      <div class="match-grid">
-        <div class="card reveal">
-          <h3>Customs</h3>
-          <div class="match-pool" id="matchPool"></div>
-        </div>
-        <div class="card reveal">
-          <h3>Situations</h3>
-          <div class="match-slots" id="matchSlots"></div>
-          <div class="match-actions">
-            <button class="btn primary" id="matchCheck">Check Answers</button>
-            <button class="btn ghost" id="matchReset">Reset</button>
-          </div>
-        </div>
-      </div>
-      <div class="card match-result reveal" id="matchResult" hidden></div>
-    </section>
-
-    <!-- ============ 08 QUIZ ============ -->
-    <section id="quiz" class="section">
-      <div class="section-head reveal">
-        <span class="eyebrow">08 · Step-by-step trainer</span>
-        <h2>Cultural Awareness Quiz</h2>
-        <p class="lead">Real-life cases. Get an explanation after every answer and earn your badge.</p>
-      </div>
-      <div class="card quiz-card reveal" id="quizCard"></div>
-    </section>
-
-    <!-- ============ FOOTER ============ -->
-    <footer class="section footer">
+  <!-- ============ 03 RADAR ============ -->
+  <section id="radar" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">03 · 6D Cultural Gap Radar</span>
+      <h2>How far is your destination — culturally?</h2>
+      <p class="lead">Based on Hofstede’s dimensions and Erin Meyer’s Culture Map. The server computes a Cultural
+        Distance Index, finds the largest gaps and builds a personal adaptation checklist.</p>
+    </div>
+    <div class="radar-grid">
       <div class="card reveal">
-        <h3>Methodology</h3>
-        <p class="muted">Country profiles combine (1) an empirical survey of NIS alumni studying in Italy, Hungary, Canada and the USA,
-          (2) the project’s exercise base, and (3) published cross-cultural research. Dimension scores are scaled expert estimates
-          that describe group tendencies — never every individual.</p>
-        <ol class="refs" id="refs"></ol>
+        <div class="field-row">
+          <label class="field"><span>I am from</span><select id="radarFrom"></select></label>
+          <button class="icon-btn swap" id="radarSwap" title="Swap" aria-label="Swap countries">⇄</button>
+          <label class="field"><span>I am going to</span><select id="radarTo"></select></label>
+        </div>
+        <div class="radar-wrap"><canvas id="radarChart" aria-label="Radar chart of six cultural dimensions"></canvas>
+        </div>
       </div>
-      <p class="muted center">CultureBridge AI · Flask + SQLAlchemy + server-side Gemini/OpenAI with offline cache · <a href="/api/health">API status</a></p>
-    </footer>
-  </main>
+      <div class="card shock reveal" id="shockPanel"></div>
+    </div>
+  </section>
 
-  <div class="toast" id="toast"></div>
+  <!-- ============ 04 DECODER ============ -->
+  <section id="decoder" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">04 · AI Pragmatic Translator</span>
+      <h2>Cultural Decoder: translate the subtext, not the words</h2>
+      <p class="lead">High-context vs low-context communication (Hall) + politeness &amp; face theory (Brown &amp;
+        Levinson). Type a phrase, choose who will hear it.</p>
+    </div>
+    <div class="decoder-grid">
+      <div class="card reveal">
+        <label class="field"><span>Your phrase (English)</span>
+          <textarea id="decInput" rows="3" maxlength="500"
+            placeholder="e.g. Your idea won't work, we need another solution."></textarea>
+        </label>
+        <div class="chip-row small" id="decPresets"></div>
+        <div class="field-row">
+          <label class="field"><span>Listener’s culture</span><select id="decCountry"></select></label>
+          <button class="btn primary" id="decRun">Decode ✦</button>
+        </div>
+        <div class="engine-badge" id="engineBadge"></div>
+      </div>
+      <div class="card dec-out reveal" id="decOut">
+        <div class="empty">Type a phrase and press <b>Decode</b> to see how it lands.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 PROXEMICS ============ -->
+  <section id="proxemics" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">05 · Proxemics &amp; Body Language Lab</span>
+      <h2>How close is too close?</h2>
+      <p class="lead">Edward T. Hall’s proxemics: every culture has an invisible bubble. Move the slider and watch your
+        partner react.</p>
+    </div>
+    <div class="prox-grid">
+      <div class="card prox-stage reveal">
+        <div class="field-row">
+          <label class="field"><span>Conversation partner from</span><select id="proxCountry"></select></label>
+          <div class="prox-readout"><b id="proxCm">80</b><span>cm</span></div>
+        </div>
+        <svg id="proxSvg" viewBox="0 0 600 260" role="img" aria-label="Two avatars at a distance"></svg>
+        <input type="range" id="proxRange" min="20" max="150" value="80" aria-label="Distance in centimetres">
+        <div class="zone-bar"><span style="flex:25">Intimate &lt;45</span><span style="flex:75">Personal
+            45–120</span><span style="flex:30">Social 120+</span></div>
+        <div class="prox-verdict" id="proxVerdict"></div>
+      </div>
+      <div class="card voice reveal">
+        <h3>🎙 Voice Tone Tester</h3>
+        <p class="muted">Speak a sentence. We measure loudness and pace and compare them with the typical norm of the
+          selected culture.</p>
+        <canvas id="voiceCanvas" height="120"></canvas>
+        <div class="meter-label"><span>Loudness</span><b id="voiceLevel">—</b></div>
+        <div class="v-meter">
+          <div class="v-band" id="voiceBand"></div>
+          <div class="v-fill" id="voiceFill"></div>
+        </div>
+        <div class="meter-label"><span>Pace (syllable peaks / s)</span><b id="voicePace">—</b></div>
+        <div class="voice-actions">
+          <button class="btn primary" id="voiceBtn">Start microphone</button>
+        </div>
+        <div class="prox-verdict" id="voiceVerdict">Microphone audio is analysed locally in your browser and never sent
+          to the server.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 06 ROLEPLAY ============ -->
+  <section id="roleplay" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">06 · Interactive Roleplay Simulator</span>
+      <h2>Earn the trust of a local</h2>
+      <p class="lead">Each reply changes the <b>Empathy &amp; Trust Score</b> in real time, with an explanation of every
+        mistake.</p>
+    </div>
+    <div class="chip-row tabs reveal" id="rpTabs"></div>
+    <div class="card rp-card reveal">
+      <div class="rp-top">
+        <div class="rp-npc"><span class="rp-avatar" id="rpAvatar"></span>
+          <div><b id="rpName"></b><small id="rpRole"></small></div><span class="rp-mood" id="rpMood"></span>
+        </div>
+        <div class="trust">
+          <div class="trust-label"><span>Empathy &amp; Trust</span><b id="rpTrustVal">50%</b></div>
+          <div class="trust-track">
+            <div class="trust-fill" id="rpTrust"></div>
+          </div>
+        </div>
+      </div>
+      <div class="rp-chat" id="rpChat"></div>
+      <div class="rp-options" id="rpOptions"></div>
+    </div>
+  </section>
+
+  <!-- ============ 07 MATCH ============ -->
+  <section id="match" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">07 · Drag-and-drop trainer</span>
+      <h2>Match the Cultural Customs</h2>
+      <p class="lead">Drag each custom onto the situation where it belongs (on a phone: tap a custom, then tap a
+        situation). Answers are checked on the server.</p>
+    </div>
+    <div class="match-grid">
+      <div class="card reveal">
+        <h3>Customs</h3>
+        <div class="match-pool" id="matchPool"></div>
+      </div>
+      <div class="card reveal">
+        <h3>Situations</h3>
+        <div class="match-slots" id="matchSlots"></div>
+        <div class="match-actions">
+          <button class="btn primary" id="matchCheck">Check Answers</button>
+          <button class="btn ghost" id="matchReset">Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="card match-result reveal" id="matchResult" hidden></div>
+  </section>
+
+  <!-- ============ 08 QUIZ ============ -->
+  <section id="quiz" class="section">
+    <div class="section-head reveal">
+      <span class="eyebrow">08 · Step-by-step trainer</span>
+      <h2>Cultural Awareness Quiz</h2>
+      <p class="lead">Real-life cases. Get an explanation after every answer and earn your badge.</p>
+    </div>
+    <div class="card quiz-card reveal" id="quizCard"></div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="section footer">
+    <div class="card reveal">
+      <h3>Methodology</h3>
+      <p class="muted">Country profiles combine (1) an empirical survey of NIS alumni studying in Italy, Hungary, Canada
+        and the USA,
+        (2) the project’s exercise base, and (3) published cross-cultural research. Dimension scores are scaled expert
+        estimates
+        that describe group tendencies — never every individual.</p>
+      <ol class="refs" id="refs"></ol>
+    </div>
+    <p class="muted center">CultureBridge AI</p>
+  </footer>
+</main>
+
+<div class="toast" id="toast"></div>
 {% endblock %}
 {% block scripts %}
-  <script src="{{ url_for('static', filename='vendor/d3.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='vendor/topojson-client.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='vendor/world-110m.js') }}"></script>
-  <script src="{{ url_for('static', filename='vendor/chart.umd.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/d3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/topojson-client.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/world-110m.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/chart.umd.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 {% endblock %}

@@ -10,54 +10,74 @@ from .models import User
 bp = Blueprint("web", __name__)
 
 # Order = navigation order = "next module" order at the bottom of each page.
+NAV_GROUPS = {
+    "explore": {"key": "explore", "label": "Explore", "icon": "🌍", "desc": "World Atlas, Greetings & Hofstede Gap Radar"},
+    "tools": {"key": "tools", "label": "AI Tools", "icon": "⚡", "desc": "AI Subtext Decoder, Proxemics & Roleplay"},
+    "practice": {"key": "practice", "label": "Practice", "icon": "🎮", "desc": "Match Customs, Quiz & Community Stats"},
+    "resources": {"key": "resources", "label": "Resources", "icon": "📚", "desc": "Scientific Methodology & REST API"},
+}
+
 PAGES = [
-    {"key": "home", "path": "/", "nav": "Home", "icon": "◐",
+    {"key": "home", "path": "/", "nav": "Home", "icon": "◐", "group": "home",
+     "short": "Intercultural Intelligence Platform overview",
      "title": "CultureBridge AI — Intercultural Intelligence Platform",
      "desc": "Interactive platform that helps students overcome the cultural barrier abroad: world atlas with NIS alumni stories, "
              "6D culture gap radar, AI subtext translator, roleplay simulator and proxemics lab."},
-    {"key": "learn", "path": "/learn", "nav": "Tracks", "icon": "🎓", "group": "train",
+    {"key": "learn", "path": "/learn", "nav": "Tracks", "icon": "🎓", "group": "learn",
+     "short": "Systematic 5-step curriculum for your destination country",
      "title": "Guided Country Learning Tracks — CultureBridge AI",
      "desc": "Systematic 5-step intercultural preparation tracks for your destination country: First Contact, Gap Discovery, Pragmatics, Roleplay and Certification Exam."},
     {"key": "atlas", "path": "/atlas", "nav": "World Atlas", "icon": "🌍", "group": "explore",
+     "short": "3D Globe & NIS alumni stories across 15+ countries",
      "title": "World Atlas & Voices of NIS Alumni — CultureBridge AI",
      "desc": "Click a country on the interactive map or 3D globe to read its etiquette, mentality and first-hand "
              "experience of NIS alumni studying abroad. Share your own story."},
     {"key": "greetings", "path": "/greetings", "nav": "Greetings", "icon": "👋", "group": "explore",
+     "short": "Word, gesture, pronunciation & etiquette in 20 cultures",
      "title": "Greetings of the World — words, gestures, pronunciation | CultureBridge AI",
      "desc": "20 greetings with 3D flip cards: the word, transliteration, the right gesture and spoken pronunciation."},
     {"key": "radar", "path": "/radar", "nav": "Gap Radar", "icon": "📡", "group": "explore",
+     "short": "6D Hofstede intercultural distance & shock-risk index",
      "title": "6D Cultural Gap Radar — compare two cultures | CultureBridge AI",
      "desc": "Compare any two countries on six cultural dimensions (Hofstede, Meyer, Hall), get a Cultural Distance Index, "
              "culture-shock risk zones and a personal adaptation checklist."},
     {"key": "decoder", "path": "/decoder", "nav": "AI Decoder", "icon": "🧠", "group": "tools",
+     "short": "AI subtext translator: how locals really hear your words",
      "title": "AI Pragmatic Subtext Translator — say it politely | CultureBridge AI",
      "desc": "Type a direct phrase and see how a local really hears it: conflict-risk meter, interpretation and polite "
              "rephrasings in English and in the local language. Works offline thanks to a database cache."},
     {"key": "proxemics", "path": "/proxemics", "nav": "Proxemics Lab", "icon": "📏", "group": "tools",
+     "short": "3D personal space bubble & microphone voice loudness calibrator",
      "title": "Proxemics & Voice Lab — personal space in 3D | CultureBridge AI",
      "desc": "A 3D simulator of conversational distance in centimetres for 10 cultures plus a microphone-based voice "
              "loudness calibrator."},
     {"key": "roleplay", "path": "/roleplay", "nav": "Roleplay", "icon": "🎭", "group": "tools",
+     "short": "Cultural dilemma branching simulator with live trust meter",
      "title": "Roleplay Simulator with Cultural Trust Meter | CultureBridge AI",
      "desc": "Talk to a Hungarian professor, an Italian host grandmother, a German teammate or an American classmate. "
              "Every reply moves your Cultural Trust Meter."},
-    {"key": "match", "path": "/match", "nav": "Match Customs", "icon": "🧩", "group": "train",
+    {"key": "match", "path": "/match", "nav": "Match Customs", "icon": "🧩", "group": "practice",
+     "short": "Drag & drop challenge: match traditions to regional situations",
      "title": "Match the Cultural Customs — drag & drop trainer | CultureBridge AI",
      "desc": "Drag 10 customs onto the situations where they belong. Answers are checked on the server and explained "
              "scientifically."},
-    {"key": "quiz", "path": "/quiz", "nav": "Awareness Quiz", "icon": "🏆", "group": "train",
+    {"key": "quiz", "path": "/quiz", "nav": "Awareness Quiz", "icon": "🏆", "group": "practice",
+     "short": "12 situational dilemmas & verifiable CQ certificate",
      "title": "Cultural Awareness Quiz — 12 real-life cases + certificate | CultureBridge AI",
      "desc": "Twelve situational questions with instant explanations. Earn a Beginner, Learner or Expert badge and a "
              "personal certificate."},
-    {"key": "stats", "path": "/stats", "nav": "Live Stats", "icon": "📊", "group": "about",
+    {"key": "stats", "path": "/stats", "nav": "Live Stats", "icon": "📊", "group": "practice",
+     "short": "Real-time training analytics & global community benchmark",
      "title": "Live Community Statistics | CultureBridge AI",
      "desc": "Real-time analytics from the database: how many people trained, average cultural awareness score, "
              "level distribution and the most common mistakes."},
-    {"key": "about", "path": "/about", "nav": "Methodology", "icon": "📚", "group": "about",
+    {"key": "about", "path": "/about", "nav": "Methodology", "icon": "📚", "group": "resources",
+     "short": "Research foundations: Hall, Hofstede, Meyer & NIS survey",
      "title": "Methodology, Sources & Architecture | CultureBridge AI",
      "desc": "The research behind CultureBridge AI: NIS alumni survey, Hofstede, Hall, Meyer and Brown & Levinson, "
              "ethics and limitations, and how the platform is built."},
-    {"key": "docs", "path": "/docs", "nav": "API Docs", "icon": "🔌", "group": "about",
+    {"key": "docs", "path": "/docs", "nav": "API Docs", "icon": "🔌", "group": "resources",
+     "short": "REST API interactive specification & developer guide",
      "title": "REST API Reference | CultureBridge AI",
      "desc": "Reference of the public REST endpoints: countries, compare, subtext translator, roleplay, quiz, matching, "
              "alumni stories and statistics."},
@@ -84,11 +104,25 @@ def inject_site():
         nxt = BY_KEY[flow[flow.index(key) + 1]]
     prev = BY_KEY[flow[flow.index(key) - 1]] if key in flow and flow.index(key) > 0 else None
 
+    # Grouped navigation structure
+    grouped_nav = {}
+    for g_key, g_meta in NAV_GROUPS.items():
+        grouped_nav[g_key] = {
+            "meta": g_meta,
+            "pages": [p for p in PAGES if p.get("group") == g_key]
+        }
+
+    # Sibling pages for current page's group
+    current_group = page.get("group")
+    sibling_pages = [p for p in PAGES if p.get("group") == current_group] if current_group in NAV_GROUPS else []
+    group_meta = NAV_GROUPS.get(current_group)
+
     uid = session.get("user_id")
     cur_user = db.session.get(User, uid) if uid else None
 
     return {
         "pages": PAGES, "page": page, "current_key": key, "next_page": nxt, "prev_page": prev,
+        "nav_groups": grouped_nav, "group_meta": group_meta, "sibling_pages": sibling_pages,
         "site_url": public_base(), "canonical": public_base() + (request.path if request.path != "/" else "/"),
         "asset_v": current_app.config.get("ASSET_VERSION", "1"), "year": datetime.now(timezone.utc).year,
         "current_user": cur_user,
