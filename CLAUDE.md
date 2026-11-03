@@ -66,7 +66,9 @@ app/
     css/pages.css       стили страниц (модули, тикер стран, промо-баннер трека, роадмап, авторизация, карточки теорий, сертификат)
     js/app.js           фронтенд (initNavigation, поиск ⌘K, мобильное меню, Three.js 3D-фон, Chart.js, D3 Atlas, Audio, Speech, initSandbox)
     js/sandbox3d.js     3D-движок песочницы (window.CBSandbox3D: Stage, LOOKS) — гуманоид, комнаты, 9 анимаций; грузится только на /roleplay
-    img/icon.svg        векторный SVG логотип платформы
+    img/icon.svg        векторный SVG логотип платформы; apple-touch-icon.png (180), icon-192/512.png — PNG-иконки для «На экран Домой»
+    js/sw.js            service worker (отдаётся по /sw.js): страницы и GET /api — сначала сеть, офлайн из кэша; /static — из кэша по ?v=<commit>
+    js/theme-init.js    применяет сохранённую тему до отрисовки + цвет статус-бара (inline-скрипты запрещены CSP)
     vendor/             d3, topojson-client, world-110m, chart.umd, alpine, tailwind, three.min.js, TwemojiCountryFlags
 seed_data/research_data.json   первичный источник контента (страны, опрос, квиз, матч, сценарии, приветствия, лексикон)
 seed.py  wsgi.py  tests/test_api.py
@@ -190,6 +192,12 @@ Cultural Distance Index = min(100, round(2·RMS шести разниц)). Ур�
 - `boot()` → `Promise.all(/api/bootstrap, /api/scenarios, загрузка шрифта флагов)` → заполняет глобали `COUNTRIES, CODES, DIMENSIONS, GREETINGS, MOODS, ROLEPLAYS` → вызывает модули:
 `initGlobe` (canvas, d3.geoOrthographic, дуги из Астаны) · `initAtlas` (SVG карта NaturalEarth1, карточка страны, голоса выпускников; кнопка «Compare» → `radar.set`) · `initGreetings` (2 бегущие строки, 3D-переворот, speechSynthesis) · `initRadar` (Chart.js radar + `/api/radar`, панель Culture Shock + U-кривая Оберга; возвращает `{set}`) · `initDecoder(presets, ai)` (`POST /api/decode`, SVG-спидометр, бейдж источника) · `initVoice` (микрофон, RMS→0–100, онсеты=темп; только в браузере) · `initProxemics(voice)` (SVG-аватары, пороги по `proxemics_cm`: <0.6 красный, <0.88 жёлтый, ≤1.6 зелёный, иначе «холодно») · `initRoleplay` (диалог, trust 0–100, POST результата) · `initMatch` (drag&drop + tap, проверка на сервере) · `initQuiz` (ответ проверяется по одному, финиш на сервере, конфетти).
 Прочее: `api(path, body?)` — fetch-обёртка; `progress` + `renderPassport()` — «CQ Passport» в localStorage (`cb-progress`); тема `cb-theme`; `themeListeners` перерисовывают canvas/Chart при смене темы; `esc()` — экранирование всего пользовательского/БД-текста в innerHTML.
+
+## Приложение для iPhone (PWA)
+Сайт ставится на iPhone через Safari → «Поделиться» → «На экран Домой» и открывается как приложение без адресной строки.
+- `base.html`: `apple-mobile-web-app-*` мета-теги, статус-бар `black-translucent`, `viewport-fit=cover`; отступы под чёлку/статус-бар — `env(safe-area-inset-*)` в конце styles.css.
+- `/manifest.webmanifest` (web.py) — PNG-иконки (iOS не понимает SVG), `display: standalone`. `theme-color` меняется вместе с темой (app.js `applyThemeIcon`).
+- `sw.js`: `VERSION` поднимать при изменении файлов **без** `?v=` (vendor/*, иконки) — иначе останутся старые копии. Не кэширует `/admin`, `/api/admin`, `/api/auth`, POST.
 
 ## Важные нюансы
 - Флаги-эмодзи на Windows не рисуются — подключён шрифт `Twemoji Country Flags` (первый в `--font`, и `Chart.defaults.font.family`). Не убирать.

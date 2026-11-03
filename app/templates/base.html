@@ -2,14 +2,22 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Installable web app: iPhone "Add to Home Screen" + Android/desktop install -->
+  <link rel="manifest" href="{{ url_for('web.manifest') }}">
+  <meta name="theme-color" content="#070a15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CultureBridge">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
   <title>{% block title %}CultureBridge AI{% endblock %}</title>
   <meta name="description" content="CultureBridge AI — Intercultural Intelligence Platform for socio-cultural adaptation abroad, built on a survey of NIS alumni.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <script src="{{ url_for('static', filename='js/theme-init.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/theme-init.js') }}?v={{ config.ASSET_VERSION }}"></script>
   {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">

@@ -870,3 +870,8 @@ a.icon-btn { display: inline-grid; place-items: center; text-decoration: none; }
 }
 /* safety net: one stray wide element must not make the whole page scroll sideways */
 html, body { max-width: 100%; overflow-x: clip; }
+/* iPhone home-screen app: the status bar is translucent (black-translucent), keep content clear of it and of the notch */
+.nav { padding-top: env(safe-area-inset-top, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.mobile-drawer { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.footer { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+.loader { top: calc(76px + env(safe-area-inset-top, 0px)); }

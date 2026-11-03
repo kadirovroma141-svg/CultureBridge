@@ -55,7 +55,11 @@ function countryOptions(select, selected) {
    Theme
    --------------------------------------------------------------------- */
 const themeListeners = [];
-function applyThemeIcon() { const btn = $("#themeBtn"); if (btn) btn.textContent = document.documentElement.dataset.theme === "light" ? "☀" : "☾"; }
+function applyThemeIcon() {
+  const light = document.documentElement.dataset.theme === "light";
+  const btn = $("#themeBtn"); if (btn) btn.textContent = light ? "☀" : "☾";
+  const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = light ? "#f8fafc" : "#070a15";
+}
 const _themeBtn = $("#themeBtn");
 if (_themeBtn) _themeBtn.addEventListener("click", () => {
   const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
@@ -2024,4 +2028,7 @@ async function boot() {
 }
 
 boot();
+
+// Offline cache for the home-screen app (browsers only allow this on HTTPS and localhost)
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
 })();

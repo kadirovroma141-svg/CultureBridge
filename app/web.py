@@ -250,11 +250,25 @@ def sitemap():
 
 @bp.get("/manifest.webmanifest")
 def manifest():
-    return jsonify(
-        name="CultureBridge AI", short_name="CultureBridge", start_url="/", display="standalone",
-        background_color="#070a17", theme_color="#8b6cff", description=BY_KEY["home"]["desc"],
-        icons=[{"src": url_for("static", filename="img/icon.svg"), "sizes": "any", "type": "image/svg+xml",
-                "purpose": "any maskable"}])
+    icon = lambda name, size, kind: {"src": url_for("static", filename=f"img/{name}"), "sizes": size, "type": kind}
+    resp = jsonify(
+        id="/", name="CultureBridge AI", short_name="CultureBridge", start_url="/", scope="/", display="standalone",
+        orientation="any", background_color="#070a15", theme_color="#070a15", description=BY_KEY["home"]["desc"],
+        categories=["education"],
+        icons=[icon("icon-192.png", "192x192", "image/png"), icon("icon-512.png", "512x512", "image/png"),
+               {**icon("icon-512.png", "512x512", "image/png"), "purpose": "maskable"},
+               icon("icon.svg", "any", "image/svg+xml")])
+    resp.mimetype = "application/manifest+json"
+    return resp
+
+
+@bp.get("/sw.js")
+def service_worker():
+    """Served from the root so its scope covers the whole site (a /static/ URL would limit it to /static/)."""
+    resp = current_app.send_static_file("js/sw.js")
+    resp.headers["Cache-Control"] = "no-cache"
+    resp.headers["Service-Worker-Allowed"] = "/"
+    return resp
 
 
 @bp.get("/favicon.ico")
