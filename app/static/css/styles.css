@@ -369,10 +369,12 @@ button, select, input, textarea { font: inherit; color: inherit; }
   position: fixed; top: 0; right: 0; bottom: 0;
   width: min(340px, 86vw); background: var(--bg-2);
   border-left: 1px solid var(--border-highlight); z-index: 150;
-  transform: translateX(100%); transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex; flex-direction: column; box-shadow: -10px 0 50px rgba(0,0,0,0.6);
+  transform: translateX(100%);
+  display: flex; flex-direction: column; visibility: hidden;
+  transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear .3s;
 }
-.mobile-drawer.is-open { transform: translateX(0); }
+/* shadow only when open — otherwise it bleeds 50px onto the right edge of the screen */
+.mobile-drawer.is-open { transform: translateX(0); visibility: visible; box-shadow: -10px 0 50px rgba(0,0,0,0.6); transition-delay: 0s; }
 .mobile-drawer-header {
   padding: 16px 20px; border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
@@ -835,6 +837,9 @@ a.icon-btn { display: inline-grid; place-items: center; text-decoration: none; }
 }
 @media (max-width: 720px) {
   .nav-container { padding: 8px 14px; gap: 8px; }
+  /* phones: Sign In lives in the drawer, admin is opened by URL — keep the bar to search, theme and menu */
+  .nav-signin-btn, .admin-btn, .user-name-label, .user-streak-badge, .nav-user-pill .nav-chevron { display: none !important; }
+  .nav-actions { gap: 6px; }
   .logo-name { font-size: 1.05rem; }
   .section { padding-top: 48px; }
   .card { padding: 18px; border-radius: 18px; }
@@ -851,3 +856,17 @@ a.icon-btn { display: inline-grid; place-items: center; text-decoration: none; }
   .context-bar { flex-direction: column; align-items: flex-start; padding: 10px 14px; }
   .sibling-pills { width: 100%; }
 }
+@media (max-width: 380px) {
+  .logo-badge { display: none; }
+  .logo-name { font-size: .98rem; }
+  .nav-actions .icon-btn, .nav-search-trigger { width: 36px; height: 36px; padding: 0; justify-content: center; }
+}
+/* touch screens: fingers need ~40px targets */
+@media (pointer: coarse) {
+  .speak { width: 40px; height: 40px; }
+  .chip { min-height: 40px; }
+  input[type="range"] { min-height: 32px; }
+  input[type="checkbox"] { width: 20px; height: 20px; }
+}
+/* safety net: one stray wide element must not make the whole page scroll sideways */
+html, body { max-width: 100%; overflow-x: clip; }

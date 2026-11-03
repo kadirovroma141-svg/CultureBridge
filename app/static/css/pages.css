@@ -642,9 +642,9 @@
   text-align: center;
   max-width: 480px;
 }
-.error-code {
+.error-card .error-code {
   font-family: var(--display);
-  font-size: 8rem;
+  font-size: clamp(5rem, 28vw, 8rem);
   font-weight: 700;
   line-height: 1;
   background: linear-gradient(120deg, var(--accent), var(--accent-2), var(--accent-3));
