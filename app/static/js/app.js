@@ -686,10 +686,11 @@ function initDecoder(presets, aiInfo) {
 
   const live = aiInfo.provider !== "none";
   const providerName = { gemini: "Google Gemini", openai: "OpenAI" }[aiInfo.provider];
-  $("#engineBadge").innerHTML = live
+  const badge = $("#engineBadge"), pill = $("#aiPill");  // #aiPill exists only on the legacy one-page index
+  if (badge) badge.innerHTML = live
     ? `<span class="dot"></span> Server AI: ${providerName} (${esc(aiInfo.model)}) · offline cache enabled`
     : `<span class="dot" style="background:var(--accent-2)"></span> Server expert engine (no API key configured) · cached analyses`;
-  $("#aiPill").textContent = live ? providerName : "Expert engine";
+  if (pill) pill.textContent = live ? providerName : "Expert engine";
 
   const SOURCES = {
     live: ["⚡ Live AI", "Generated now and saved to the database cache"],
@@ -709,6 +710,8 @@ function initDecoder(presets, aiInfo) {
       const r = await api("/decode", { text, country: sel.value });
       render(r, sel.value);
       saveProgress({ decoder: progress.decoder + 1 });
+      // one-column layout (phones, tablets): the result is below the form, out of view
+      if (out.getBoundingClientRect().top > innerHeight * 0.6) out.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (e) {
       out.innerHTML = `<div class="empty">⚠️ ${esc(e.message)}</div>`;
     } finally {

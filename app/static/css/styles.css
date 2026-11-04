@@ -682,6 +682,7 @@ select:focus, input:focus, textarea:focus { border-color: var(--accent); box-sha
 
 /* ---------- decoder ---------- */
 .engine-badge { font-size: .8rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.dec-out { scroll-margin-top: calc(76px + env(safe-area-inset-top, 0px)); }
 .dec-out .empty { color: var(--muted); display: grid; place-items: center; min-height: 260px; text-align: center; }
 .gauge-wrap { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
 .gauge { width: 190px; flex: none; }
@@ -750,7 +751,7 @@ select:focus, input:focus, textarea:focus { border-color: var(--accent); box-sha
 .rp-end .big { font-size: 3rem; }
 
 /* ---------- match ---------- */
-.match-pool { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; min-height: 80px; }
+.match-pool { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr)); gap: 10px; min-height: 80px; }
 .mcard {
   display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-radius: 14px;
   border: 1px solid var(--border); background: var(--surface-2); cursor: grab; user-select: none; touch-action: manipulation;
@@ -772,7 +773,7 @@ select:focus, input:focus, textarea:focus { border-color: var(--accent); box-sha
 .match-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 .match-result { margin-top: 16px; }
 .score-big { font-family: var(--display); font-size: 2.6rem; }
-.explain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-top: 12px; }
+.explain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 10px; margin-top: 12px; }
 .explain-grid .dec-block h4 { color: var(--text); text-transform: none; letter-spacing: 0; font-size: 1rem; }
 .explain-grid .dec-block p { font-size: .88rem; color: var(--muted); }
 
@@ -810,7 +811,8 @@ select:focus, input:focus, textarea:focus { border-color: var(--accent); box-sha
 
 /* ---------- modal & toast ---------- */
 .modal { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: rgba(0,0,0,.5); padding: 16px; backdrop-filter: blur(6px); }
-.modal[hidden] { display: none; }
+/* `hidden` must win over component display rules (e.g. .auth-form { display: flex }) */
+[hidden] { display: none !important; }
 .modal-box { width: min(480px, 100%); background: var(--bg-2); }
 .modal-head { display: flex; justify-content: space-between; align-items: center; }
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 120px); z-index: 100; padding: 12px 18px; border-radius: 14px; background: var(--bg-2); border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform .35s; max-width: calc(100% - 32px); }
@@ -850,6 +852,7 @@ a.icon-btn { display: inline-grid; place-items: center; text-decoration: none; }
   .msg { max-width: 92%; }
   .refs { columns: 1; }
   .gauge { width: 160px; }
+  .zone-bar span { white-space: normal; text-overflow: clip; font-size: .66rem; line-height: 1.25; padding: 4px 3px; }
   .map-wrap { aspect-ratio: 1.6; }
   .field-row { flex-direction: column; align-items: stretch; }
   .field-row .swap { align-self: center; transform: rotate(90deg); margin: -6px 0 6px; }
