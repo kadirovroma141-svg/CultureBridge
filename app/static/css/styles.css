@@ -320,7 +320,8 @@ button, select, input, textarea { font: inherit; color: inherit; }
 .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
   width: 18px; height: 2px; background: var(--text); border-radius: 2px; position: absolute; transition: .2s;
 }
-.hamburger-inner { top: 6px; }
+.hamburger-inner { top: 6px; left: 0; display: block; }
+.hamburger-inner::before, .hamburger-inner::after { left: 0; }
 .hamburger-inner::before { content: ""; top: -6px; }
 .hamburger-inner::after { content: ""; top: 6px; }
 
@@ -426,9 +427,19 @@ button, select, input, textarea { font: inherit; color: inherit; }
   color: #fff; font-weight: 700; text-transform: uppercase;
 }
 .mobile-drawer-footer {
-  padding: 14px 20px; border-top: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  font-size: .8rem; color: var(--muted);
 }
+.drawer-admin-link {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  text-decoration: none; font-weight: 600; white-space: nowrap;
+}
+.mobile-auth-cta .btn { width: 100%; }
+@media (pointer: coarse) { .mobile-search-btn kbd { display: none; } }
+.drawer-version { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mobile-drawer-header .logo { gap: 8px; }
 
 /* ---------- quick search modal ---------- */
 .search-modal-backdrop {
@@ -858,6 +869,16 @@ a.icon-btn { display: inline-grid; place-items: center; text-decoration: none; }
   .field-row .swap { align-self: center; transform: rotate(90deg); margin: -6px 0 6px; }
   .context-bar { flex-direction: column; align-items: flex-start; padding: 10px 14px; }
   .sibling-pills { width: 100%; }
+}
+/* phones: hero reads as one tidy column, buttons the same width */
+@media (max-width: 600px) {
+  .hero { padding-top: 20px; }
+  .hero-main h1 { font-size: clamp(1.9rem, 8.6vw, 2.4rem); line-height: 1.1; }
+  .hero-main .lead { font-size: .98rem; line-height: 1.55; }
+  .hero-cta { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 14px; }
+  .hero-cta .btn { width: 100%; white-space: normal; text-align: center; padding: 13px 16px; }
+  .mobile-nav-item { padding: 10px 12px; }
+  .mobile-item-desc { line-height: 1.35; }
 }
 @media (max-width: 380px) {
   .logo-badge { display: none; }

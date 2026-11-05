@@ -196,7 +196,9 @@
 <aside class="mobile-drawer" id="mobileDrawer" aria-label="Mobile Navigation" aria-hidden="true">
   <div class="mobile-drawer-header">
     <a href="{{ url_for('web.home') }}" class="logo">
-      <span class="logo-mark">◐</span> Culture<b>Bridge</b> <small class="logo-badge">AI</small>
+      <span class="logo-mark">◐</span>
+      <span class="logo-name">Culture<b>Bridge</b></span>
+      <span class="logo-badge">AI</span>
     </a>
     <button class="icon-btn mobile-close-btn" id="mobileCloseBtn" aria-label="Close menu">✕</button>
   </div>
@@ -291,8 +293,8 @@
   </div>
 
   <div class="mobile-drawer-footer">
-    <a href="{{ url_for('admin.panel') }}" class="btn ghost small">⚙ Admin Panel</a>
-    <span class="muted text-xs">CultureBridge AI v2.4</span>
+    <a href="{{ url_for('admin.panel') }}" class="drawer-admin-link">⚙ Admin</a>
+    <span class="drawer-version">CultureBridge AI · v2.4</span>
   </div>
 </aside>
 
