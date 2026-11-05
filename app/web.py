@@ -253,7 +253,7 @@ def manifest():
     icon = lambda name, size, kind: {"src": url_for("static", filename=f"img/{name}"), "sizes": size, "type": kind}
     resp = jsonify(
         id="/", name="CultureBridge AI", short_name="CultureBridge", start_url="/", scope="/", display="standalone",
-        orientation="any", background_color="#070a15", theme_color="#070a15", description=BY_KEY["home"]["desc"],
+        orientation="any", background_color="#f8fafc", theme_color="#f8fafc", description=BY_KEY["home"]["desc"],
         categories=["education"],
         icons=[icon("icon-192.png", "192x192", "image/png"), icon("icon-512.png", "512x512", "image/png"),
                {**icon("icon-512.png", "512x512", "image/png"), "purpose": "maskable"},

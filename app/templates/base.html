@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- Installable web app: iPhone "Add to Home Screen" + Android/desktop install -->
   <link rel="manifest" href="{{ url_for('web.manifest') }}">
-  <meta name="theme-color" content="#070a15">
+  <meta name="theme-color" content="#f8fafc">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CultureBridge">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
   <title>{% block title %}CultureBridge AI{% endblock %}</title>

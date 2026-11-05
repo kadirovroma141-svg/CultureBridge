@@ -201,7 +201,7 @@ Cultural Distance Index = min(100, round(2·RMS шести разниц)). Ур�
 
 ## Важные нюансы
 - Флаги-эмодзи на Windows не рисуются — подключён шрифт `Twemoji Country Flags` (первый в `--font`, и `Chart.defaults.font.family`). Не убирать.
-- Цвета только через CSS-переменные в styles.css; тёмная тема по умолчанию (`data-theme="dark"`).
+- Цвета только через CSS-переменные в styles.css; светлая тема по умолчанию (`data-theme="light"`), тёмная — только если пользователь выбрал её кнопкой (`cb-theme` в localStorage).
 - Квиз-бейджи заданы для 12 вопросов; `badge_for` масштабирует счёт, если админ добавил/скрыл вопросы.
 - Rate limiter декодера — in-memory, per-worker (`DECODE_RATE_LIMIT`/мин/IP).
 - `SECRET_KEY` без env генерируется случайно на процесс → в проде задавать обязательно (render.yaml генерирует).
